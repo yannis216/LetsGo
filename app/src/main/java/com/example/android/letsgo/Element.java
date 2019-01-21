@@ -15,9 +15,9 @@ public class Element {
     private List<String> materialsNeeded;
     //To be set true when an Element is very basic (Like Pushups) and reviewed + edited by staff/(admins?). From then it can only be updated by admins
     private boolean isFixedBasic;
-    //TODO Add List of Subelements
+    //TODO Add List of SubElements
 
-    public Element(String title) throws Exception {
+    public Element(String title) {
         this.title = title;
     }
 

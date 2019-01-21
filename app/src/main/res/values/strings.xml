@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LetsGo</string>
+    <string name="element_edit_title">Title</string>
 </resources>

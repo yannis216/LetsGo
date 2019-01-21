@@ -6,11 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 
 public class ElementEditActivity extends AppCompatActivity {
     EditText mTitleEdit;
+    EditText mUsedForEdit;
+    EditText mThumbnailUrlEdit;
+    EditText mVideoUrlEdit;
+    NumberPicker mMinHumansPicker;
     Button mSaveButton;
-    String createdTitle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +23,20 @@ public class ElementEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_element_edit);
 
         mTitleEdit = findViewById(R.id.et_element_title);
+        mUsedForEdit = findViewById(R.id.et_element_usedFor);
+        mThumbnailUrlEdit =findViewById(R.id.et_element_thumbnailUrl);
+        mVideoUrlEdit=findViewById(R.id.et_element_videoUrl);
+        mMinHumansPicker=findViewById(R.id.np_element_min_humans);
         mSaveButton = findViewById(R.id.bn_element_save);
+
+
+
 
         mSaveButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
-                createdTitle = mTitleEdit.getText().toString();
-                Element createdElement = new Element(createdTitle);
+                Element createdElement = getElementFromInputs();
                 Intent intent = new Intent(ElementEditActivity.this, ElementDetailActivity.class);
                 intent.putExtra("CreatedElement", createdElement);
                 startActivity(intent);
@@ -34,6 +45,19 @@ public class ElementEditActivity extends AppCompatActivity {
         });
 
 
+
+
+
+    }
+
+    private Element getElementFromInputs(){
+        String createdTitle = mTitleEdit.getText().toString();
+        String createdUsedForEdit = mUsedForEdit.getText().toString();
+        String createdThumbnailUrl = mThumbnailUrlEdit.getText().toString();
+        String createdVideoUrl = mVideoUrlEdit.getText().toString();
+        int createdMinHumans = mMinHumansPicker.getValue();
+
+        return new Element(createdTitle,createdUsedForEdit,createdThumbnailUrl,createdVideoUrl,createdMinHumans);
 
 
 

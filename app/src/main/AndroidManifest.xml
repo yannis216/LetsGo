@@ -10,15 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ModulListActivity">
+
+        </activity>
+        <activity android:name=".ElementListActivity" />
+        <activity android:name=".ElementDetailActivity" />
+        <activity android:name=".ElementEditActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ElementListActivity" />
-        <activity android:name=".ElementDetailActivity" />
-        <activity android:name=".ElementEditActivity"></activity>
     </application>
 
 </manifest>

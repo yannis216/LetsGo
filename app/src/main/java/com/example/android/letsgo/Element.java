@@ -1,8 +1,9 @@
 package com.example.android.letsgo;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Element {
+public class Element implements Serializable {
 
     private String title;
     //What do you achieve with it, what do you use it for? E.G. Lower Back for Deadlift

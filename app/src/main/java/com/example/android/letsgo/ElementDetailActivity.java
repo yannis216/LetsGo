@@ -1,5 +1,6 @@
 package com.example.android.letsgo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
@@ -13,12 +14,13 @@ public class ElementDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_element_detail);
 
-        mTitleView = findViewById(R.id.tv_title);
+        mTitleView = findViewById(R.id.tv_element_title);
 
-        displayedElement = new Element("Pushups");
+        Intent intent = getIntent();
+
+        displayedElement = (Element) intent.getSerializableExtra("CreatedElement");
+
         String elementTitle = displayedElement.getTitle();
-
-
         populateUi(elementTitle);
 
     }

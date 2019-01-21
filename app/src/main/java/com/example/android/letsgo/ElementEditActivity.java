@@ -29,6 +29,10 @@ public class ElementEditActivity extends AppCompatActivity {
         mMinHumansPicker=findViewById(R.id.np_element_min_humans);
         mSaveButton = findViewById(R.id.bn_element_save);
 
+        mMinHumansPicker.setMinValue(1);
+        mMinHumansPicker.setMaxValue(32);
+        //TODO Could add a 32+ Value -> Maybe use .setDisplayedValues
+
 
 
 

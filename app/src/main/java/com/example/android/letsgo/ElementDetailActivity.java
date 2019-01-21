@@ -7,7 +7,11 @@ import android.widget.TextView;
 
 public class ElementDetailActivity extends AppCompatActivity {
     TextView mTitleView;
-        Element displayedElement;
+    TextView mUsedForView;
+    TextView mThumbnailUrlView;
+    TextView mVideoUrlView;
+    TextView mMinHumansView;
+    Element displayedElement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,18 +19,26 @@ public class ElementDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_element_detail);
 
         mTitleView = findViewById(R.id.tv_element_title);
+        mUsedForView=findViewById(R.id.tv_element_usedFor);
+        mThumbnailUrlView=findViewById(R.id.tv_element_thumbnailUrl);
+        mVideoUrlView=findViewById(R.id.tv_element_videoUrl);
+        mMinHumansView=findViewById(R.id.tv_element_min_humans);
 
         Intent intent = getIntent();
 
         displayedElement = (Element) intent.getSerializableExtra("CreatedElement");
 
-        String elementTitle = displayedElement.getTitle();
-        populateUi(elementTitle);
+        populateUi(displayedElement);
 
     }
 
-    private void populateUi(String title){
-        mTitleView.setText(title);
+    private void populateUi(Element element){
+        mTitleView.setText(element.getTitle());
+        mUsedForView.setText(element.getUsedFor());
+        mThumbnailUrlView.setText(element.getThumbnailUrl());
+        mVideoUrlView.setText(element.getVideoUrl());
+        mMinHumansView.setText(String.valueOf(element.getMinNumberOfHumans()));
+
     }
 
 }

@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,19 +25,25 @@ public class ElementDetailActivity extends AppCompatActivity {
     Palette.Swatch swatchVibrant;
     Palette.Swatch swatchMutedLight;
     Palette.Swatch swatchMutedDark;
+    Palette.Swatch swatchDominant;
     int titleColor;
     int titleBackgroundColor;
+    ConstraintLayout mElementLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_element_detail);
 
+        mElementLayout = findViewById(R.id.cl_element_layout);
         mTitleView = findViewById(R.id.tv_element_title);
         mUsedForView=findViewById(R.id.tv_element_usedFor);
         mThumbnailUrlView=findViewById(R.id.tv_element_thumbnailUrl);
         mVideoUrlView=findViewById(R.id.tv_element_videoUrl);
         mMinHumansView=findViewById(R.id.tv_element_min_humans);
+        titleColor = getResources().getColor(R.color.colorAccent);
+        titleBackgroundColor= getResources().getColor(R.color.colorPrimaryDark);
 
         Intent intent = getIntent();
 
@@ -59,41 +67,42 @@ public class ElementDetailActivity extends AppCompatActivity {
         int imageWidth = (int) getResources().getDimension(R.dimen.element_picture_width);
 
         Picasso.with(ElementDetailActivity.this)
-                .load("https://source.unsplash.com/random")
+                .load("https://source.unsplash.com/random")//TODO Replace wioth dynamic picture url
                 .resize(imageWidth, imageHeight)
                 .centerCrop()
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        Log.e("onBitmapLoaded","was called");
                         assert mThumbnailUrlView != null;
                         mThumbnailUrlView.setImageBitmap(bitmap);
                         Palette.from(bitmap)
                                 .generate(new Palette.PaletteAsyncListener() {
                                     @Override
                                     public void onGenerated(Palette palette) {
-                                        swatchVibrant = palette.getVibrantSwatch();
-                                        swatchMutedLight = palette.getLightMutedSwatch();
                                         swatchMutedDark =palette.getDarkMutedSwatch();
+                                        if (swatchMutedDark == null) {
+                                            Toast.makeText(ElementDetailActivity.this, "Null swatch :(", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        titleColor = swatchMutedDark.getBodyTextColor();
+                                        titleBackgroundColor =swatchMutedDark.getRgb();
+                                        Toast.makeText(ElementDetailActivity.this, "SwatchColours used", Toast.LENGTH_LONG).show();
+                                        mTitleView.setTextColor(titleColor);
+                                        mTitleView.setBackgroundColor(titleBackgroundColor);
+                                        mTitleView.getBackground().setAlpha(200);
+                                        //TODO Adapt Default and SetColours in Design phase
                                     }
-
                                 });
-                        titleColor = getResources().getColor(R.color.colorAccent);
-                        titleBackgroundColor= getResources().getColor(R.color.colorPrimaryDark);
-                        if(swatchVibrant!=null){
-                            titleColor = swatchVibrant.getRgb();
-                            Toast.makeText(ElementDetailActivity.this, "SwatchColours used", Toast.LENGTH_LONG).show();
-                        }
-                        mTitleView.setTextColor(titleColor);
-                        mTitleView.setBackgroundColor(titleBackgroundColor);
-                        mTitleView.getBackground().setAlpha(150);
 
-                        //TODO Adapt Default and SetColours in Design phase
                     };
                     @Override
                     public void onBitmapFailed(Drawable errorDrawable) {
+                        Log.e("onBitmapFailed","was called");
                     }
                     @Override
                     public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        Log.e("onPrepareLoad","was called");
                     }
                 });
     }

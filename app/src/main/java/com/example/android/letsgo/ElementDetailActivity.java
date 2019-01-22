@@ -39,7 +39,7 @@ public class ElementDetailActivity extends AppCompatActivity {
         mElementLayout = findViewById(R.id.cl_element_layout);
         mTitleView = findViewById(R.id.tv_element_title);
         mUsedForView=findViewById(R.id.tv_element_usedFor);
-        mThumbnailUrlView=findViewById(R.id.tv_element_thumbnailUrl);
+        mThumbnailUrlView=findViewById(R.id.iv_element_thumbnailUrl);
         mVideoUrlView=findViewById(R.id.tv_element_videoUrl);
         mMinHumansView=findViewById(R.id.tv_element_min_humans);
         titleColor = getResources().getColor(R.color.colorAccent);
@@ -57,7 +57,7 @@ public class ElementDetailActivity extends AppCompatActivity {
         mTitleView.setText(element.getTitle());
         mUsedForView.setText(element.getUsedFor());
         mVideoUrlView.setText(element.getVideoUrl());
-        mMinHumansView.setText(String.valueOf(element.getMinNumberOfHumans()));
+        mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));
         initializePictureWithColours();
 
     }
@@ -92,9 +92,6 @@ public class ElementDetailActivity extends AppCompatActivity {
                                     titleBackgroundColor =swatchDominant.getRgb();
                                     //TODO May choose to do this only when vibrant colour is available
                                 }
-
-
-
                                 mTitleView.setTextColor(titleColor);
                                 mTitleView.setBackgroundColor(titleBackgroundColor);
                                 mTitleView.getBackground().setAlpha(200);

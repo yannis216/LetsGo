@@ -22,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.content.FileProvider;
+
 public class ImagePicker {
 
     private static final int DEFAULT_MIN_WIDTH_QUALITY = 400;        // min pixels
@@ -40,7 +42,10 @@ public class ImagePicker {
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePhotoIntent.putExtra("return-data", true);
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile(context)));
+
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(context,
+                context.getApplicationContext().getPackageName()
+                        + ".com.example.android.letsgo.provider", getTempFile(context)));
         intentList = addIntentsToList(context, intentList, pickIntent);
         intentList = addIntentsToList(context, intentList, takePhotoIntent);
 
@@ -77,7 +82,9 @@ public class ImagePicker {
                     imageReturnedIntent.getData() == null  ||
                     imageReturnedIntent.getData().toString().contains(imageFile.toString()));
             if (isCamera) {     /** CAMERA **/
-                selectedImage = Uri.fromFile(imageFile);
+                selectedImage = FileProvider.getUriForFile(context,
+                        context.getApplicationContext().getPackageName()
+                                + ".com.example.android.letsgo.provider", imageFile);
             } else {            /** ALBUM **/
                 selectedImage = imageReturnedIntent.getData();
             }

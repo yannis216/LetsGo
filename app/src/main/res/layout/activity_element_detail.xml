@@ -20,6 +20,7 @@
         />
     <TextView
         android:layout_width="wrap_content"
+        android:minWidth="@dimen/element_picture_width"
         android:layout_height="wrap_content"
         android:id="@+id/tv_element_title"
         android:textSize="32sp"
@@ -28,6 +29,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="32dp"
         app:layout_constraintWidth_percent=".5"
+        android:textAlignment="center"
 
         />
     <TextView

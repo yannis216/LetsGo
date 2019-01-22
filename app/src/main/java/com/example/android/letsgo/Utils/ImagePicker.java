@@ -154,7 +154,6 @@ public class ImagePicker {
     private static int getRotationFromCamera(Context context, Uri imageFile) {
         int rotate = 0;
         try {
-
             context.getContentResolver().notifyChange(imageFile, null);
             ExifInterface exif = new ExifInterface(imageFile.getPath());
             int orientation = exif.getAttributeInt(

@@ -25,6 +25,12 @@
         android:id="@+id/bn_element_picture_picker"
         android:inputType="textUri"
         android:hint="@string/element_edit_thumbnail_url"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_element_picture_url"
+        android:inputType="textUri"
+        android:hint="@string/element_edit_thumbnail_url"/>
     <!-- TODO Include a Picture Picker here for getting pictures out of own device -->
     <EditText
         android:layout_width="match_parent"

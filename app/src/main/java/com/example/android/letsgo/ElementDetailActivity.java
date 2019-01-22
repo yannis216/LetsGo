@@ -4,20 +4,22 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.chip.Chip;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.palette.graphics.Palette;
+
 public class ElementDetailActivity extends AppCompatActivity {
     TextView mTitleView;
-    TextView mUsedForView;
+    Chip mUsedForChip;
     ImageView mThumbnailUrlView;
     TextView mVideoUrlView;
     TextView mMinHumansView;
@@ -38,7 +40,7 @@ public class ElementDetailActivity extends AppCompatActivity {
 
         mElementLayout = findViewById(R.id.cl_element_layout);
         mTitleView = findViewById(R.id.tv_element_title);
-        mUsedForView=findViewById(R.id.tv_element_usedFor);
+        mUsedForChip =findViewById(R.id.tv_element_usedFor);
         mThumbnailUrlView=findViewById(R.id.iv_element_thumbnailUrl);
         mVideoUrlView=findViewById(R.id.tv_element_videoUrl);
         mMinHumansView=findViewById(R.id.tv_element_min_humans);
@@ -55,7 +57,7 @@ public class ElementDetailActivity extends AppCompatActivity {
 
     private void populateUi(Element element){
         mTitleView.setText(element.getTitle());
-        mUsedForView.setText(element.getUsedFor());
+        mUsedForChip.setText(element.getUsedFor());
         mVideoUrlView.setText(element.getVideoUrl());
         mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));
         initializePictureWithColours();
@@ -112,7 +114,7 @@ public class ElementDetailActivity extends AppCompatActivity {
         mThumbnailUrlView.setTag(target);
 
         Picasso.with(ElementDetailActivity.this)
-                .load("https://source.unsplash.com/random")//TODO Replace wioth dynamic picture url
+                .load("https://source.unsplash.com/random")//TODO Replace with dynamic picture url
                 .resize(imageWidth, imageHeight)
                 .centerCrop()
                 .into(target);

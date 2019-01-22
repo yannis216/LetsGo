@@ -26,10 +26,9 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, String usedFor, String thumbnailUrl, String videoUrl, int minNumberOfHumans) {
+    public Element(String title, String usedFor, String videoUrl, int minNumberOfHumans) {
         this.title = title;
         this.usedFor = usedFor;
-        this.thumbnailUrl = thumbnailUrl;
         this.videoUrl = videoUrl;
         this.minNumberOfHumans = minNumberOfHumans;
     }

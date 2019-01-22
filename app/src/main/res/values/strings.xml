@@ -4,5 +4,6 @@
     <string name="element_edit_usedFor">e.g. Biceps</string>
     <string name="element_edit_thumbnail_url">Link to picture</string>
     <string name="element_edit_video_url">Link to youtube video</string>
+    <string name="pick_image_intent_text">IntentText</string>
 
 </resources>

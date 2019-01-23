@@ -10,7 +10,7 @@ public class Element implements Serializable {
     //TODO This will be a List at some point and maybe be (entered and) displayed as chips
     private String usedFor;
     private String pictureUrl;
-    private String videoUrl;
+    private String videoId;
     //How may people do you need min. for successfully doing this element?
     private int minNumberOfHumans;
     //Are any materials needed for doing this element? Should be implemented with Tags/Chips
@@ -26,10 +26,10 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, String usedFor, String pictureUrl, String videoUrl,  int minNumberOfHumans) {
+    public Element(String title, String usedFor, String pictureUrl, String videoId, int minNumberOfHumans) {
         this.title = title;
         this.usedFor = usedFor;
-        this.videoUrl = videoUrl;
+        this.videoId = videoId;
         this.minNumberOfHumans = minNumberOfHumans;
         this.pictureUrl =pictureUrl;
     }
@@ -58,12 +58,12 @@ public class Element implements Serializable {
         this.pictureUrl = pictureUrl;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
+    public String getVideoId() {
+        return videoId;
     }
 
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
     }
 
     public int getMinNumberOfHumans() {

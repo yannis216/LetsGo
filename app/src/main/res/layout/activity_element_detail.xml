@@ -29,8 +29,18 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="32dp"
         app:layout_constraintWidth_percent=".5"
-        android:textAlignment="center"
-
+        android:textAlignment="center"/>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ib_element_play_video"
+        android:src="@drawable/baseline_play_circle_filled_black_48dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_element_title"
+        android:layout_marginTop="32dp"
+        app:layout_constraintWidth_percent=".5"
+        android:background="?android:selectableItemBackground"
         />
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
@@ -48,6 +58,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_element_usedFor"
         android:layout_marginTop="4dp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,10 +69,6 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_element_videoUrl"/>
 
 
 

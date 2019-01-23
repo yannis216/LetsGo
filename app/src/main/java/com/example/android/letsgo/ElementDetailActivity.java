@@ -1,10 +1,15 @@
 package com.example.android.letsgo;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +26,6 @@ public class ElementDetailActivity extends AppCompatActivity {
     TextView mTitleView;
     Chip mUsedForChip;
     ImageView mThumbnailUrlView;
-    TextView mVideoUrlView;
     TextView mMinHumansView;
     Element displayedElement;
     Palette.Swatch swatchVibrant;
@@ -31,6 +35,7 @@ public class ElementDetailActivity extends AppCompatActivity {
     int titleColor;
     int titleBackgroundColor;
     ConstraintLayout mElementLayout;
+    ImageButton mPlayVideoButton;
 
 
     @Override
@@ -42,8 +47,8 @@ public class ElementDetailActivity extends AppCompatActivity {
         mTitleView = findViewById(R.id.tv_element_title);
         mUsedForChip =findViewById(R.id.tv_element_usedFor);
         mThumbnailUrlView=findViewById(R.id.iv_element_thumbnailUrl);
-        mVideoUrlView=findViewById(R.id.tv_element_videoUrl);
         mMinHumansView=findViewById(R.id.tv_element_min_humans);
+        mPlayVideoButton =findViewById(R.id.ib_element_play_video);
         titleColor = getResources().getColor(R.color.colorAccent);
         titleBackgroundColor= getResources().getColor(R.color.colorPrimaryDark);
 
@@ -55,11 +60,24 @@ public class ElementDetailActivity extends AppCompatActivity {
 
     }
 
-    private void populateUi(Element element){
+    private void populateUi(final Element element){
         mTitleView.setText(element.getTitle());
         mUsedForChip.setText(element.getUsedFor());
-        mVideoUrlView.setText(element.getVideoUrl());
         mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));
+        if(element.getVideoId().equals("")){
+            mPlayVideoButton.setVisibility(View.GONE);
+        }else{
+            mPlayVideoButton.setVisibility(View.VISIBLE);
+            mPlayVideoButton.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    Log.e("onClickVideoButton", "was called");
+                    watchYoutubeVideo(ElementDetailActivity.this, element.getVideoId());
+
+                }
+            });
+        }
         if(element.getPictureUrl()!= null){
             initializePictureWithColours(element.getPictureUrl());
         }
@@ -100,7 +118,9 @@ public class ElementDetailActivity extends AppCompatActivity {
                                 mTitleView.setTextColor(titleColor);
                                 mTitleView.setBackgroundColor(titleBackgroundColor);
                                 mTitleView.getBackground().setAlpha(200);
+
                                 //TODO Adapt Default and SetColours in Design phase
+                                //TODO Change Colour of the Play video icon programmatically
                             }
                         });
 
@@ -123,5 +143,17 @@ public class ElementDetailActivity extends AppCompatActivity {
                 .centerCrop()
                 .into(target);
     }
+
+    public static void watchYoutubeVideo(Context context, String id){
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://www.youtube.com/watch?v=" + id));
+        try {
+            context.startActivity(appIntent);
+        } catch (ActivityNotFoundException ex) {
+            context.startActivity(webIntent);
+        }
+    }
+
 
 }

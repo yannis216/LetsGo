@@ -1,8 +1,9 @@
 package com.example.android.letsgo.Classes;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Material {
+public class Material implements Serializable {
     private String title;
     private boolean getsConsumed;
     private List<String> shoppingLinks;

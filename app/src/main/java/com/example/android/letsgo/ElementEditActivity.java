@@ -89,7 +89,7 @@ public class ElementEditActivity extends AppCompatActivity {
                 return;
             }
             try {
-                InputStream inputStream = ElementEditActivity.this.getContentResolver().openInputStream(data.getData());
+                InputStream inputStream = ElementEditActivity.this.getContentResolver().openInputStream(data.getData()); //TODO delete is safe?
                 Uri inputUri = data.getData();
                 pictureUrl = inputUri.toString();
                 mPictureUrlEdit.setText(pictureUrl);

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.letsgo.Classes.Element;
+import com.example.android.letsgo.Classes.Material;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
@@ -41,7 +42,8 @@ public class ElementDetailActivity extends AppCompatActivity {
     int titleBackgroundColor;
     ConstraintLayout mElementLayout;
     ImageButton mPlayVideoButton;
-    ChipGroup mUsedForChips;
+    ChipGroup mUsedForChipGroup;
+    ChipGroup mMaterialChipGroup;
 
 
     @Override
@@ -54,9 +56,11 @@ public class ElementDetailActivity extends AppCompatActivity {
         mThumbnailUrlView=findViewById(R.id.iv_element_thumbnailUrl);
         mMinHumansView=findViewById(R.id.tv_element_min_humans);
         mPlayVideoButton =findViewById(R.id.ib_element_play_video);
-        mUsedForChips=findViewById(R.id.cg_element_detail_usedFor_chips);
+        mUsedForChipGroup =findViewById(R.id.cg_element_detail_usedFor_chips);
+        mMaterialChipGroup = findViewById(R.id.cg_element_detail_material_chips);
         titleColor = getResources().getColor(R.color.colorAccent);
         titleBackgroundColor= getResources().getColor(R.color.colorPrimaryDark);
+
 
         Intent intent = getIntent();
 
@@ -69,6 +73,7 @@ public class ElementDetailActivity extends AppCompatActivity {
     private void populateUi(final Element element){
         mTitleView.setText(element.getTitle());
         setChips(element.getUsedFor());
+        setMaterialChips(element.getNeededMaterials());
         mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));
         if(element.getVideoId().equals("")){
             mPlayVideoButton.setVisibility(View.GONE);
@@ -87,8 +92,6 @@ public class ElementDetailActivity extends AppCompatActivity {
         if(element.getPictureUrl()!= null){
             initializePictureWithColours(element.getPictureUrl());
         }
-
-
 
     }
 
@@ -164,15 +167,27 @@ public class ElementDetailActivity extends AppCompatActivity {
 
     private void setChips(List<String> strings){
         for(int i=0; i<strings.size(); i++){
-            final Chip thisChip = getChip(mUsedForChips, strings.get(i));
-            mUsedForChips.addView(thisChip);
+            final Chip thisChip = getChip(mUsedForChipGroup, strings.get(i));
+            mUsedForChipGroup.addView(thisChip);
+        }
+    }
+
+    private void setMaterialChips(List<Material> materials){
+        for(int i=0; i<materials.size(); i++){
+            final Chip thisChip = getChip(mMaterialChipGroup, materials.get(i).getTitle());
+            mMaterialChipGroup.addView(thisChip);
         }
     }
 
 
     private Chip getChip(final ChipGroup entryChipGroup, String text) {
         final Chip chip = new Chip(this);
-        chip.setChipDrawable(ChipDrawable.createFromResource(this, R.xml.used_for_detail_chip));
+        if(entryChipGroup == mUsedForChipGroup){
+            chip.setChipDrawable(ChipDrawable.createFromResource(this, R.xml.used_for_detail_chip));
+        }else if(entryChipGroup == mMaterialChipGroup) {
+            chip.setChipDrawable(ChipDrawable.createFromResource(this, R.xml.material_detail_chip));
+        }
+
         int paddingDp = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 10,
                 getResources().getDisplayMetrics()
@@ -183,6 +198,7 @@ public class ElementDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO Show list of Elements with same usedFor?
+                //TODO Show Shopping possibilities?
             }
         });
         return chip;

@@ -71,7 +71,25 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_element_material_header"
+        android:textSize="16sp"
+        android:text="@string/element_detail_material_header"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_element_min_humans"
+        android:layout_marginTop="4dp" />
 
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cg_element_detail_material_chips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/tv_element_material_header"
+        app:layout_constraintTop_toTopOf="@id/tv_element_material_header"
+        app:layout_constraintBottom_toBottomOf="@id/tv_element_material_header"
+        >
+    </com.google.android.material.chip.ChipGroup>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

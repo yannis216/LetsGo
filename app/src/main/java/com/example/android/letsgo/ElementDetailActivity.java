@@ -62,7 +62,7 @@ public class ElementDetailActivity extends AppCompatActivity {
 
     private void populateUi(final Element element){
         mTitleView.setText(element.getTitle());
-        mUsedForChip.setText(element.getUsedFor());
+        //mUsedForChip.setText(element.getUsedFor());
         mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));
         if(element.getVideoId().equals("")){
             mPlayVideoButton.setVisibility(View.GONE);

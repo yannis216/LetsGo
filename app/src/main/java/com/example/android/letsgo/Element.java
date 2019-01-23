@@ -8,7 +8,7 @@ public class Element implements Serializable {
     private String title;
     //What do you achieve with it, what do you use it for? E.G. Lower Back for Deadlift
     //TODO This will be a List at some point and maybe be (entered and) displayed as chips
-    private String usedFor;
+    private List<String> usedFor;
     private String pictureUrl;
     private String videoId;
     //How may people do you need min. for successfully doing this element?
@@ -26,7 +26,7 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, String usedFor, String pictureUrl, String videoId, int minNumberOfHumans) {
+    public Element(String title, List<String> usedFor, String pictureUrl, String videoId, int minNumberOfHumans) {
         this.title = title;
         this.usedFor = usedFor;
         this.videoId = videoId;
@@ -42,11 +42,11 @@ public class Element implements Serializable {
         this.title = title;
     }
 
-    public String getUsedFor() {
+    public List<String> getUsedFor() {
         return usedFor;
     }
 
-    public void setUsedFor(String usedFor) {
+    public void setUsedFor(List<String> usedFor) {
         this.usedFor = usedFor;
     }
 

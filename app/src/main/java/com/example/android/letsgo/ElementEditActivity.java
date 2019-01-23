@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,8 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -97,10 +100,11 @@ public class ElementEditActivity extends AppCompatActivity {
 
     private Element getElementFromInputs(){
         String createdTitle = mTitleEdit.getText().toString();
-        String createdUsedForEdit = mUsedForEdit.getText().toString();
         String createdVideoUrl = mVideoUrlEdit.getText().toString();
         int createdMinHumans = mMinHumansPicker.getValue();
-        return new Element(createdTitle,createdUsedForEdit, pictureUrl, createdVideoUrl,createdMinHumans);
+        List<String> createdUsedFor = generateListFromChipGroup(mUsedForChips);
+
+        return new Element(createdTitle,createdUsedFor, pictureUrl, createdVideoUrl,createdMinHumans);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -138,6 +142,20 @@ public class ElementEditActivity extends AppCompatActivity {
         });
         return chip;
     }
+    private List<String> generateListFromChipGroup(ChipGroup chipGroup){
+        List<String> strings = new ArrayList<String>();
 
+        //Do this for when the user forgets to press the add button on his last chip entry
+        if(!mUsedForEdit.getText().toString().equals("")){
+            strings.add(mUsedForEdit.getText().toString());
+            //TODO May have to ask user if he wants that
+        }
+        for(int i=0; i<chipGroup.getChildCount(); i++){
+            Chip chip =(Chip) chipGroup.getChildAt(i);
+            strings.add(chip.getText().toString());
+        }
+        Log.e("StringsList", ""+strings);
+        return strings;
+    }
 
 }

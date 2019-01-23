@@ -6,11 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Material;
@@ -27,14 +30,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ElementEditActivity extends AppCompatActivity {
     EditText mTitleEdit;
+    //TODO Set Maximum number of character for edittexts that result in chips.
+    // Otherwise error on display because long chips dont fit in a row and cant get textwrapped
     EditText mUsedForEdit;
     Button mUsedForAdder;
     ChipGroup mUsedForChipGroup;
     Button mPicturePicker;
     EditText mPictureUrlEdit;
     String pictureUrl;
-    EditText mVideoUrlEdit;
+    EditText mVideoUrlEdit;    
+    //TODO Set Maximum number of character for edittexts that result in chips.
+    // Otherwise error on display because long chips dont fit in a row and cant get textwrapped
     EditText mMaterialEdit;
+    //TODO Should handle this in Alterbox at some point
     CheckBox mMaterialGetsConsumed;
     Button mMaterialCommiter;
     NumberPicker mMinHumansPicker;
@@ -66,6 +74,7 @@ public class ElementEditActivity extends AppCompatActivity {
         mMinHumansPicker.setMinValue(1);
         mMinHumansPicker.setMaxValue(32);
         //TODO Could add a 32+ Value -> Maybe use .setDisplayedValues
+        mUsedForEdit.setOnEditorActionListener(new DoneOnEditorActionListener());
 
         setOnClickListeners();
 
@@ -153,10 +162,7 @@ public class ElementEditActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                String newUsedForChipText = mUsedForEdit.getText().toString();
-                final Chip entryChip = getChip(mUsedForChipGroup, newUsedForChipText);
-                mUsedForChipGroup.addView(entryChip);
-                mUsedForEdit.getText().clear();
+                handleNewUsedForChipAdded();
             }
         });
 
@@ -195,20 +201,45 @@ public class ElementEditActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                String newMaterialTitle = mMaterialEdit.getText().toString();
-                boolean newMaterialGetsConsumed = mMaterialGetsConsumed.isChecked();
-                List<String> newMaterialShoppingLinks = new ArrayList<>();
-                Material newMaterial = new Material(newMaterialTitle, newMaterialGetsConsumed, newMaterialShoppingLinks);
-                mCreatedNeededMaterials.add(newMaterial);
-
-                final Chip entryChip = getChip(mMaterialChipGroup, newMaterialTitle);
-                mMaterialChipGroup.addView(entryChip);
-                mMaterialEdit.getText().clear();
-                mMaterialGetsConsumed.setChecked(false);
-
-
+                handleNewMaterialChipAdded();
             }
         });
+    }
+
+    private void handleNewUsedForChipAdded(){
+        String newUsedForChipText = mUsedForEdit.getText().toString();
+        final Chip entryChip = getChip(mUsedForChipGroup, newUsedForChipText);
+        mUsedForChipGroup.addView(entryChip);
+        mUsedForEdit.getText().clear();
+    }
+
+    private void handleNewMaterialChipAdded(){
+        String newMaterialTitle = mMaterialEdit.getText().toString();
+        boolean newMaterialGetsConsumed = mMaterialGetsConsumed.isChecked();
+        List<String> newMaterialShoppingLinks = new ArrayList<>();
+        Material newMaterial = new Material(newMaterialTitle, newMaterialGetsConsumed, newMaterialShoppingLinks);
+        mCreatedNeededMaterials.add(newMaterial);
+
+        final Chip entryChip = getChip(mMaterialChipGroup, newMaterialTitle);
+        mMaterialChipGroup.addView(entryChip);
+        mMaterialEdit.getText().clear();
+        mMaterialGetsConsumed.setChecked(false);
+    }
+
+    class DoneOnEditorActionListener implements TextView.OnEditorActionListener {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if(v == mUsedForEdit) {
+                    //InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    //imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    //TODO Add upper lines to close keyboard after click on Done? Test with users whats better
+                    handleNewUsedForChipAdded();
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
 }

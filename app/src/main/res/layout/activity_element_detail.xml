@@ -83,11 +83,12 @@
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/cg_element_detail_material_chips"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@id/tv_element_material_header"
         app:layout_constraintTop_toTopOf="@id/tv_element_material_header"
-        app:layout_constraintBottom_toBottomOf="@id/tv_element_material_header"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="4dp"
         >
     </com.google.android.material.chip.ChipGroup>
 

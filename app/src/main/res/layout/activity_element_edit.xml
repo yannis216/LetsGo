@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/et_element_usedFor"
             android:inputType="textCapSentences|textAutoCorrect"
-            android:hint="@string/element_edit_usedFor"/>
+            android:hint="@string/element_edit_usedFor"
+            android:imeOptions="actionDone"/>
         <Button
             android:layout_width="32dp"
             android:layout_height="64dp"

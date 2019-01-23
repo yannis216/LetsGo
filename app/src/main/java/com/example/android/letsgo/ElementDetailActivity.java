@@ -106,7 +106,7 @@ public class ElementDetailActivity extends AppCompatActivity {
 
             };
             @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                 Log.e("onBitmapFailed","was called");
             }
             @Override
@@ -116,11 +116,11 @@ public class ElementDetailActivity extends AppCompatActivity {
         };
         mThumbnailUrlView.setTag(target);
 
-        Picasso.with(ElementDetailActivity.this).setLoggingEnabled(true);
-        Picasso.with(ElementDetailActivity.this)
+
+        Picasso.get()
                 .load(pictureUrl)//TODO Replace with dynamic picture url
                 .resize(imageWidth, imageHeight)
-                //.centerCrop()
+                .centerCrop()
                 .into(target);
     }
 

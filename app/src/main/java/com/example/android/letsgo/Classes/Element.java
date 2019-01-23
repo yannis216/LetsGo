@@ -7,16 +7,14 @@ public class Element implements Serializable {
 
     private String title;
     //What do you achieve with it, what do you use it for? E.G. Lower Back for Deadlift
-    //TODO This will be a List at some point and maybe be (entered and) displayed as chips
     private List<String> usedFor;
     private String pictureUrl;
     private String videoId;
     //How may people do you need min. for successfully doing this element?
     private int minNumberOfHumans;
-    //Are any materials needed for doing this element? Should be implemented with Tags/Chips
-    private List<String> materialsNeeded;
-    //To be set true when an Element is very basic (Like Pushups) and reviewed + edited by staff/(admins?). From then it can only be updated by admins
+    //TODO To be set true when an Element is very basic (Like Pushups) and reviewed + edited by staff/(admins?). From then it can only be updated by admins
     private boolean isFixedBasic;
+    private List<Material> neededMaterials;
     //TODO Add List of SubElements
 
     public Element(String title) {
@@ -26,13 +24,15 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, List<String> usedFor, String pictureUrl, String videoId, int minNumberOfHumans) {
+    public Element(String title, List<String> usedFor, String pictureUrl, String videoId, int minNumberOfHumans,  List<Material> neededMaterials) {
         this.title = title;
         this.usedFor = usedFor;
+        this.pictureUrl = pictureUrl;
         this.videoId = videoId;
         this.minNumberOfHumans = minNumberOfHumans;
-        this.pictureUrl =pictureUrl;
+        this.neededMaterials = neededMaterials;
     }
+
 
     public String getTitle() {
         return title;
@@ -74,20 +74,20 @@ public class Element implements Serializable {
         this.minNumberOfHumans = numberOfHumans;
     }
 
-    public List<String> getMaterialsNeeded() {
-        return materialsNeeded;
-    }
-
-    public void setMaterialsNeeded(List<String> materialsNeeded) {
-        this.materialsNeeded = materialsNeeded;
-    }
-
     public boolean isFixedBasic() {
         return isFixedBasic;
     }
 
     public void setFixedBasic(boolean fixedBasic) {
         isFixedBasic = fixedBasic;
+    }
+
+    public List<Material> getNeededMaterials() {
+        return neededMaterials;
+    }
+
+    public void setNeededMaterials(List<Material> neededMaterials) {
+        this.neededMaterials = neededMaterials;
     }
 
 

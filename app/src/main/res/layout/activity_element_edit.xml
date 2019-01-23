@@ -1,60 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ElementEditActivity"
-    android:orientation="vertical">
-    <EditText
+    android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_element_title"
-        android:inputType="textCapSentences|textAutoCorrect"
-        android:hint="@string/element_edit_title"/>
-    <!--TODO make this an autocompleteTextView that suggests already existing titles with a hint: Already existing: -->
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_element_usedFor"
-        android:inputType="textCapSentences|textAutoCorrect"
-        android:hint="@string/element_edit_usedFor"/>
-    <Button
-        android:layout_width="32dp"
-        android:layout_height="64dp"
-        android:id="@+id/bn_element_usedFor_add" />
+        android:layout_height="match_parent"
+        tools:context=".ElementEditActivity"
+        android:orientation="vertical">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_element_title"
+            android:inputType="textCapSentences|textAutoCorrect"
+            android:hint="@string/element_edit_title"/>
+        <!--TODO make this an autocompleteTextView that suggests already existing titles with a hint: Already existing: -->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_element_usedFor"
+            android:inputType="textCapSentences|textAutoCorrect"
+            android:hint="@string/element_edit_usedFor"/>
+        <Button
+            android:layout_width="32dp"
+            android:layout_height="64dp"
+            android:id="@+id/bn_element_usedFor_add" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/cg_element_edit_usedFor_chips"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.google.android.material.chip.ChipGroup>
-    <Button
-        android:layout_width="32dp"
-        android:layout_height="64dp"
-        android:id="@+id/bn_element_picture_picker" />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_element_picture_url"
-        android:inputType="textUri"
-        android:hint="@string/element_edit_thumbnail_url"/>
-    <!-- TODO Include a Picture Picker here for getting pictures out of own device -->
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_element_videoUrl"
-        android:inputType="textUri"
-        android:hint="@string/element_edit_video_url"/>
-    <NumberPicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/np_element_min_humans"/>
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_element_edit_usedFor_chips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.google.android.material.chip.ChipGroup>
+        <Button
+            android:layout_width="32dp"
+            android:layout_height="64dp"
+            android:id="@+id/bn_element_picture_picker" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_element_picture_url"
+            android:inputType="textUri"
+            android:hint="@string/element_edit_thumbnail_url"/>
+        <!-- TODO Include a Picture Picker here for getting pictures out of own device -->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_element_videoUrl"
+            android:inputType="textUri"
+            android:hint="@string/element_edit_video_url"/>
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/np_element_min_humans"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_element_material"
+            android:inputType="textUri"
+            android:hint="@string/element_material_edit_text"
+            />
+        <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cb_element_material_gets_consumed"/>
+        <Button
+            android:layout_width="32dp"
+            android:layout_height="64dp"
+            android:id="@+id/bn_element_material_commit" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_element_edit_material_chips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.google.android.material.chip.ChipGroup>
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bn_element_save"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bn_element_save"/>
 
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

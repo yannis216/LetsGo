@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.chip.ChipGroup;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -17,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ElementEditActivity extends AppCompatActivity {
     EditText mTitleEdit;
     EditText mUsedForEdit;
+    Button mUsedForAdder;
+    ChipGroup mUsedForChips;
     Button mPicturePicker;
     EditText mPictureUrlEdit;
     String pictureUrl;
@@ -33,6 +40,8 @@ public class ElementEditActivity extends AppCompatActivity {
 
         mTitleEdit = findViewById(R.id.et_element_title);
         mUsedForEdit = findViewById(R.id.et_element_usedFor);
+        mUsedForAdder =findViewById(R.id.bn_element_usedFor_add);
+        mUsedForChips=findViewById(R.id.cg_element_usedFor_chips);
         mPicturePicker =findViewById(R.id.bn_element_picture_picker);
         mVideoUrlEdit=findViewById(R.id.et_element_videoUrl);
         mMinHumansPicker=findViewById(R.id.np_element_min_humans);
@@ -42,6 +51,17 @@ public class ElementEditActivity extends AppCompatActivity {
         mMinHumansPicker.setMinValue(1);
         mMinHumansPicker.setMaxValue(32);
         //TODO Could add a 32+ Value -> Maybe use .setDisplayedValues
+
+        mUsedForAdder.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                String newUsedForChipText = mUsedForEdit.getText().toString();
+                final Chip entryChip = getChip(mUsedForChips, newUsedForChipText);
+                mUsedForChips.addView(entryChip);
+                mUsedForEdit.getText().clear();
+            }
+        });
 
 
         mPicturePicker.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +119,24 @@ public class ElementEditActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private Chip getChip(final ChipGroup entryChipGroup, String text) {
+        final Chip chip = new Chip(this);
+        chip.setChipDrawable(ChipDrawable.createFromResource(this, R.xml.used_for_chip));
+        int paddingDp = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 10,
+                getResources().getDisplayMetrics()
+        );
+        chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
+        chip.setText(text);
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                entryChipGroup.removeView(chip);
+            }
+        });
+        return chip;
     }
 
 

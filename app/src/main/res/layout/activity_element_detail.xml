@@ -42,21 +42,23 @@
         app:layout_constraintWidth_percent=".5"
         android:background="?android:selectableItemBackground"
         />
-    <com.google.android.material.chip.Chip
-        android:layout_width="wrap_content"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cg_element_detail_usedFor_chips"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_element_usedFor"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_element_thumbnailUrl"
         android:layout_marginTop="8dp"
-        />
+        >
+    </com.google.android.material.chip.ChipGroup>
+
     <ImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:id="@+id/iv_element_minHumans_icon"
         android:src="@drawable/baseline_people_black_24dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_element_usedFor"
+        app:layout_constraintTop_toBottomOf="@id/cg_element_detail_usedFor_chips"
         android:layout_marginTop="4dp"/>
 
     <TextView

@@ -8,15 +8,21 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.letsgo.Classes.Element;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -24,7 +30,6 @@ import androidx.palette.graphics.Palette;
 
 public class ElementDetailActivity extends AppCompatActivity {
     TextView mTitleView;
-    Chip mUsedForChip;
     ImageView mThumbnailUrlView;
     TextView mMinHumansView;
     Element displayedElement;
@@ -36,6 +41,7 @@ public class ElementDetailActivity extends AppCompatActivity {
     int titleBackgroundColor;
     ConstraintLayout mElementLayout;
     ImageButton mPlayVideoButton;
+    ChipGroup mUsedForChips;
 
 
     @Override
@@ -45,10 +51,10 @@ public class ElementDetailActivity extends AppCompatActivity {
 
         mElementLayout = findViewById(R.id.cl_element_layout);
         mTitleView = findViewById(R.id.tv_element_title);
-        mUsedForChip =findViewById(R.id.tv_element_usedFor);
         mThumbnailUrlView=findViewById(R.id.iv_element_thumbnailUrl);
         mMinHumansView=findViewById(R.id.tv_element_min_humans);
         mPlayVideoButton =findViewById(R.id.ib_element_play_video);
+        mUsedForChips=findViewById(R.id.cg_element_detail_usedFor_chips);
         titleColor = getResources().getColor(R.color.colorAccent);
         titleBackgroundColor= getResources().getColor(R.color.colorPrimaryDark);
 
@@ -62,7 +68,7 @@ public class ElementDetailActivity extends AppCompatActivity {
 
     private void populateUi(final Element element){
         mTitleView.setText(element.getTitle());
-        //mUsedForChip.setText(element.getUsedFor());
+        setChips(element.getUsedFor());
         mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));
         if(element.getVideoId().equals("")){
             mPlayVideoButton.setVisibility(View.GONE);
@@ -81,6 +87,7 @@ public class ElementDetailActivity extends AppCompatActivity {
         if(element.getPictureUrl()!= null){
             initializePictureWithColours(element.getPictureUrl());
         }
+
 
 
     }
@@ -153,6 +160,32 @@ public class ElementDetailActivity extends AppCompatActivity {
         } catch (ActivityNotFoundException ex) {
             context.startActivity(webIntent);
         }
+    }
+
+    private void setChips(List<String> strings){
+        for(int i=0; i<strings.size(); i++){
+            final Chip thisChip = getChip(mUsedForChips, strings.get(i));
+            mUsedForChips.addView(thisChip);
+        }
+    }
+
+
+    private Chip getChip(final ChipGroup entryChipGroup, String text) {
+        final Chip chip = new Chip(this);
+        chip.setChipDrawable(ChipDrawable.createFromResource(this, R.xml.used_for_detail_chip));
+        int paddingDp = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 10,
+                getResources().getDisplayMetrics()
+        );
+        chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
+        chip.setText(text);
+        chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Show list of Elements with same usedFor?
+            }
+        });
+        return chip;
     }
 
 

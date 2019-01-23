@@ -1,4 +1,4 @@
-package com.example.android.letsgo;
+package com.example.android.letsgo.Classes;
 
 import java.io.Serializable;
 import java.util.List;

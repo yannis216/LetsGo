@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
+import com.example.android.letsgo.Classes.Element;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
@@ -44,7 +45,7 @@ public class ElementEditActivity extends AppCompatActivity {
         mTitleEdit = findViewById(R.id.et_element_title);
         mUsedForEdit = findViewById(R.id.et_element_usedFor);
         mUsedForAdder =findViewById(R.id.bn_element_usedFor_add);
-        mUsedForChips=findViewById(R.id.cg_element_usedFor_chips);
+        mUsedForChips=findViewById(R.id.cg_element_edit_usedFor_chips);
         mPicturePicker =findViewById(R.id.bn_element_picture_picker);
         mVideoUrlEdit=findViewById(R.id.et_element_videoUrl);
         mMinHumansPicker=findViewById(R.id.np_element_min_humans);
@@ -127,7 +128,7 @@ public class ElementEditActivity extends AppCompatActivity {
 
     private Chip getChip(final ChipGroup entryChipGroup, String text) {
         final Chip chip = new Chip(this);
-        chip.setChipDrawable(ChipDrawable.createFromResource(this, R.xml.used_for_chip));
+        chip.setChipDrawable(ChipDrawable.createFromResource(this, R.xml.used_for_edit_chip));
         int paddingDp = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 10,
                 getResources().getDisplayMetrics()

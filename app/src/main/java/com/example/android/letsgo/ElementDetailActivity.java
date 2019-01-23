@@ -13,8 +13,6 @@ import com.google.android.material.chip.Chip;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.File;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.palette.graphics.Palette;
@@ -62,7 +60,10 @@ public class ElementDetailActivity extends AppCompatActivity {
         mUsedForChip.setText(element.getUsedFor());
         mVideoUrlView.setText(element.getVideoUrl());
         mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));
-        initializePictureWithColours(element.getPictureUrl());
+        if(element.getPictureUrl()!= null){
+            initializePictureWithColours(element.getPictureUrl());
+        }
+
 
     }
 
@@ -115,10 +116,11 @@ public class ElementDetailActivity extends AppCompatActivity {
         };
         mThumbnailUrlView.setTag(target);
 
+        Picasso.with(ElementDetailActivity.this).setLoggingEnabled(true);
         Picasso.with(ElementDetailActivity.this)
-                .load(new File(pictureUrl))//TODO Replace with dynamic picture url
+                .load(pictureUrl)//TODO Replace with dynamic picture url
                 .resize(imageWidth, imageHeight)
-                .centerCrop()
+                //.centerCrop()
                 .into(target);
     }
 

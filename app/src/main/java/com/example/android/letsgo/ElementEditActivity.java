@@ -1,27 +1,18 @@
 package com.example.android.letsgo;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.Toast;
 
-import com.example.android.letsgo.Utils.ImagePicker;
-import com.example.android.letsgo.Utils.PermissionRequestWriteExternal;
-
-import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import static com.example.android.letsgo.Utils.PermissionRequestWriteExternal.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
 
 public class ElementEditActivity extends AppCompatActivity {
     EditText mTitleEdit;
@@ -32,8 +23,7 @@ public class ElementEditActivity extends AppCompatActivity {
     EditText mVideoUrlEdit;
     NumberPicker mMinHumansPicker;
     Button mSaveButton;
-    private static final int PICK_IMAGE_ID = 23;
-    Bitmap bitmap;
+    int PICK_PHOTO_FOR_ELEMENT = 2;
 
 
     @Override
@@ -58,8 +48,16 @@ public class ElementEditActivity extends AppCompatActivity {
 
               @Override
               public void onClick(View view) {
-                  Intent chooseImageIntent = ImagePicker.getPickImageIntent(ElementEditActivity.this);
-                  startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+                  Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                  getIntent.setType("image/*");
+
+                  Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                  pickIntent.setType("image/*");
+
+                  Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                  chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+                  startActivityForResult(chooserIntent, PICK_PHOTO_FOR_ELEMENT);
               }
           });
 
@@ -82,58 +80,26 @@ public class ElementEditActivity extends AppCompatActivity {
         String createdUsedForEdit = mUsedForEdit.getText().toString();
         String createdVideoUrl = mVideoUrlEdit.getText().toString();
         int createdMinHumans = mMinHumansPicker.getValue();
-
         return new Element(createdTitle,createdUsedForEdit, pictureUrl, createdVideoUrl,createdMinHumans);
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
-            case PICK_IMAGE_ID:
-                bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-                // TODO use bitmap
-                if (PermissionRequestWriteExternal.checkPermissionWRITE_EXTERNAL_STORAGE(this)) {
-                    Uri tempUri = getImageUri(getApplicationContext(), bitmap);
-                    pictureUrl = getRealPathFromURI(tempUri);
-                    mPictureUrlEdit.setText(pictureUrl);
-                }
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-                break;
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_PHOTO_FOR_ELEMENT && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                //TODO Display an error
+                return;
+            }
+            try {
+                InputStream inputStream = ElementEditActivity.this.getContentResolver().openInputStream(data.getData());
+                Uri inputUri = data.getData();
+                pictureUrl = inputUri.toString();
+                mPictureUrlEdit.setText(pictureUrl);
+            }catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
 
-    public String getRealPathFromURI(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Uri tempUri = getImageUri(getApplicationContext(), bitmap);
-                    pictureUrl = getRealPathFromURI(tempUri);
-                    mPictureUrlEdit.setText(pictureUrl);
-                } else {
-                    Toast.makeText(ElementEditActivity.this, "Access to pictures denied",
-                            Toast.LENGTH_SHORT).show();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions,
-                        grantResults);
-        }
-    }
 }

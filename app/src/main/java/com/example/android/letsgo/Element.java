@@ -9,7 +9,7 @@ public class Element implements Serializable {
     //What do you achieve with it, what do you use it for? E.G. Lower Back for Deadlift
     //TODO This will be a List at some point and maybe be (entered and) displayed as chips
     private String usedFor;
-    private String thumbnailUrl;
+    private String pictureUrl;
     private String videoUrl;
     //How may people do you need min. for successfully doing this element?
     private int minNumberOfHumans;
@@ -26,11 +26,12 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, String usedFor, String videoUrl, int minNumberOfHumans) {
+    public Element(String title, String usedFor, String pictureUrl, String videoUrl,  int minNumberOfHumans) {
         this.title = title;
         this.usedFor = usedFor;
         this.videoUrl = videoUrl;
         this.minNumberOfHumans = minNumberOfHumans;
+        this.pictureUrl =pictureUrl;
     }
 
     public String getTitle() {
@@ -49,12 +50,12 @@ public class Element implements Serializable {
         this.usedFor = usedFor;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     public String getVideoUrl() {

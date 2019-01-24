@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Material;
+import com.example.android.letsgo.Utils.PictureUtil;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
@@ -104,7 +105,8 @@ public class ElementEditActivity extends AppCompatActivity {
                 Uri inputUri = data.getData();
                 pictureUrl = inputUri.toString();
                 if(pictureUrl!= null){
-                    initializePictureWithColours(element.getPictureUrl());
+                    PictureUtil pictureUtil = new PictureUtil(ElementEditActivity.this);
+                    pictureUtil.initializePictureWithColours(pictureUrl, mPicture, mTitleEdit);
                 }
             }catch (FileNotFoundException e) {
                 e.printStackTrace();

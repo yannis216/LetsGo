@@ -3,12 +3,12 @@
     <string name="element_edit_title">Title</string>
     <string name="element_edit_usedFor">e.g. Biceps</string>
     <string name="element_edit_thumbnail_url">Link to picture</string>
-    <string name="element_edit_video_url">Link to youtube video</string>
+    <string name="element_edit_video_url">Youtube Video ID</string>
     <string name="pick_image_intent_text">IntentText</string>
-    <string name="element_material_edit_text">Type needed materials here</string>
+    <string name="element_material_edit_text">eg. 10kg weights</string>
     <string name="element_detail_material_header">Materials: </string>
     <string name="element_edit_usedFor_add">Add</string>
     <string name="element_edit_material_add">Add</string>
-    <string name="element_edit_save">Add</string>
+    <string name="element_edit_save">Save</string>
 
 </resources>

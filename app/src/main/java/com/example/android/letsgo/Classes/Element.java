@@ -17,6 +17,8 @@ public class Element implements Serializable {
     private List<Material> neededMaterials;
     //TODO Add List of SubElements
 
+    //TODO Does this need a short written description?
+
     public Element(String title) {
         this.title = title;
     }

@@ -4,13 +4,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ElementEditActivity"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context=".ElementEditActivity">
+
         <ImageView
             android:id="@+id/iv_element_edit_picture"
             android:layout_width="@dimen/element_picture_width"
@@ -19,128 +21,138 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".5"
-            />
+            app:layout_constraintWidth_percent=".5" />
+
         <EditText
-            android:layout_width="wrap_content"
-            android:minWidth="@dimen/element_picture_width"
-            android:layout_height="wrap_content"
             android:id="@+id/et_element_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:hint="@string/element_edit_title"
+            android:inputType="textCapSentences|textAutoCorrect"
+            android:minWidth="@dimen/element_picture_width"
+            android:textAlignment="center"
             android:textSize="32sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="32dp"
-            app:layout_constraintWidth_percent=".5"
-            android:textAlignment="center"
-            android:hint="@string/element_edit_title"
-            android:inputType="textCapSentences|textAutoCorrect"
-            />
+            app:layout_constraintWidth_percent=".5" />
         <!--TODO make this an autocompleteTextView that suggests already existing titles with a hint: Already existing: -->
         <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:id="@+id/et_element_usedFor"
-            android:inputType="textCapSentences|textAutoCorrect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:hint="@string/element_edit_usedFor"
             android:imeOptions="actionDone"
-            app:layout_constraintTop_toBottomOf="@id/iv_element_edit_picture"
+            android:inputType="textCapSentences|textAutoCorrect"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/bn_element_usedFor_add"/>
+            app:layout_constraintRight_toLeftOf="@id/bn_element_usedFor_add"
+            app:layout_constraintTop_toBottomOf="@id/iv_element_edit_picture" />
+
         <Button
+            android:id="@+id/bn_element_usedFor_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/element_edit_usedFor_add"
-            android:id="@+id/bn_element_usedFor_add"
             app:layout_constraintLeft_toRightOf="@id/et_element_usedFor"
-            app:layout_constraintTop_toTopOf="@id/et_element_usedFor"/>
+            app:layout_constraintTop_toTopOf="@id/et_element_usedFor" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cg_element_edit_usedFor_chips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/et_element_usedFor"
-            app:layout_constraintLeft_toLeftOf="parent">
-        </com.google.android.material.chip.ChipGroup>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_element_usedFor"></com.google.android.material.chip.ChipGroup>
+
         <EditText
+            android:id="@+id/et_element_videoUrl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/et_element_videoUrl"
-            android:inputType="textUri"
             android:hint="@string/element_edit_video_url"
-            app:layout_constraintTop_toBottomOf="@+id/et_element_usedFor"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            android:inputType="textUri"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cg_element_edit_usedFor_chips" />
+
         <ImageButton
-            android:layout_width="32dp"
-            android:layout_height="64dp"
-            android:src="@drawable/baseline_add_photo_alternate_black_48dp"
             android:id="@+id/bn_element_picture_picker"
-            app:layout_constraintTop_toBottomOf="@id/et_element_videoUrl"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:src="@drawable/baseline_add_photo_alternate_black_48dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_element_videoUrl" />
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
             android:id="@+id/iv_element_edit_minHumans_icon"
-            android:src="@drawable/baseline_people_black_24dp"
-            app:layout_constraintLeft_toRightOf="@+id/bn_element_picture_picker"
-            app:layout_constraintTop_toTopOf="@id/bn_element_picture_picker"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"/>
-        <NumberPicker
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/baseline_people_black_48dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bn_element_picture_picker" />
+
+        <!-- TODO Move the Numberpicker in an alertdialog opened by Button -->
+        <NumberPicker
             android:id="@+id/np_element_min_humans"
-            android:layout_marginLeft="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
             app:layout_constraintLeft_toRightOf="@id/iv_element_edit_minHumans_icon"
-            app:layout_constraintTop_toTopOf="@id/bn_element_picture_picker"/>
+            app:layout_constraintTop_toTopOf="@id/bn_element_picture_picker" />
 
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/et_element_material"
-            android:inputType="textUri"
-            android:hint="@string/element_material_edit_text"
-            app:layout_constraintTop_toBottomOf="@+id/np_element_min_humans"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/cb_element_material_gets_consumed"
-            />
-        <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/element_material_edit_text"
+            android:inputType="textUri"
+            app:layout_constraintEnd_toStartOf="@+id/cb_element_material_gets_consumed"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/np_element_min_humans"
+            app:layout_constraintHorizontal_weight="6"/>
+
+        <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/cb_element_material_gets_consumed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/bn_element_material_commit"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/et_element_material"
             app:layout_constraintTop_toTopOf="@id/et_element_material"
-            app:layout_constraintLeft_toRightOf="@id/et_element_material"
-            app:layout_constraintRight_toLeftOf="@id/bn_element_material_commit"
-            />
+            app:layout_constraintHorizontal_weight="1"/>
+
         <Button
-            android:layout_width="wrap_content"
+            android:id="@+id/bn_element_material_commit"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/element_edit_material_add"
-            android:id="@+id/bn_element_material_commit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/cb_element_material_gets_consumed"
             app:layout_constraintTop_toTopOf="@id/et_element_material"
-            app:layout_constraintLeft_toRightOf="@id/cb_element_material_gets_consumed"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintHorizontal_weight="3"/>
+
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cg_element_edit_material_chips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/et_element_material"
-            app:layout_constraintLeft_toLeftOf="parent">
-        </com.google.android.material.chip.ChipGroup>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_element_material"/>
 
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/bn_element_save"
-            app:layout_constraintTop_toBottomOf="@id/cg_element_edit_material_chips"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="0dp"
             android:background="@color/colorAccent"
-            android:text="@string/element_edit_save"/>
-
+            android:text="@string/element_edit_save"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cg_element_edit_material_chips" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

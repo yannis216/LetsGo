@@ -31,6 +31,8 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
+// TODO There is no Input Validation here. Think about security concerns etc
 public class ElementEditActivity extends AppCompatActivity {
     ImageView mPicture;
     EditText mTitleEdit;
@@ -232,6 +234,7 @@ public class ElementEditActivity extends AppCompatActivity {
         mMaterialGetsConsumed.setChecked(false);
     }
 
+    // TODO Könnte man glaub auch irgendwie in Utils packen
     class DoneOnEditorActionListener implements TextView.OnEditorActionListener {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

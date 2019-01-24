@@ -12,6 +12,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -29,20 +31,20 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ElementEditActivity extends AppCompatActivity {
+    ImageView mPicture;
     EditText mTitleEdit;
     //TODO Set Maximum number of character for edittexts that result in chips.
     // Otherwise error on display because long chips dont fit in a row and cant get textwrapped
     EditText mUsedForEdit;
     Button mUsedForAdder;
     ChipGroup mUsedForChipGroup;
-    Button mPicturePicker;
-    EditText mPictureUrlEdit;
+    ImageButton mPicturePicker;
     String pictureUrl;
-    EditText mVideoUrlEdit;    
+    EditText mVideoUrlEdit;
     //TODO Set Maximum number of character for edittexts that result in chips.
     // Otherwise error on display because long chips dont fit in a row and cant get textwrapped
     EditText mMaterialEdit;
-    //TODO Should handle this in Alterbox at some point
+    //TODO Should handle this in AlertDialog at some point
     CheckBox mMaterialGetsConsumed;
     Button mMaterialCommiter;
     NumberPicker mMinHumansPicker;
@@ -57,6 +59,7 @@ public class ElementEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_element_edit);
 
+        mPicture =findViewById(R.id.iv_element_edit_picture);
         mTitleEdit = findViewById(R.id.et_element_title);
         mUsedForEdit = findViewById(R.id.et_element_usedFor);
         mUsedForAdder =findViewById(R.id.bn_element_usedFor_add);
@@ -65,7 +68,6 @@ public class ElementEditActivity extends AppCompatActivity {
         mVideoUrlEdit=findViewById(R.id.et_element_videoUrl);
         mMinHumansPicker=findViewById(R.id.np_element_min_humans);
         mSaveButton = findViewById(R.id.bn_element_save);
-        mPictureUrlEdit =findViewById(R.id.et_element_picture_url);
         mMaterialEdit=findViewById(R.id.et_element_material);
         mMaterialGetsConsumed=findViewById(R.id.cb_element_material_gets_consumed);
         mMaterialCommiter=findViewById(R.id.bn_element_material_commit);
@@ -101,7 +103,9 @@ public class ElementEditActivity extends AppCompatActivity {
                 InputStream inputStream = ElementEditActivity.this.getContentResolver().openInputStream(data.getData()); //TODO delete is safe?
                 Uri inputUri = data.getData();
                 pictureUrl = inputUri.toString();
-                mPictureUrlEdit.setText(pictureUrl);
+                if(pictureUrl!= null){
+                    initializePictureWithColours(element.getPictureUrl());
+                }
             }catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

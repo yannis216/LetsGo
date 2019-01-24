@@ -7,4 +7,8 @@
     <string name="pick_image_intent_text">IntentText</string>
     <string name="element_material_edit_text">Type needed materials here</string>
     <string name="element_detail_material_header">Materials: </string>
+    <string name="element_edit_usedFor_add">Add</string>
+    <string name="element_edit_material_add">Add</string>
+    <string name="element_edit_save">Add</string>
+
 </resources>

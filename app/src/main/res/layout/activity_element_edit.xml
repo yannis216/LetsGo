@@ -37,6 +37,18 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent=".5" />
+
+        <EditText
+            android:id="@+id/et_element_edit_shortDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/element_edit_shortDesc"
+            android:inputType="textAutoCorrect|textMultiLine"
+            android:lines="4"
+            android:maxLines="4"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_element_edit_picture" />
         <!--TODO make this an autocompleteTextView that suggests already existing titles with a hint: Already existing: -->
         <EditText
             android:id="@+id/et_element_usedFor"
@@ -47,7 +59,7 @@
             android:inputType="textCapSentences|textAutoCorrect"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/bn_element_usedFor_add"
-            app:layout_constraintTop_toBottomOf="@id/iv_element_edit_picture" />
+            app:layout_constraintTop_toBottomOf="@id/et_element_edit_shortDesc" />
 
         <Button
             android:id="@+id/bn_element_usedFor_add"

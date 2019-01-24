@@ -36,6 +36,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ElementEditActivity extends AppCompatActivity {
     ImageView mPicture;
     EditText mTitleEdit;
+    EditText mShortDescEdit;
     //TODO Set Maximum number of character for edittexts that result in chips.
     // Otherwise error on display because long chips dont fit in a row and cant get textwrapped
     EditText mUsedForEdit;
@@ -64,6 +65,7 @@ public class ElementEditActivity extends AppCompatActivity {
 
         mPicture =findViewById(R.id.iv_element_edit_picture);
         mTitleEdit = findViewById(R.id.et_element_title);
+        mShortDescEdit=findViewById(R.id.et_element_edit_shortDesc);
         mUsedForEdit = findViewById(R.id.et_element_usedFor);
         mUsedForAdder =findViewById(R.id.bn_element_usedFor_add);
         mUsedForChipGroup =findViewById(R.id.cg_element_edit_usedFor_chips);
@@ -87,12 +89,13 @@ public class ElementEditActivity extends AppCompatActivity {
 
     private Element getElementFromInputs(){
         String createdTitle = mTitleEdit.getText().toString();
+        String createdShortDesc =mShortDescEdit.getText().toString();
         String createdVideoUrl = mVideoUrlEdit.getText().toString();
         int createdMinHumans = mMinHumansPicker.getValue();
         List<String> createdUsedFor = generateListFromChipGroup(mUsedForChipGroup);
 
 
-        return new Element(createdTitle, createdUsedFor, pictureUrl, createdVideoUrl, createdMinHumans, mCreatedNeededMaterials);
+        return new Element(createdTitle, createdShortDesc, createdUsedFor, pictureUrl, createdVideoUrl, createdMinHumans, mCreatedNeededMaterials);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

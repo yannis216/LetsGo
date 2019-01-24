@@ -6,6 +6,7 @@ import java.util.List;
 public class Element implements Serializable {
 
     private String title;
+    private String shortDesc;
     //What do you achieve with it, what do you use it for? E.G. Lower Back for Deadlift
     private List<String> usedFor;
     private String pictureUrl;
@@ -26,8 +27,9 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, List<String> usedFor, String pictureUrl, String videoId, int minNumberOfHumans,  List<Material> neededMaterials) {
+    public Element(String title, String shortDesc, List<String> usedFor, String pictureUrl, String videoId, int minNumberOfHumans,  List<Material> neededMaterials) {
         this.title = title;
+        this.shortDesc =shortDesc;
         this.usedFor = usedFor;
         this.pictureUrl = pictureUrl;
         this.videoId = videoId;
@@ -42,6 +44,14 @@ public class Element implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getShortDesc() {
+        return shortDesc;
+    }
+
+    public void setShortDesc(String shortDesc) {
+        this.shortDesc = shortDesc;
     }
 
     public List<String> getUsedFor() {

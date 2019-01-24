@@ -42,12 +42,22 @@
         app:layout_constraintWidth_percent=".5"
         android:background="?android:selectableItemBackground"
         />
+    <TextView
+        android:id="@+id/tv_element_detail_shortDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_element_thumbnailUrl"
+        android:layout_marginTop="4dp"
+        >
+    </TextView>
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/cg_element_detail_usedFor_chips"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_element_thumbnailUrl"
+        app:layout_constraintTop_toBottomOf="@id/tv_element_detail_shortDesc"
         android:layout_marginTop="8dp"
         >
     </com.google.android.material.chip.ChipGroup>

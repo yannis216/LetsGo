@@ -29,6 +29,7 @@ public class ElementDetailActivity extends AppCompatActivity {
     ImageView mPictureView;
     TextView mMinHumansView;
     Element displayedElement;
+    TextView mShortDescView;
 
 
     ConstraintLayout mElementLayout;
@@ -45,6 +46,7 @@ public class ElementDetailActivity extends AppCompatActivity {
         mElementLayout = findViewById(R.id.cl_element_layout);
         mTitleView = findViewById(R.id.tv_element_title);
         mPictureView =findViewById(R.id.iv_element_thumbnailUrl);
+        mShortDescView=findViewById(R.id.tv_element_detail_shortDesc);
         mMinHumansView=findViewById(R.id.tv_element_min_humans);
         mPlayVideoButton =findViewById(R.id.ib_element_play_video);
         mUsedForChipGroup =findViewById(R.id.cg_element_detail_usedFor_chips);
@@ -62,6 +64,7 @@ public class ElementDetailActivity extends AppCompatActivity {
 
     private void populateUi(final Element element){
         mTitleView.setText(element.getTitle());
+        mShortDescView.setText(element.getShortDesc());
         setChips(element.getUsedFor());
         setMaterialChips(element.getNeededMaterials());
         mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));

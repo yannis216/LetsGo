@@ -64,7 +64,7 @@ public class ElementDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        displayedElement = (Element) intent.getSerializableExtra("CreatedElement");
+        displayedElement = (Element) intent.getSerializableExtra("element");
         List<Material> materials = getMaterialsFromDatabase(displayedElement.getNeededMaterialsIds());
 
         populateUi(displayedElement);
@@ -166,6 +166,7 @@ public class ElementDetailActivity extends AppCompatActivity {
                         }
                     });
         }
+        //TODO Try addMaterialChips (With a list of Strings here to avoid single-loading chips
 
         return materials;
 

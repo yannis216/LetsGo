@@ -218,7 +218,7 @@ public class ElementEditActivity extends AppCompatActivity {
 
                 //TODO Hand over List of Materials here via Intent to save time and Databasereads in DetailActivity
                 Intent intent = new Intent(ElementEditActivity.this, ElementDetailActivity.class);
-                intent.putExtra("CreatedElement", createdElement);
+                intent.putExtra("element", createdElement);
                 startActivity(intent);
 
             }

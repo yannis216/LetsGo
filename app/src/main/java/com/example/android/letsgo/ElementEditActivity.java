@@ -97,7 +97,7 @@ public class ElementEditActivity extends AppCompatActivity {
 
     }
 
-    private Element getElementFromInputs(){
+    private Element getElementFromInputs(List<String> materialIds){
         String createdTitle = mTitleEdit.getText().toString();
         String createdShortDesc =mShortDescEdit.getText().toString();
         String createdVideoUrl = mVideoUrlEdit.getText().toString();
@@ -106,7 +106,7 @@ public class ElementEditActivity extends AppCompatActivity {
         String timeOnSavePressed= String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
 
 
-        return new Element(createdTitle, createdShortDesc, createdUsedFor, pictureUrl, createdVideoUrl, createdMinHumans, mCreatedNeededMaterials, timeOnSavePressed);
+        return new Element(createdTitle, createdShortDesc, createdUsedFor, pictureUrl, createdVideoUrl, createdMinHumans, materialIds, timeOnSavePressed);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -211,9 +211,12 @@ public class ElementEditActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Element createdElement = getElementFromInputs();
+                List<String> materialIds = saveMaterialsToDatabase(mCreatedNeededMaterials);
+                Element createdElement = getElementFromInputs(materialIds);
+                Log.e("MaterialIds", ""+createdElement.getNeededMaterialsIds());
                 saveElementToDatabase(createdElement);
 
+                //TODO Hand over List of Materials here via Intent to save time and Databasereads in DetailActivity
                 Intent intent = new Intent(ElementEditActivity.this, ElementDetailActivity.class);
                 intent.putExtra("CreatedElement", createdElement);
                 startActivity(intent);
@@ -274,6 +277,7 @@ public class ElementEditActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.e("saveElement", "Document Snap added with id:" + documentReference.getId());
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -282,6 +286,21 @@ public class ElementEditActivity extends AppCompatActivity {
                         Log.w("saveElement", "Error adding document", e);
                     }
                 });
+
+    }
+
+    public List<String> saveMaterialsToDatabase(List<Material> newMaterials){
+        List<String> materialIds= new ArrayList<>();
+        for(int i = 0; i<newMaterials.size(); i++){
+            Material newMaterial = newMaterials.get(i);
+            String materialId = db.collection("materials").document().getId();
+            materialIds.add(materialId);
+            db.collection("materials").document(materialId)
+                    .set(newMaterial);
+
+        }
+        return materialIds;
+
 
     }
 

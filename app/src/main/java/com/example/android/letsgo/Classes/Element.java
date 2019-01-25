@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Element implements Serializable {
 
+
     private String title;
     private String shortDesc;
     //What do you achieve with it, what do you use it for? E.G. Lower Back for Deadlift
@@ -15,7 +16,8 @@ public class Element implements Serializable {
     private int minNumberOfHumans;
     //TODO To be set true when an Element is very basic (Like Pushups) and reviewed + edited by staff/(admins?). From then it can only be updated by admins
     private boolean isFixedBasic;
-    private List<Material> neededMaterials;
+    //TODO REconsinder making this a List<Material> -> Having the data denormalized
+    private List<String> neededMaterialsIds;
 
     //TODO Add List of SubElements
     private String timeCreated;
@@ -29,17 +31,16 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, String shortDesc, List<String> usedFor, String pictureUrl, String videoId, int minNumberOfHumans,  List<Material> neededMaterials, String timeCreated) {
+    public Element(String title, String shortDesc, List<String> usedFor, String pictureUrl, String videoId, int minNumberOfHumans, List<String> neededMaterialsIds, String timeCreated) {
         this.title = title;
         this.shortDesc =shortDesc;
         this.usedFor = usedFor;
         this.pictureUrl = pictureUrl;
         this.videoId = videoId;
         this.minNumberOfHumans = minNumberOfHumans;
-        this.neededMaterials = neededMaterials;
+        this.neededMaterialsIds = neededMaterialsIds;
         this.timeCreated = timeCreated;
     }
-
 
     public String getTitle() {
         return title;
@@ -97,12 +98,12 @@ public class Element implements Serializable {
         isFixedBasic = fixedBasic;
     }
 
-    public List<Material> getNeededMaterials() {
-        return neededMaterials;
+    public List<String> getNeededMaterialsIds() {
+        return neededMaterialsIds;
     }
 
-    public void setNeededMaterials(List<Material> neededMaterials) {
-        this.neededMaterials = neededMaterials;
+    public void setNeededMaterialsIds(List<String> neededMaterialsIds) {
+        this.neededMaterialsIds = neededMaterialsIds;
     }
 
     public String getTimeCreated() {

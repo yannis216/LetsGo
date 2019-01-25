@@ -15,10 +15,14 @@ import android.widget.TextView;
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Material;
 import com.example.android.letsgo.Utils.PictureUtil;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,12 +40,16 @@ public class ElementDetailActivity extends AppCompatActivity {
     ImageButton mPlayVideoButton;
     ChipGroup mUsedForChipGroup;
     ChipGroup mMaterialChipGroup;
+    FirebaseFirestore db;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_element_detail);
+
+        // Access a Cloud Firestore instance
+        db = FirebaseFirestore.getInstance();
 
         mElementLayout = findViewById(R.id.cl_element_layout);
         mTitleView = findViewById(R.id.tv_element_title);
@@ -57,6 +65,7 @@ public class ElementDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         displayedElement = (Element) intent.getSerializableExtra("CreatedElement");
+        List<Material> materials = getMaterialsFromDatabase(displayedElement.getNeededMaterialsIds());
 
         populateUi(displayedElement);
 
@@ -66,7 +75,6 @@ public class ElementDetailActivity extends AppCompatActivity {
         mTitleView.setText(element.getTitle());
         mShortDescView.setText(element.getShortDesc());
         setChips(element.getUsedFor());
-        setMaterialChips(element.getNeededMaterials());
         mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));
         if(element.getVideoId().equals("")){
             mPlayVideoButton.setVisibility(View.GONE);
@@ -109,11 +117,10 @@ public class ElementDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void setMaterialChips(List<Material> materials){
-        for(int i=0; i<materials.size(); i++){
-            final Chip thisChip = getChip(mMaterialChipGroup, materials.get(i).getTitle());
+    private void addMaterialChip(Material material){
+            final Chip thisChip = getChip(mMaterialChipGroup, material.getTitle());
             mMaterialChipGroup.addView(thisChip);
-        }
+
     }
 
 
@@ -139,6 +146,29 @@ public class ElementDetailActivity extends AppCompatActivity {
             }
         });
         return chip;
+    }
+
+    private List<Material> getMaterialsFromDatabase(List<String> materialIds){
+        //TODO Revisit this: This might be better done with a query or a batch request or sth. like that. Maybe a query with or(Not possible yet in Jan. 2019 but feature is requested onm github)?
+        final List<Material> materials = new ArrayList<Material>();
+        for(int i = 0; i<materialIds.size(); i++){
+            db.collection("materials")
+                    .document(materialIds.get(i))
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Material material=documentSnapshot.toObject(Material.class);
+                            materials.add(material);
+                            addMaterialChip(material);
+
+
+                        }
+                    });
+        }
+
+        return materials;
+
     }
 
 

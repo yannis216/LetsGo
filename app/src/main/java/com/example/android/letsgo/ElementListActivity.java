@@ -1,7 +1,8 @@
 package com.example.android.letsgo;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ElementListActivity extends AppCompatActivity {
 
@@ -11,5 +12,7 @@ public class ElementListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_element_list);
 
         //TODO Make this a fragment for TwoPane Layouts
+
+
     }
 }

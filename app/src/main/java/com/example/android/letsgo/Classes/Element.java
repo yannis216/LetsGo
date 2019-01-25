@@ -16,7 +16,9 @@ public class Element implements Serializable {
     //TODO To be set true when an Element is very basic (Like Pushups) and reviewed + edited by staff/(admins?). From then it can only be updated by admins
     private boolean isFixedBasic;
     private List<Material> neededMaterials;
+
     //TODO Add List of SubElements
+    private String timeCreated;
 
     //TODO Does this need a short written description?
 
@@ -27,7 +29,7 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, String shortDesc, List<String> usedFor, String pictureUrl, String videoId, int minNumberOfHumans,  List<Material> neededMaterials) {
+    public Element(String title, String shortDesc, List<String> usedFor, String pictureUrl, String videoId, int minNumberOfHumans,  List<Material> neededMaterials, String timeCreated) {
         this.title = title;
         this.shortDesc =shortDesc;
         this.usedFor = usedFor;
@@ -35,6 +37,7 @@ public class Element implements Serializable {
         this.videoId = videoId;
         this.minNumberOfHumans = minNumberOfHumans;
         this.neededMaterials = neededMaterials;
+        this.timeCreated = timeCreated;
     }
 
 
@@ -100,6 +103,14 @@ public class Element implements Serializable {
 
     public void setNeededMaterials(List<Material> neededMaterials) {
         this.neededMaterials = neededMaterials;
+    }
+
+    public String getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(String timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
 

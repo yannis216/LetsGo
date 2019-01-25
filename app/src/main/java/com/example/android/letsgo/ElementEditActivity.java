@@ -20,15 +20,21 @@ import android.widget.TextView;
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Material;
 import com.example.android.letsgo.Utils.PictureUtil;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -56,12 +62,16 @@ public class ElementEditActivity extends AppCompatActivity {
     ChipGroup mMaterialChipGroup;
     List<Material> mCreatedNeededMaterials = new ArrayList<Material>();
     int PICK_PHOTO_FOR_ELEMENT = 2;
+    FirebaseFirestore db;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_element_edit);
+
+        // Access a Cloud Firestore instance
+        db = FirebaseFirestore.getInstance();
 
         mPicture =findViewById(R.id.iv_element_edit_picture);
         mTitleEdit = findViewById(R.id.et_element_title);
@@ -93,9 +103,10 @@ public class ElementEditActivity extends AppCompatActivity {
         String createdVideoUrl = mVideoUrlEdit.getText().toString();
         int createdMinHumans = mMinHumansPicker.getValue();
         List<String> createdUsedFor = generateListFromChipGroup(mUsedForChipGroup);
+        String timeOnSavePressed= String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
 
 
-        return new Element(createdTitle, createdShortDesc, createdUsedFor, pictureUrl, createdVideoUrl, createdMinHumans, mCreatedNeededMaterials);
+        return new Element(createdTitle, createdShortDesc, createdUsedFor, pictureUrl, createdVideoUrl, createdMinHumans, mCreatedNeededMaterials, timeOnSavePressed);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -201,6 +212,8 @@ public class ElementEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Element createdElement = getElementFromInputs();
+                saveElementToDatabase(createdElement);
+
                 Intent intent = new Intent(ElementEditActivity.this, ElementDetailActivity.class);
                 intent.putExtra("CreatedElement", createdElement);
                 startActivity(intent);
@@ -252,6 +265,24 @@ public class ElementEditActivity extends AppCompatActivity {
             }
             return false;
         }
+    }
+
+    public void saveElementToDatabase(Element newElement){
+        db.collection("elements")
+                .add(newElement)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.e("saveElement", "Document Snap added with id:" + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("saveElement", "Error adding document", e);
+                    }
+                });
+
     }
 
 }

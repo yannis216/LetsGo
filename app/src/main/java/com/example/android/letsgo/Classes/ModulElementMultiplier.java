@@ -1,16 +1,16 @@
 package com.example.android.letsgo.Classes;
 
-public class ElementMultiplier {
+public class ModulElementMultiplier {
 
     private int timesMultiplied;
     private String type;
 
-    public ElementMultiplier(int timesMultiplied, String type) {
+    public ModulElementMultiplier(int timesMultiplied, String type) {
         this.timesMultiplied = timesMultiplied;
         this.type = type;
     }
 
-    public ElementMultiplier() {
+    public ModulElementMultiplier() {
     }
 
     public int getTimesMultiplied() {

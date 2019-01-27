@@ -1,6 +1,8 @@
 package com.example.android.letsgo.Classes;
 
-public class ModulElementMultiplier {
+import java.io.Serializable;
+
+public class ModulElementMultiplier implements Serializable {
 
     private int timesMultiplied;
     private String type;

@@ -1,8 +1,9 @@
 package com.example.android.letsgo.Classes;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Modul {
+public class Modul implements Serializable {
 
     private String title;
     private List<ModulElement> modulElements;
@@ -15,6 +16,7 @@ public class Modul {
 
     public Modul() {
     }
+
 
     public String getTitle() {
         return title;

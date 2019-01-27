@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.letsgo.Classes.Element;
+import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.ElementListAdapter;
 import com.example.android.letsgo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,12 +33,22 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.Adapter mAdapter;
     FirebaseFirestore db;
+    boolean isModulEditMode = false;
+    List<Element> selectedElementsForModul;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_element_list);
 
         db = FirebaseFirestore.getInstance();
+        selectedElementsForModul = new ArrayList<Element>();
+
+        Intent intent = getIntent();
+        Modul newModul = (Modul) intent.getSerializableExtra("newModul");
+        if(newModul != null){
+            isModulEditMode = true;
+        }
 
         //TODO Make this a fragment for TwoPane Layouts
         mRvElements = findViewById(R.id.rv_elements_list);
@@ -92,7 +103,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
     }
 
     public void updateUiWithFetchedElements(List<Element> elements){
-        mAdapter = new ElementListAdapter(this, elements, this);
+        mAdapter = new ElementListAdapter(this, elements, this, isModulEditMode);
         mRvElements.setAdapter(mAdapter);
     }
 

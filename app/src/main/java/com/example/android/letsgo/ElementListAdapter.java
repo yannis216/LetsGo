@@ -17,11 +17,15 @@ public class ElementListAdapter extends RecyclerView.Adapter<ElementListAdapter.
     private List<Element> elements;
     private LayoutInflater mInflater;
     private final ElementOnClickHandler mClickHandler;
+    boolean isModulEditMode = false;
+    private Context context;
 
-    public ElementListAdapter(Context context, List<Element> elements, ElementOnClickHandler clickHandler) {
+    public ElementListAdapter(Context context, List<Element> elements, ElementOnClickHandler clickHandler, boolean isModulEditMode) {
         this.elements = elements;
         this.mInflater = LayoutInflater.from(context);
         this.mClickHandler=clickHandler;
+        this.isModulEditMode=isModulEditMode;
+        this.context = context;
     }
 
     public class ElementViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -57,8 +61,11 @@ public class ElementListAdapter extends RecyclerView.Adapter<ElementListAdapter.
     public void onBindViewHolder(@NonNull ElementViewHolder holder, int position) {
         Element currentElement = elements.get(position);
         String elementTitle = currentElement.getTitle();
-
         TextView titleView = holder.itemView.findViewById(R.id.tv_element_list_item_title);
+        if(isModulEditMode){
+            int color = context.getResources().getColor(R.color.colorPrimary);
+            holder.itemView.setBackgroundColor(color);
+        }
 
 
         titleView.setText(elementTitle);

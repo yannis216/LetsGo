@@ -1,6 +1,8 @@
 package com.example.android.letsgo;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +38,25 @@ public class ElementListAdapter extends RecyclerView.Adapter<ElementListAdapter.
 
         @Override
         public void onClick(View view) {
+            if(isModulEditMode){
+                int selectedColor = context.getResources().getColor(R.color.colorAccent);
+                int isColor = Color.TRANSPARENT;
+                if(view.getBackground() != null){
+                isColor = ((ColorDrawable)view.getBackground()).getColor();
+                }
+
+                if(isColor != selectedColor){
+                    view.setBackgroundColor(selectedColor);
+                }else{
+                    int unSelected = context.getResources().getColor(R.color.colorPrimary);
+                    view.setBackgroundColor(unSelected);
+                }
+
+            }
             int adapterPosition = getAdapterPosition();
             Element clickedElement = elements.get(adapterPosition);
             mClickHandler.onClick(clickedElement);
+
         }
     }
 
@@ -62,12 +80,6 @@ public class ElementListAdapter extends RecyclerView.Adapter<ElementListAdapter.
         Element currentElement = elements.get(position);
         String elementTitle = currentElement.getTitle();
         TextView titleView = holder.itemView.findViewById(R.id.tv_element_list_item_title);
-        if(isModulEditMode){
-            int color = context.getResources().getColor(R.color.colorPrimary);
-            holder.itemView.setBackgroundColor(color);
-        }
-
-
         titleView.setText(elementTitle);
 
     }

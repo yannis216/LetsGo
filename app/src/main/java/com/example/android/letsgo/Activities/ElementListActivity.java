@@ -109,8 +109,14 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
 
     @Override
     public void onClick(Element clickedElement) {
-        Intent startElementDetailActivityIntent = new Intent(this, ElementDetailActivity.class);
-        startElementDetailActivityIntent.putExtra("element", clickedElement);
-        startActivity(startElementDetailActivityIntent);
+        if (isModulEditMode) {
+           selectedElementsForModul.add(clickedElement);
+           Log.e("onClickElement", "" +clickedElement);
+
+        }else {
+            Intent startElementDetailActivityIntent = new Intent(this, ElementDetailActivity.class);
+            startElementDetailActivityIntent.putExtra("element", clickedElement);
+            startActivity(startElementDetailActivityIntent);
+        }
     }
 }

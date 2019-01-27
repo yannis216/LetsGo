@@ -57,6 +57,9 @@ public class ElementListAdapter extends RecyclerView.Adapter<ElementListAdapter.
             Element clickedElement = elements.get(adapterPosition);
             mClickHandler.onClick(clickedElement);
 
+            //TODO Design: Make an Imageview that has previousply been gone to visible (with a green checkmark) or simply make it a checkbox
+
+
         }
     }
 

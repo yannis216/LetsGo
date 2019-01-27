@@ -110,6 +110,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
     @Override
     public void onClick(Element clickedElement) {
         if (isModulEditMode) {
+            //TODO Remove Element from List when clicked Twice
            selectedElementsForModul.add(clickedElement);
            Log.e("onClickElement", "" +clickedElement);
 

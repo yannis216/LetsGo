@@ -16,9 +16,11 @@ import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Material;
 import com.example.android.letsgo.Utils.PictureUtil;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -34,6 +36,7 @@ public class ElementDetailActivity extends AppCompatActivity {
     TextView mMinHumansView;
     Element displayedElement;
     TextView mShortDescView;
+
 
 
     ConstraintLayout mElementLayout;
@@ -59,6 +62,8 @@ public class ElementDetailActivity extends AppCompatActivity {
         mPlayVideoButton =findViewById(R.id.ib_element_play_video);
         mUsedForChipGroup =findViewById(R.id.cg_element_detail_usedFor_chips);
         mMaterialChipGroup = findViewById(R.id.cg_element_detail_material_chips);
+        BottomAppBar bar= (BottomAppBar) findViewById(R.id.bar_activity_element_detail);
+        FloatingActionButton fab = findViewById(R.id.fab_activity_element_detail);
 
 
 
@@ -68,6 +73,15 @@ public class ElementDetailActivity extends AppCompatActivity {
         List<Material> materials = getMaterialsFromDatabase(displayedElement.getNeededMaterialsIds());
 
         populateUi(displayedElement);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent fabIntent = new Intent(ElementDetailActivity.this, ElementEditActivity.class);
+                startActivity(fabIntent);
+            }
+        });
+
 
     }
 

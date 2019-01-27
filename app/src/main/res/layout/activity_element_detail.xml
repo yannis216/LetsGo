@@ -1,106 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ElementDetailActivity"
-    android:id="@+id/cl_element_layout"
-    >
+    android:id="@+id/col_activity_element_detail_coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/iv_element_thumbnailUrl"
-        android:layout_width="@dimen/element_picture_width"
-        android:layout_height="@dimen/element_picture_height"
-        android:src="@drawable/ic_launcher_background"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent=".5"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:minWidth="@dimen/element_picture_width"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_element_title"
-        android:textSize="32sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="32dp"
-        app:layout_constraintWidth_percent=".5"
-        android:textAlignment="center"/>
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ib_element_play_video"
-        android:src="@drawable/baseline_play_circle_filled_black_48dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_element_title"
-        android:layout_marginTop="32dp"
-        app:layout_constraintWidth_percent=".5"
-        android:background="?android:selectableItemBackground"
-        />
-    <TextView
-        android:id="@+id/tv_element_detail_shortDesc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_element_thumbnailUrl"
-        android:layout_marginTop="4dp"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".ElementDetailActivity"
+        android:id="@+id/cl_element_layout"
         >
-    </TextView>
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/cg_element_detail_usedFor_chips"
+
+        <ImageView
+            android:id="@+id/iv_element_thumbnailUrl"
+            android:layout_width="@dimen/element_picture_width"
+            android:layout_height="@dimen/element_picture_height"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".5"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:minWidth="@dimen/element_picture_width"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_element_title"
+            android:textSize="32sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="32dp"
+            app:layout_constraintWidth_percent=".5"
+            android:textAlignment="center"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ib_element_play_video"
+            android:src="@drawable/baseline_play_circle_filled_black_48dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_element_title"
+            android:layout_marginTop="32dp"
+            app:layout_constraintWidth_percent=".5"
+            android:background="?android:selectableItemBackground"
+            />
+        <TextView
+            android:id="@+id/tv_element_detail_shortDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_element_thumbnailUrl"
+            android:layout_marginTop="4dp"
+            >
+        </TextView>
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_element_detail_usedFor_chips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_element_detail_shortDesc"
+            android:layout_marginTop="8dp"
+            >
+        </com.google.android.material.chip.ChipGroup>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/iv_element_minHumans_icon"
+            android:src="@drawable/baseline_people_black_24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cg_element_detail_usedFor_chips"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_element_min_humans"
+            app:layout_constraintBottom_toBottomOf="@id/iv_element_minHumans_icon"
+            app:layout_constraintLeft_toRightOf="@id/iv_element_minHumans_icon"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_element_material_header"
+            android:textSize="16sp"
+            android:text="@string/element_detail_material_header"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_element_min_humans"
+            android:layout_marginTop="4dp" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_element_detail_material_chips"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/tv_element_material_header"
+            app:layout_constraintTop_toTopOf="@id/tv_element_material_header"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginLeft="4dp"
+            >
+        </com.google.android.material.chip.ChipGroup>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bar_activity_element_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_element_detail_shortDesc"
-        android:layout_marginTop="8dp"
-        >
-    </com.google.android.material.chip.ChipGroup>
-
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:id="@+id/iv_element_minHumans_icon"
-        android:src="@drawable/baseline_people_black_24dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cg_element_detail_usedFor_chips"
-        android:layout_marginTop="4dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_element_min_humans"
-        app:layout_constraintBottom_toBottomOf="@id/iv_element_minHumans_icon"
-        app:layout_constraintLeft_toRightOf="@id/iv_element_minHumans_icon"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="center"
         />
-    <TextView
+    <!-- TODO den könnte man individuell (Form)im Sinne des Logos designen -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_activity_element_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_element_material_header"
-        android:textSize="16sp"
-        android:text="@string/element_detail_material_header"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_element_min_humans"
-        android:layout_marginTop="4dp" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/cg_element_detail_material_chips"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/tv_element_material_header"
-        app:layout_constraintTop_toTopOf="@id/tv_element_material_header"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="4dp"
-        >
-    </com.google.android.material.chip.ChipGroup>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:src="@drawable/baseline_add_black_24dp"
+        app:layout_anchor="@id/bar_activity_element_detail"/>
+    <!-- TODO Change src on functionality change -->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

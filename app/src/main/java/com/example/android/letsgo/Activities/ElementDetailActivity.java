@@ -1,4 +1,4 @@
-package com.example.android.letsgo;
+package com.example.android.letsgo.Activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Material;
+import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.PictureUtil;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomappbar.BottomAppBar;

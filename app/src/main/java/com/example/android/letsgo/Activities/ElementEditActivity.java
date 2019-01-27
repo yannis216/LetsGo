@@ -1,4 +1,4 @@
-package com.example.android.letsgo;
+package com.example.android.letsgo.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Material;
+import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.PictureUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

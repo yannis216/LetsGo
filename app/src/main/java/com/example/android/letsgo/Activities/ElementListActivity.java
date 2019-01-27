@@ -1,4 +1,4 @@
-package com.example.android.letsgo;
+package com.example.android.letsgo.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.letsgo.Classes.Element;
+import com.example.android.letsgo.ElementListAdapter;
+import com.example.android.letsgo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -24,7 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ElementListActivity extends AppCompatActivity implements ElementListAdapter.ElementOnClickHandler{
+public class ElementListActivity extends AppCompatActivity implements ElementListAdapter.ElementOnClickHandler {
 
     RecyclerView mRvElements;
     RecyclerView.LayoutManager mLayoutManager;

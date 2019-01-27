@@ -12,21 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ModulListActivity">
-
-        </activity>
-        <activity android:name=".ElementListActivity">
+        <activity android:name=".Activities.ModulDetailActivity"></activity>
+        <activity android:name=".Activities.ModulEditActivity" />
+        <activity android:name=".Activities.ModulListActivity" />
+        <activity android:name=".Activities.ElementListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ElementDetailActivity" />
-        <activity android:name=".ElementEditActivity">
-
-        </activity>
+        <activity android:name=".Activities.ElementDetailActivity" />
+        <activity android:name=".Activities.ElementEditActivity" />
     </application>
-
 
 </manifest>

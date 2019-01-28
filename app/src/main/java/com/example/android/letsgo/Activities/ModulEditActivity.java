@@ -27,6 +27,9 @@ public class ModulEditActivity extends AppCompatActivity {
     Modul currentModul;
     List<ModulElement> modulElements = new ArrayList<ModulElement>();
     List<Element> addElements;
+    ImageButton mAddNewElement;
+    EditText mTitleView;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +38,9 @@ public class ModulEditActivity extends AppCompatActivity {
 
 
 
-        final EditText mTitleView = findViewById(R.id.et_modul_edit_title);
-        ImageButton mAddNewElement = findViewById(R.id.ib_modul_edit_add_element);
-        FloatingActionButton fab = findViewById(R.id.fab_modul_edit);
+        mTitleView = findViewById(R.id.et_modul_edit_title);
+        mAddNewElement = findViewById(R.id.ib_modul_edit_add_element);
+        fab = findViewById(R.id.fab_modul_edit);
 
         Intent receivedIntent = getIntent();
         if(receivedIntent != null){
@@ -51,7 +54,24 @@ public class ModulEditActivity extends AppCompatActivity {
 
         }
 
+        addOnClickListeners();
 
+    }
+
+    public List<ModulElement> generateModulElementsFromElements(List<Element> elements){
+        for(Element element: addElements){
+            // TODO Not sure if I can set other varaible when only using this simple Constructor
+            ModulElement newModulElement = new ModulElement(element);
+            modulElements.add(newModulElement);
+        }
+        return modulElements;
+    }
+
+
+
+    
+
+    public void addOnClickListeners(){
         mAddNewElement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,14 +99,5 @@ public class ModulEditActivity extends AppCompatActivity {
                 //TODO Save Modul to Database
             }
         });
-    }
-
-    public List<ModulElement> generateModulElementsFromElements(List<Element> elements){
-        for(Element element: addElements){
-            // TODO Not sure if I can set other varaible when only using this simple Constructor
-            ModulElement newModulElement = new ModulElement(element);
-            modulElements.add(newModulElement);
-        }
-        return modulElements;
     }
 }

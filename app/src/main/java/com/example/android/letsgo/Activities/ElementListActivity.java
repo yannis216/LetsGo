@@ -17,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +74,16 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent fabIntent = new Intent(ElementListActivity.this, ElementEditActivity.class);
-                startActivity(fabIntent);
+                if(isModulEditMode){
+                    Intent fabIntent = new Intent(ElementListActivity.this, ModulEditActivity.class);
+                    String selectedElementsListSerialized = new Gson().toJson(selectedElementsForModul);
+                    fabIntent.putExtra("selectedElements", selectedElementsListSerialized);
+                    startActivity(fabIntent);
+
+                }else {
+                    Intent fabIntent = new Intent(ElementListActivity.this, ElementEditActivity.class);
+                    startActivity(fabIntent);
+                }
             }
         });
 
@@ -110,7 +119,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
     @Override
     public void onClick(Element clickedElement) {
         if (isModulEditMode) {
-            //TODO Remove Element from List when clicked Twice
+            //TODO IMPORTANT BUG Remove Element from List when clicked Twice
            selectedElementsForModul.add(clickedElement);
            Log.e("onClickElement", "" +clickedElement);
 

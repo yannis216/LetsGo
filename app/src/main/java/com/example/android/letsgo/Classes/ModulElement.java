@@ -6,7 +6,7 @@ import java.util.List;
 public class ModulElement extends Element implements Serializable {
     //TODO Might have to add "SourceElementId" here
     private ModulElementMultiplier multiplier;
-    //Meant to display additional, Modul specific instrcutions for the element.
+    //Meant to display additional, Modul specific instructions for the element.
     // Eg. Something like "If you are running out of stamina here its ok to slow down a little bit"
     // or "As many/fast as as you can"
     private String hint;
@@ -22,6 +22,19 @@ public class ModulElement extends Element implements Serializable {
         this.hint = hint;
         this.sourceElementId = sourceElementId;
         this.orderInModul = orderInModul;
+    }
+
+    public ModulElement(Element baseElement, ModulElementMultiplier multiplier, String hint, String sourceElementId, int orderInModul){
+        super.copy(baseElement);
+        this.multiplier = multiplier;
+        this.hint = hint;
+        this.sourceElementId = sourceElementId;
+        this.orderInModul = orderInModul;
+    }
+
+    //TODO Experimental
+    public ModulElement(Element baseElement){
+        super.copy(baseElement);
     }
 
     public ModulElementMultiplier getMultiplier() {

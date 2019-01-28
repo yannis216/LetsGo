@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,13 +25,15 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ModulEditActivity extends AppCompatActivity {
 
     Modul currentModul;
-    List<ModulElement> modulElements;
+    List<ModulElement> modulElements = new ArrayList<ModulElement>();
     List<Element> addElements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modul_edit);
+
+
 
         final EditText mTitleView = findViewById(R.id.et_modul_edit_title);
         ImageButton mAddNewElement = findViewById(R.id.ib_modul_edit_add_element);
@@ -42,6 +45,10 @@ public class ModulEditActivity extends AppCompatActivity {
             Type listType = new TypeToken<List<Element>>(){}.getType();
             addElements = gson.fromJson(receivedIntent.getStringExtra("selectedElements"), listType);
             Log.e("addElements: ", "" + addElements);
+            if(addElements != null){
+                modulElements = generateModulElementsFromElements(addElements);
+            }
+
         }
 
 
@@ -54,6 +61,7 @@ public class ModulEditActivity extends AppCompatActivity {
 
                 }else{
                     if(mTitleView.getText() != null){
+                        //TODO Muss man hier wirklich das ganze Modul verschicken?
                         currentModul = new Modul(mTitleView.getText().toString(), modulElements);
                         addIntent.putExtra("newModul", currentModul);
                         startActivity(addIntent);
@@ -61,9 +69,7 @@ public class ModulEditActivity extends AppCompatActivity {
                     }else{
                         Toast.makeText(ModulEditActivity.this, "You have to define a Title first", Toast.LENGTH_SHORT).show();
                     }
-
                 }
-
             }
         });
 
@@ -73,5 +79,14 @@ public class ModulEditActivity extends AppCompatActivity {
                 //TODO Save Modul to Database
             }
         });
+    }
+
+    public List<ModulElement> generateModulElementsFromElements(List<Element> elements){
+        for(Element element: addElements){
+            // TODO Not sure if I can set other varaible when only using this simple Constructor
+            ModulElement newModulElement = new ModulElement(element);
+            modulElements.add(newModulElement);
+        }
+        return modulElements;
     }
 }

@@ -114,6 +114,19 @@ public class Element implements Serializable {
         this.timeCreated = timeCreated;
     }
 
+    //Copy function so that on creation of subclasses its not always necessary to input every single variable
+    public void copy(Element element){
+        this.title = element.getTitle();
+        this.shortDesc = element.getShortDesc();
+        this.usedFor = element.getUsedFor();
+        this.pictureUrl = element.getPictureUrl();
+        this.videoId = element.getVideoId();
+        this.minNumberOfHumans = element.getMinNumberOfHumans();
+        this.isFixedBasic = element.isFixedBasic();
+        this.timeCreated = element.getTimeCreated();
+        this.neededMaterialsIds = element.getNeededMaterialsIds();
+
+    }
 
 
 }

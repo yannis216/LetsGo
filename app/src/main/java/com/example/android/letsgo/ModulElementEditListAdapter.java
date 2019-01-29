@@ -39,11 +39,12 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
     public class ModulElementViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public EditText mMultiplierEdit;
         public ModulElementEditTextListener editTextListener;
-        //public AdapterView.OnItemSelectedListener spinnerListener;
+        public ModulElementSpinnerListener spinnerListener;
+        public Spinner spinner;
 
 
 
-        public ModulElementViewHolder(View view, ModulElementEditTextListener editTextListener){
+        public ModulElementViewHolder(View view, ModulElementEditTextListener editTextListener, ModulElementSpinnerListener spinnerListener){
             super(view);
             view.setOnClickListener(this);
 
@@ -54,9 +55,12 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             this.mMultiplierEdit.addTextChangedListener(editTextListener);
 
             //Spinner Code
-
-
-
+            this.spinnerListener =spinnerListener;
+            this.spinner = view.findViewById(R.id.s_modul_element_edit_list_item_mutliplier_type);
+            ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context, R.array.multiplier_type_array, android.R.layout.simple_spinner_item);
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            this.spinner.setAdapter(spinnerAdapter);
+            this.spinner.setOnItemSelectedListener(spinnerListener);
 
         }
 
@@ -85,7 +89,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean attachImmediately = false;
         View view = inflater.inflate(layoutIdForListItem, viewGroup, attachImmediately);
-        ModulElementViewHolder vh = new ModulElementViewHolder(view, new ModulElementEditTextListener());
+        ModulElementViewHolder vh = new ModulElementViewHolder(view, new ModulElementEditTextListener(), new ModulElementSpinnerListener());
         return vh;
     }
 
@@ -95,6 +99,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         String modulElementTitle = currentModulElement.getTitle();
 
         holder.editTextListener.updatePosition(position);
+        holder.spinnerListener.updatePosition(position);
         //TODO Think about setting these standards somewhere else
         //This makes the edittext show the given, pre-existing timeMultiplied
         if(modulElements.get(position).getMultiplier()==null){
@@ -107,29 +112,6 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
 
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_element_edit_list_item_title);
         titleView.setText(modulElementTitle);
-
-        //TODO Doing all this Spinner stuff here causes lag & uses to many resources. This can somehow be moved
-        // to ModulElementViewholder the same way as the EditText Listener
-        
-        Spinner spinner = holder.itemView.findViewById(R.id.s_modul_element_edit_list_item_mutliplier_type);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context, R.array.multiplier_type_array, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAdapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String spinnerSelection =  adapterView.getItemAtPosition(i).toString();
-                Toast.makeText(view.getContext(), spinnerSelection, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-
 
 
     }
@@ -176,16 +158,24 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         }
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        String selectedMultiplierType = parent.getItemAtPosition(pos).toString();
+    private class ModulElementSpinnerListener implements AdapterView.OnItemSelectedListener {
+        private int position;
+        public void updatePosition(int position) {
+            this.position = position;
+        }
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            String spinnerSelection = adapterView.getItemAtPosition(i).toString();
+            Toast.makeText(view.getContext(), spinnerSelection, Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
     }
 
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
-    }
 
 
 }

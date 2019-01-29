@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/ll_modul_element_edit_list_item">
+    <TextView
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_modul_element_edit_list_item_title"
+        android:layout_width="match_parent"
+        android:textSize="24sp"
+        />
+    <EditText
+        android:layout_height="wrap_content"
+        android:id="@+id/et_modul_element_edit_list_item_times_multiplied"
+        android:layout_width="wrap_content"
+        android:inputType="number"
+        android:textSize="24sp"
+        />
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/s_modul_element_edit_list_item_mutliplier_type"
+        />
+    <ImageButton
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:id="@+id/et_modul_element_edit_list_item_goto_element_detail"/>
+
+</LinearLayout>

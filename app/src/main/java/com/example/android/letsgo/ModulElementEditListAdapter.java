@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -36,15 +37,27 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
 
     public class ModulElementViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public EditText mMultiplierEdit;
+        public Spinner spinner;
         public ModulElementEditTextListener editTextListener;
+        public AdapterView.OnItemSelectedListener spinnerListener;
+        public ArrayAdapter<CharSequence> spinnerAdapter;
 
         public ModulElementViewHolder(View view, ModulElementEditTextListener editTextListener){
             super(view);
             view.setOnClickListener(this);
 
+            //Edit Time Multiplied Code
             this.mMultiplierEdit = (EditText) view.findViewById(R.id.et_modul_element_edit_list_item_times_multiplied);
             this.editTextListener = editTextListener;
             this.mMultiplierEdit.addTextChangedListener(editTextListener);
+
+            //Spinner Code
+            this.spinner = (Spinner) view.findViewById(R.id.s_modul_element_edit_list_item_mutliplier_type);
+            this.spinnerAdapter = ArrayAdapter.createFromResource(context, R.array.multiplier_type_array, android.R.layout.simple_spinner_item);
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            this.spinner.setAdapter(this.spinnerAdapter);
+
+
         }
 
         @Override
@@ -82,6 +95,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         String modulElementTitle = currentModulElement.getTitle();
 
         holder.editTextListener.updatePosition(position);
+        //TODO Think about setting these standards somewhere else
         //This makes the edittext show the given, pre-existing timeMultiplied
         if(modulElements.get(position).getMultiplier()==null){
             modulElements.get(position).setMultiplier(new ModulElementMultiplier());
@@ -94,11 +108,8 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_element_edit_list_item_title);
         titleView.setText(modulElementTitle);
 
-        Spinner spinner = (Spinner) holder.itemView.findViewById(R.id.s_modul_element_edit_list_item_mutliplier_type);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.multiplier_type_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+
 
     }
 

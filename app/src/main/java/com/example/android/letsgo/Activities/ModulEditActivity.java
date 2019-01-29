@@ -36,7 +36,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
 
     RecyclerView mRvModulElements;
     RecyclerView.LayoutManager mLayoutManager;
-    RecyclerView.Adapter mAdapter;
+    ModulElementEditListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +121,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
             @Override
             public void onClick(View view) {
                 //TODO Save Modul to Database
+                Toast.makeText(ModulEditActivity.this, "timeMultiplied at index 0 in Activity= "+ mAdapter.getModulElements().get(0).getMultiplier().getTimesMultiplied(), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -121,7 +121,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
             @Override
             public void onClick(View view) {
                 //TODO Save Modul to Database
-                Toast.makeText(ModulEditActivity.this, "timeMultiplied at index 0 in Activity= "+ mAdapter.getModulElements().get(0).getMultiplier().getTimesMultiplied(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ModulEditActivity.this, "Type at index 1 in Activity= "+ mAdapter.getModulElements().get(1).getMultiplier().getType(), Toast.LENGTH_SHORT).show();
             }
         });
     }

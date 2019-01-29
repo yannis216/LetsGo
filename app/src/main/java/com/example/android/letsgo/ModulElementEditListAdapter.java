@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.Classes.ModulElementMultiplier;
@@ -166,7 +165,10 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             String spinnerSelection = adapterView.getItemAtPosition(i).toString();
-            Toast.makeText(view.getContext(), spinnerSelection, Toast.LENGTH_SHORT).show();
+            if(modulElements.get(position).getMultiplier()==null){
+                modulElements.get(position).setMultiplier(new ModulElementMultiplier());
+            }
+            modulElements.get(position).getMultiplier().setType(spinnerSelection);
 
         }
 

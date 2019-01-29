@@ -11,7 +11,6 @@ public class ModulElement extends Element implements Serializable {
     // or "As many/fast as as you can"
     private String hint;
     private String sourceElementId;
-
     private int orderInModul;
 
     public ModulElement(String title, String shortDesc, List<String> usedFor, String pictureUrl,

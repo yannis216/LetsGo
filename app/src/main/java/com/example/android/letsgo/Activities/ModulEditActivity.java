@@ -67,7 +67,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
 
             //TODO May have to make this happen only after Database fetch is completed?
             if(addElements != null){
-                modulElements = generateModulElementsFromElements(addElements);
+                modulElements = generateModulElementsFromElements();
             }
         }
 
@@ -85,7 +85,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     }
 
 
-    public List<ModulElement> generateModulElementsFromElements(List<Element> elements){
+    public List<ModulElement> generateModulElementsFromElements(){
         for(Element element: addElements){
             // TODO Not sure if I can set other varaible when only using this simple Constructor
             ModulElement newModulElement = new ModulElement(element);

@@ -136,12 +136,8 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             }
             holder.spinner.setSelection(index);
         }
-
-
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_element_edit_list_item_title);
         titleView.setText(modulElementTitle);
-
-
     }
 
     //TODO CHECK IF WORKS

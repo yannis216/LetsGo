@@ -27,6 +27,16 @@
             app:layout_constraintWidth_percent=".5"
             android:textAlignment="center"
             android:inputType="textAutoComplete|textCapSentences"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rv_modul_element_edit_list"
+            app:layout_constraintTop_toBottomOf="@id/et_modul_edit_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="32dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,20 +44,11 @@
             android:src="@drawable/baseline_add_black_24dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_modul_edit_title"
-            android:layout_marginTop="100dp"
+            app:layout_constraintTop_toBottomOf="@id/rv_modul_element_edit_list"
+            android:layout_marginTop="32dp"
             app:layout_constraintWidth_percent=".5"
             android:background="?android:selectableItemBackground"
             />
-        <androidx.recyclerview.widget.RecyclerView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/rv_modul_element_edit_list"
-            app:layout_constraintTop_toBottomOf="@id/ib_modul_edit_add_element"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="32dp"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.bottomappbar.BottomAppBar

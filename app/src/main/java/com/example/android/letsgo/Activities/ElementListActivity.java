@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.letsgo.Classes.Element;
-import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.ElementListAdapter;
 import com.example.android.letsgo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,10 +45,8 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
         selectedElementsForModul = new ArrayList<Element>();
 
         Intent intent = getIntent();
-        Modul newModul = (Modul) intent.getSerializableExtra("newModul");
-        if(newModul != null){
-            isModulEditMode = true;
-        }
+        isModulEditMode =  intent.getBooleanExtra("modulEdit", false);
+
 
         //TODO Make this a fragment for TwoPane Layouts
         mRvElements = findViewById(R.id.rv_elements_list);

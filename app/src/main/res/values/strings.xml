@@ -12,4 +12,13 @@
     <string name="element_edit_save">Save</string>
     <string name="element_edit_shortDesc">Type a short description here...</string>
 
+    <string-array name="multiplier_type_array">
+        <item>Times</item>
+        <item>Seconds</item>
+        <item>Minutes</item>
+        <item>Hours</item>
+        <item>Days</item>
+        <item>Meters</item>
+    </string-array>
+
 </resources>

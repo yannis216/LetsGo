@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.ModulElement;
@@ -64,8 +67,17 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
     public void onBindViewHolder(@NonNull ModulElementViewHolder holder, int position) {
         ModulElement currentModulElement = modulElements.get(position);
         String modulElementTitle = currentModulElement.getTitle();
+
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_element_edit_list_item_title);
+        EditText timesMultipliedView = holder.itemView.findViewById(R.id.et_modul_element_edit_list_item_times_multiplied);
         titleView.setText(modulElementTitle);
+        timesMultipliedView.setText("1");
+
+        Spinner spinner = (Spinner) holder.itemView.findViewById(R.id.s_modul_element_edit_list_item_mutliplier_type);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.multiplier_type_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
     }
 

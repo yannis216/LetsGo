@@ -40,6 +40,9 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         public ModulElementEditTextListener editTextListener;
         public ModulElementSpinnerListener spinnerListener;
         public Spinner spinner;
+        public String givenType;
+        public String defaultType;
+        public int DEFAULT_SPINNER_POSITION = 0;
 
 
 
@@ -60,6 +63,10 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             this.spinner.setAdapter(spinnerAdapter);
             this.spinner.setOnItemSelectedListener(spinnerListener);
+
+
+
+
 
         }
 
@@ -99,6 +106,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
 
         holder.editTextListener.updatePosition(position);
         holder.spinnerListener.updatePosition(position);
+
         //TODO Think about setting these standards somewhere else
         //This makes the edittext show the given, pre-existing timeMultiplied
         if(modulElements.get(position).getMultiplier()==null){
@@ -107,7 +115,28 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         if(modulElements.get(position).getMultiplier().getTimesMultiplied()==0){
            modulElements.get(position).getMultiplier().setTimesMultiplied(1);
         }
-        holder.mMultiplierEdit.setText(""+modulElements.get(position).getMultiplier().getTimesMultiplied());
+        holder.mMultiplierEdit.setText("" +modulElements.get(position).getMultiplier().getTimesMultiplied());
+
+        //Setting Defaults for MultiplierType in case of new ModulElement
+        String[] strings = context.getResources().getStringArray(R.array.multiplier_type_array);
+        holder.defaultType = strings[holder.DEFAULT_SPINNER_POSITION];
+        if(modulElements.get(position).getMultiplier().getType()==null){
+            modulElements.get(position).getMultiplier().setType(holder.defaultType);
+            holder.spinner.setSelection(holder.DEFAULT_SPINNER_POSITION);
+        }
+        //Make Sure that Spinner shows right selection also when multiplierType has already been set from Database
+        else{
+            String givenType = modulElements.get(position).getMultiplier().getType();
+            int index = 0;
+            for(int i = 0; i<strings.length; i++ ){
+                if(givenType.equals(strings[i])) {
+                    index = i;
+                    break;
+                }
+            }
+            holder.spinner.setSelection(index);
+        }
+
 
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_element_edit_list_item_title);
         titleView.setText(modulElementTitle);

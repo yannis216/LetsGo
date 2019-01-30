@@ -15,7 +15,11 @@ import com.example.android.letsgo.ModulElementEditListAdapter;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
 import com.example.android.letsgo.Utils.TouchHelper.SimpleItemTouchHelperCallback;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -23,6 +27,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,10 +46,16 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     RecyclerView.LayoutManager mLayoutManager;
     ModulElementEditListAdapter mAdapter;
 
+    FirebaseFirestore db;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modul_edit);
+
+        // Access a Cloud Firestore instance
+        db = FirebaseFirestore.getInstance();
 
         mTitleView = findViewById(R.id.et_modul_edit_title);
         mAddNewElement = (ImageButton) findViewById(R.id.ib_modul_edit_add_element);
@@ -55,13 +66,12 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
 
 
 
-
-
-
         //currentModul = getModulFromDatabase();
         //TODO Delete following line
         currentModul = new Modul("title", modulElements);
         modulElements = currentModul.getModulElements();
+
+        //TODO Set OrderinModul for new Modulelements somewhere
 
         Intent receivedIntent = getIntent();
         if(receivedIntent != null){
@@ -130,7 +140,16 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
             @Override
             public void onClick(View view) {
                 //TODO Save Modul to Database
-                Toast.makeText(ModulEditActivity.this, "Type at index 1 in Activity= "+ mAdapter.getModulElements().get(1).getMultiplier().getType(), Toast.LENGTH_SHORT).show();
+                if(!mTitleView.getText().toString().equals("")&& modulElements.size() > 0) {
+                    modulElements = mAdapter.getModulElements();
+                    String titleText = mTitleView.getText().toString();
+                    currentModul.setModulElements(modulElements);
+                    currentModul.setTitle(titleText);
+                    saveModulToDb(currentModul);
+                }else{
+                    Toast.makeText(ModulEditActivity.this, "Your Modul needs a title and min. 1 ModulElement", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
@@ -154,10 +173,27 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     public void onNoteListChanged(List<ModulElement> modulElements) {
        for(int i = 0; i<modulElements.size(); i++){
            modulElements.get(i).setOrderInModul(i);
-           Log.e("OnNoteListChanged", "ModulElement:" +modulElements.get(i).getTitle() + "Order in Modul:" + modulElements.get(i).getOrderInModul());
        }
 
 
+    }
+
+    public void saveModulToDb(Modul modul){
+        db.collection("modulElements")
+                .add(modul)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.e("saveModulElement", "Document Snap added with id:" + documentReference.getId());
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("saveModulElement", "Error adding document", e);
+                    }
+                });
     }
 
 

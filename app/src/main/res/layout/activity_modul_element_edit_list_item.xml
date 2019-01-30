@@ -3,6 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FFF"
     android:id="@+id/ll_modul_element_edit_list_item">
     <TextView
         android:layout_height="wrap_content"

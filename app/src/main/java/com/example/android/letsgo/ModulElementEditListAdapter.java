@@ -14,25 +14,54 @@ import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.Classes.ModulElementMultiplier;
+import com.example.android.letsgo.Utils.TouchHelper.ItemTouchHelperAdapter;
+import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulElementEditListAdapter.ModulElementViewHolder> {
+public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulElementEditListAdapter.ModulElementViewHolder> implements ItemTouchHelperAdapter {
     private List<ModulElement> modulElements;
     private LayoutInflater mInflater;
     private final ModulElementOnClickHandler mClickHandler;
     private Context context;
+    private OnModulElementListChangedListener modulElementListChangedListener;
 
-    public ModulElementEditListAdapter(Context context, List<ModulElement> modulElements, ModulElementOnClickHandler clickHandler) {
+    public ModulElementEditListAdapter(Context context, List<ModulElement> modulElements, ModulElementOnClickHandler clickHandler, OnModulElementListChangedListener modulElementListChangedListener) {
         this.modulElements = modulElements;
         this.mInflater = LayoutInflater.from(context);
         this.mClickHandler=clickHandler;
         this.context = context;
+        this.modulElementListChangedListener = modulElementListChangedListener;
     }
 
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(modulElements, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(modulElements, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+        modulElementListChangedListener.onNoteListChanged(modulElements);
+        return true;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        modulElements.remove(position);
+        modulElementListChangedListener.onNoteListChanged(modulElements);
+        notifyItemRemoved(position);
+    }
 
 
     public class ModulElementViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -202,6 +231,10 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
 
         }
     }
+
+
+
+
 
 
 

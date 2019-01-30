@@ -13,6 +13,8 @@ import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.ModulElementEditListAdapter;
 import com.example.android.letsgo.R;
+import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
+import com.example.android.letsgo.Utils.TouchHelper.SimpleItemTouchHelperCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -22,10 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ModulEditActivity extends AppCompatActivity implements ModulElementEditListAdapter.ModulElementOnClickHandler {
+public class ModulEditActivity extends AppCompatActivity implements ModulElementEditListAdapter.ModulElementOnClickHandler, OnModulElementListChangedListener {
 
     Modul currentModul;
     List<ModulElement> modulElements = new ArrayList<ModulElement>();
@@ -49,6 +52,8 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
 
         mRvModulElements = findViewById(R.id.rv_modul_element_edit_list);
         mLayoutManager = new LinearLayoutManager(this);
+
+
 
 
 
@@ -80,8 +85,12 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
 
     private void updateUiWithModulElements(){
         mRvModulElements.setLayoutManager(mLayoutManager);
-        mAdapter = new ModulElementEditListAdapter(this, modulElements, this);
+        mAdapter = new ModulElementEditListAdapter(this, modulElements, this, this);
         mRvModulElements.setAdapter(mAdapter);
+        ItemTouchHelper.Callback callback =
+                new SimpleItemTouchHelperCallback(mAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mRvModulElements);
     }
 
 
@@ -140,4 +149,16 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
         startActivity(startElementDetailActivityIntent);
 
     }
+
+    @Override
+    public void onNoteListChanged(List<ModulElement> modulElements) {
+       for(int i = 0; i<modulElements.size(); i++){
+           modulElements.get(i).setOrderInModul(i);
+           Log.e("OnNoteListChanged", "ModulElement:" +modulElements.get(i).getTitle() + "Order in Modul:" + modulElements.get(i).getOrderInModul());
+       }
+
+
+    }
+
+
 }

@@ -36,6 +36,9 @@ public class ModulElement extends Element implements Serializable {
         super.copy(baseElement);
     }
 
+    public ModulElement() {
+    }
+
     public ModulElementMultiplier getMultiplier() {
         return multiplier;
     }

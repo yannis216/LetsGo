@@ -3,12 +3,14 @@ package com.example.android.letsgo.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.ModulElementDetailListAdapter;
 import com.example.android.letsgo.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -32,6 +34,16 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
 
         mRvModulElements =(RecyclerView) findViewById(R.id.rv_modul_detail_modulelement__list);
         mTvTitle = findViewById(R.id.tv_modul_detail_title);
+
+        FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab_modul_detail);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent startModulEditActivityIntent = new Intent(ModulDetailActivity.this, ModulEditActivity.class);
+                startActivity(startModulEditActivityIntent);
+            }
+        });
 
         mLayoutManager = new LinearLayoutManager(this);
         mRvModulElements.setLayoutManager(mLayoutManager);

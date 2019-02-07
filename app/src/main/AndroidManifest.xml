@@ -14,13 +14,15 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.ModulDetailActivity"></activity>
         <activity android:name=".Activities.ModulEditActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name=".Activities.ModulListActivity" />
+        <activity android:name=".Activities.ModulListActivity" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".Activities.ElementListActivity">
 
         </activity>

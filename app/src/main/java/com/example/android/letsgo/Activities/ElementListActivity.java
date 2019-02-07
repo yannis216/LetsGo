@@ -62,7 +62,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
             public boolean onMenuItemClick(MenuItem item) {
                 // Handle actions based on the menu item
                 if (item.getItemId()==R.id.fab_activity_element_detail){
-                    //TODO DO Something
+                    //TODO DO Something on other id clicks
                 }
                 return true;
             }

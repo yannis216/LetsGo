@@ -182,19 +182,19 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     }
 
     public void saveModulToDb(Modul modul){
-        db.collection("modulElements")
+        db.collection("moduls")
                 .add(modul)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.e("saveModulElement", "Document Snap added with id:" + documentReference.getId());
+                        Log.e("saveModul", "Document Snap added with id:" + documentReference.getId());
 
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("saveModulElement", "Error adding document", e);
+                        Log.w("saveModul", "Error adding document", e);
                     }
                 });
     }

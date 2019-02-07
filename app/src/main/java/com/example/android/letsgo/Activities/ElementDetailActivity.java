@@ -76,8 +76,8 @@ public class ElementDetailActivity extends AppCompatActivity {
             //TODO Do Something with the resulting info that this element was a modulElement before
             // e.g. take away opportunity to editcertain fields
         }
-        List<Material> materials = getMaterialsFromDatabase(displayedElement.getNeededMaterialsIds());
 
+       getMaterialsFromDatabase(displayedElement.getNeededMaterialsIds());
         populateUi(displayedElement);
 
         fab.setOnClickListener(new View.OnClickListener() {

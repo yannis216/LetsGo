@@ -149,9 +149,9 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                     Toast.makeText(ModulEditActivity.this, "Your Modul needs a title and min. 1 ModulElement", Toast.LENGTH_SHORT).show();
                 }
                 //TODO Intent to ModulDetaiLAcitivty
-                Intent startElementDetailActivityIntent = new Intent(ModulEditActivity.this, ElementDetailActivity.class);
-                startElementDetailActivityIntent.putExtra("modul", currentModul);
-                startActivity(startElementDetailActivityIntent);
+                Intent startModulDetailActivityIntent = new Intent(ModulEditActivity.this, ModulDetailActivity.class);
+                startModulDetailActivityIntent.putExtra("modul", currentModul);
+                startActivity(startModulDetailActivityIntent);
 
             }
         });

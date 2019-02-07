@@ -71,6 +71,11 @@ public class ElementDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         displayedElement = (Element) intent.getSerializableExtra("element");
+        if (displayedElement == null){
+            displayedElement = (Element) intent.getSerializableExtra("clickedModulElement");
+            //TODO Do Something with the resulting info that this element was a modulElement before
+            // e.g. take away opportunity to editcertain fields
+        }
         List<Material> materials = getMaterialsFromDatabase(displayedElement.getNeededMaterialsIds());
 
         populateUi(displayedElement);

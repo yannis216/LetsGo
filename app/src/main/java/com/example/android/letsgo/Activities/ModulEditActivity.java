@@ -139,7 +139,6 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO Save Modul to Database
                 if(!mTitleView.getText().toString().equals("")&& modulElements.size() > 0) {
                     modulElements = mAdapter.getModulElements();
                     String titleText = mTitleView.getText().toString();
@@ -149,6 +148,10 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                 }else{
                     Toast.makeText(ModulEditActivity.this, "Your Modul needs a title and min. 1 ModulElement", Toast.LENGTH_SHORT).show();
                 }
+                //TODO Intent to ModulDetaiLAcitivty
+                Intent startElementDetailActivityIntent = new Intent(ModulEditActivity.this, ElementDetailActivity.class);
+                startElementDetailActivityIntent.putExtra("modul", currentModul);
+                startActivity(startElementDetailActivityIntent);
 
             }
         });

@@ -1,9 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/col_activity_modul_detail_coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activities.ModulDetailActivity">
+    android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".Activities.ModulDetailActivity"
+        android:id="@+id/cl_modul_detail_layout"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:minWidth="@dimen/element_picture_width"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_modul_detail_title"
+            android:textSize="32sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="32dp"
+            app:layout_constraintWidth_percent=".5"
+            android:textAlignment="center" />
+
+        <!-- TODO Hier könnte/ sollte man noch ein horizontales Linearlayout evtl mit Gesamtdauer
+        (Eigener durchschnitt, fremder Durchschnitt), Liste benötigter Materialien etc einfügen)-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rv_modul_detail_modulelement__list"
+            app:layout_constraintTop_toBottomOf="@id/tv_modul_detail_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="32dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bar_modul_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="center"
+        />
+    <!-- TODO den könnte man individuell (Form)im Sinne des Logos designen -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_modul_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_add_black_24dp"
+        app:layout_anchor="@id/bar_modul_detail"/>
+    <!-- TODO Change src on functionality change -->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -42,6 +42,8 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
             public void onClick(View view) {
                 Intent startModulEditActivityIntent = new Intent(ModulDetailActivity.this, ModulEditActivity.class);
                 startActivity(startModulEditActivityIntent);
+
+                //TODO This Should trigger Doing-Mode at some point
             }
         });
 

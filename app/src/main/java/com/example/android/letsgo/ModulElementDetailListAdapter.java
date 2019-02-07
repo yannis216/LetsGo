@@ -64,9 +64,16 @@ public class ModulElementDetailListAdapter extends RecyclerView.Adapter<ModulEle
     public void onBindViewHolder(@NonNull ModulElementDetailListAdapter.ModulElementsViewHolder holder, int position) {
         ModulElement currentModulElement = modulElements.get(position);
         String modulElementTitle = currentModulElement.getTitle();
+        String timesMultiplied = ""+currentModulElement.getMultiplier().getTimesMultiplied()+" ";
+        String multiplier_type = currentModulElement.getMultiplier().getType();
 
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_detail_modulelement_title);
+        TextView timesMultipliedView = holder.itemView.findViewById(R.id.tv_modul_detail_modulelement_times_multiplied);
+        TextView multiplierTypeView = holder.itemView.findViewById(R.id.tv_modul_detail_modulelement_multiplier_type);
         titleView.setText(modulElementTitle);
+        timesMultipliedView.setText(timesMultiplied);
+        multiplierTypeView.setText(multiplier_type);
+
 
 
     }

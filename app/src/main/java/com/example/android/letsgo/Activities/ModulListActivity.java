@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.android.letsgo.Adapter.ModulListAdapter;
 import com.example.android.letsgo.Classes.Modul;
+import com.example.android.letsgo.Classes.User;
 import com.example.android.letsgo.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,6 +17,8 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,6 +41,7 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    FirebaseUser authUser;
 
     //Arbitrary sign in code for google auth sign in flow
     private static final int RC_SIGN_IN = 567;
@@ -66,10 +70,10 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null){
+                authUser = firebaseAuth.getCurrentUser();
+                if(authUser != null){
                     //user is signed in
-                    onSignedInInitialize(user.getDisplayName());
+                    onSignedInInitialize(authUser.getDisplayName());
                 }else{
                     onSignedOutCleanUp();
                     //user is signed out
@@ -95,6 +99,23 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RC_SIGN_IN){
             if(resultCode == RESULT_OK){
+                authUser = mFirebaseAuth.getCurrentUser();
+                DocumentReference docRef = db.collection("user").document(authUser.getUid());
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            DocumentSnapshot document = task.getResult();
+                            //Check if the user already exists in the database
+                            if(!document.exists()){
+                                //1. Create the user in the database
+                                db.collection("user").document(authUser.getUid()).set(new User());
+                                //TODO May wanna open a Dialog to add some personal data like username
+                            }
+                        }
+                    }
+                });
+
             }
             else if (resultCode ==RESULT_CANCELED){
                 Toast.makeText(ModulListActivity.this, "Sign in cancelled", Toast.LENGTH_SHORT).show();

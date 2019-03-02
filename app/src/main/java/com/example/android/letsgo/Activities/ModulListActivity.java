@@ -6,21 +6,26 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Adapter.ModulListAdapter;
+import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.R;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +36,11 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.Adapter mAdapter;
     FirebaseFirestore db;
-    
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+    //Arbitrary sign in code for google auth sign in flow
+    private static final int RC_SIGN_IN = 567;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +48,7 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
         setContentView(R.layout.activity_modul_list);
 
         db = FirebaseFirestore.getInstance();
+        mFirebaseAuth =FirebaseAuth.getInstance();
 
         mRvModuls = findViewById(R.id.rv_modul_list);
         mLayoutManager = new LinearLayoutManager(this);
@@ -53,8 +63,44 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
             }
         });
 
-        getModulsFromDatabase();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null){
+                    //user is signed in
+                    onSignedInInitialize(user.getDisplayName());
+                }else{
+                    onSignedOutCleanUp();
+                    //user is signed out
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    //TODO Might wanna enable this before launch
+                                    .setIsSmartLockEnabled(false)
 
+                                    .setAvailableProviders(Arrays.asList(
+                                            new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                            new AuthUI.IdpConfig.EmailBuilder().build()))
+                                    .build(),
+                            RC_SIGN_IN);
+
+                }
+            }
+        };
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_SIGN_IN){
+            if(resultCode == RESULT_OK){
+            }
+            else if (resultCode ==RESULT_CANCELED){
+                Toast.makeText(ModulListActivity.this, "Sign in cancelled", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 
     private void getModulsFromDatabase(){
@@ -92,5 +138,26 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
 
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        //Attach the AuthStateListener here is best practice :-)
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //Makes sure the AuthStateListener gets disattached to avoid memory leaks
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+    }
+
+    private void onSignedInInitialize(String username){
+        //This happens here because only authenticated users are allowed to read moduls from the database
+        getModulsFromDatabase();
+    }
+
+    private void onSignedOutCleanUp(){
+
+    }
 }

@@ -31,6 +31,7 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.Adapter mAdapter;
     FirebaseFirestore db;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

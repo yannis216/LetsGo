@@ -42,6 +42,8 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser authUser;
+    User user;
+    List<Modul> moduls;
 
     //Arbitrary sign in code for google auth sign in flow
     private static final int RC_SIGN_IN = 567;
@@ -73,7 +75,25 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
                 authUser = firebaseAuth.getCurrentUser();
                 if(authUser != null){
                     //user is signed in
-                    onSignedInInitialize(authUser.getDisplayName());
+                    //If necessary checks if the user exists also in the database, if not -> sends to UserCreationActivity
+                    if(user == null) {
+                        DocumentReference docRef = db.collection("user").document(authUser.getUid());
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        user = document.toObject(User.class);
+                                    } else {
+                                        Intent startUserCreationActivityIntent = new Intent(ModulListActivity.this, UserCreationActivity.class);
+                                        startActivity(startUserCreationActivityIntent);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    onSignedInInitialize();
                 }else{
                     onSignedOutCleanUp();
                     //user is signed out
@@ -82,7 +102,6 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
                                     .createSignInIntentBuilder()
                                     //TODO Might wanna enable this before launch
                                     .setIsSmartLockEnabled(false)
-
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.GoogleBuilder().build(),
                                             new AuthUI.IdpConfig.EmailBuilder().build()))
@@ -99,23 +118,6 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RC_SIGN_IN){
             if(resultCode == RESULT_OK){
-                authUser = mFirebaseAuth.getCurrentUser();
-                DocumentReference docRef = db.collection("user").document(authUser.getUid());
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
-                            DocumentSnapshot document = task.getResult();
-                            //Check if the user already exists in the database
-                            if(!document.exists()){
-                                //1. Create the user in the database
-                                db.collection("user").document(authUser.getUid()).set(new User());
-                                //TODO May wanna open a Dialog to add some personal data like username
-                            }
-                        }
-                    }
-                });
-
             }
             else if (resultCode ==RESULT_CANCELED){
                 Toast.makeText(ModulListActivity.this, "Sign in cancelled", Toast.LENGTH_SHORT).show();
@@ -125,7 +127,7 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
     }
 
     private void getModulsFromDatabase(){
-        final List<Modul> moduls = new ArrayList<Modul>();
+        moduls = new ArrayList<Modul>();
         db.collection("moduls")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -173,9 +175,13 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
-    private void onSignedInInitialize(String username){
-        //This happens here because only authenticated users are allowed to read moduls from the database
-        getModulsFromDatabase();
+    private void onSignedInInitialize(){
+        //This happens here because only authenticated users are allowed to read moduls from
+        // the database and we would get an error if we get them from DB before USer is authenticated
+        if(moduls ==null){
+            getModulsFromDatabase();
+        }
+
     }
 
     private void onSignedOutCleanUp(){

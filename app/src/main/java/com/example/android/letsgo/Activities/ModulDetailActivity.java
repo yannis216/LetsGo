@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
-import com.example.android.letsgo.ModulElementDetailListAdapter;
+import com.example.android.letsgo.Adapter.ModulElementDetailListAdapter;
 import com.example.android.letsgo.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

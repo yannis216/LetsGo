@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.android.letsgo.Classes.Modul;
-import com.example.android.letsgo.ModulListAdapter;
+import com.example.android.letsgo.Adapter.ModulListAdapter;
 import com.example.android.letsgo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

@@ -1,4 +1,4 @@
-package com.example.android.letsgo;
+package com.example.android.letsgo.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.ModulElement;
+import com.example.android.letsgo.R;
 
 import java.util.List;
 

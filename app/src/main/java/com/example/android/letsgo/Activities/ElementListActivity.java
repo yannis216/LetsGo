@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.letsgo.Classes.Element;
-import com.example.android.letsgo.ElementListAdapter;
+import com.example.android.letsgo.Adapter.ElementListAdapter;
 import com.example.android.letsgo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

@@ -1,4 +1,4 @@
-package com.example.android.letsgo;
+package com.example.android.letsgo.Adapter;
 
 import android.content.Context;
 import android.text.Editable;
@@ -14,11 +14,10 @@ import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.Classes.ModulElementMultiplier;
+import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.TouchHelper.ItemTouchHelperAdapter;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
-import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

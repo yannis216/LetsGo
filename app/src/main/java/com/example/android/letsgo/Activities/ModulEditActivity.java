@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
-import com.example.android.letsgo.ModulElementEditListAdapter;
+import com.example.android.letsgo.Adapter.ModulElementEditListAdapter;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
 import com.example.android.letsgo.Utils.TouchHelper.SimpleItemTouchHelperCallback;

@@ -68,7 +68,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
 
         //currentModul = getModulFromDatabase();
         //TODO Delete following line
-        currentModul = new Modul("title", modulElements);
+        currentModul = new Modul("title","", modulElements);
         modulElements = currentModul.getModulElements();
 
         //TODO Set OrderinModul for new Modulelements somewhere
@@ -143,6 +143,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                     modulElements = mAdapter.getModulElements();
                     String titleText = mTitleView.getText().toString();
                     currentModul.setModulElements(modulElements);
+                    //TODO Add Fitting CreatorUid here
                     currentModul.setTitle(titleText);
                     saveModulToDb(currentModul);
                 }else{

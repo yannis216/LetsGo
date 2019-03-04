@@ -10,7 +10,9 @@ public class Modul implements Serializable {
     private String creatorUid;
     //TODO Insert String creatorName -> Denormalized, has to get updated on Creatorname changed
     private int creationTimestamp;
+    //TODO Save non-originals in Collection Associated with creatorUid and save Originals also there AND in Main Mouduls List
     private int editTimeStamp;
+    //TODO If it has an originalCreatorUid it is an original that is saved also in Main Module List
     private String originalCreatorUid;
     private List<ModulElement> modulElements;
 

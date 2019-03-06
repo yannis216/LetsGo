@@ -53,6 +53,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
 
+    //TODO Make it so that List of Modulelelemnts does not forget every element that has been there before goind to add new ones
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +80,10 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
         mRvModulElements = findViewById(R.id.rv_modul_element_edit_list);
         mLayoutManager = new LinearLayoutManager(this);
 
-
-
-        //currentModul = getModulFromDatabase();
-        //TODO Delete following line
-        currentModul = new Modul("title","", modulElements);
-        modulElements = currentModul.getModulElements();
+        if(currentModul == null) {
+            currentModul = new Modul("title", "", modulElements);
+            modulElements = currentModul.getModulElements();
+        }
 
         //TODO Set OrderinModul for new Modulelements somewhere
 
@@ -93,6 +92,12 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
             Gson gson = new Gson();
             Type listType = new TypeToken<List<Element>>(){}.getType();
             addElements = gson.fromJson(receivedIntent.getStringExtra("selectedElements"), listType);
+
+            //Adds already existing data to the display when returning from Moudlelement Selection
+            if(receivedIntent.hasExtra("modul")) {
+                currentModul = (Modul) receivedIntent.getSerializableExtra("modul");
+                mTitleView.setText(currentModul.getTitle());
+            }
             Log.e("addElements: ", "" + addElements);
 
             //TODO May have to make this happen only after Database fetch is completed?
@@ -135,20 +140,17 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                 Log.e("onClick AddNew", "clicklistener Has been fired");
                 Intent addIntent = new Intent(ModulEditActivity.this, ElementListActivity.class);
                 addIntent.putExtra("modulEdit", true);
-
-                if(currentModul != null){
-                    startActivity(addIntent);
-                }else{
-                    if(mTitleView.getText() != null){
-                        //TODO Muss man hier wirklich das ganze Modul verschicken?
-
-                        startActivity(addIntent);
-
-                    }else{
-                        Toast.makeText(ModulEditActivity.this, "You have to define a Title first", Toast.LENGTH_SHORT).show();
-                    }
+                addIntent.putExtra("modul", currentModul);
+                if(mTitleView.getText() != null){
+                    //TODO Muss man hier wirklich das ganze Modul verschicken?
+                    String titleText = mTitleView.getText().toString();
+                    currentModul.setTitle(titleText);
                 }
+                addIntent.putExtra("modul", currentModul);
+                startActivity(addIntent);
+
             }
+
         });
 
         fab.setOnClickListener(new View.OnClickListener() {

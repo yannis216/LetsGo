@@ -6,8 +6,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Adapter.ElementListAdapter;
+import com.example.android.letsgo.Classes.Element;
+import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,6 +36,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
     FirebaseFirestore db;
     boolean isModulEditMode = false;
     List<Element> selectedElementsForModul;
+    Modul currentModul;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,9 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
 
         Intent intent = getIntent();
         isModulEditMode =  intent.getBooleanExtra("modulEdit", false);
+        if(isModulEditMode){
+            currentModul = (Modul) intent.getSerializableExtra("modul");
+        }
 
 
         //TODO Make this a fragment for TwoPane Layouts
@@ -75,6 +80,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
                     Intent fabIntent = new Intent(ElementListActivity.this, ModulEditActivity.class);
                     String selectedElementsListSerialized = new Gson().toJson(selectedElementsForModul);
                     fabIntent.putExtra("selectedElements", selectedElementsListSerialized);
+                    fabIntent.putExtra("modul", currentModul);
                     startActivity(fabIntent);
 
                 }else {

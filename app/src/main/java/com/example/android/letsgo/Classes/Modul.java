@@ -9,9 +9,9 @@ public class Modul implements Serializable {
 
     private String creatorUid;
     //TODO Insert String creatorName -> Denormalized, has to get updated on Creatorname changed, saves Document reads
-    private int creationTimestamp;
+    private long creationTimestamp;
     //TODO Save non-originals in Collection Associated with creatorUid and save Originals also there AND in Main Mouduls List
-    private int editTimeStamp;
+    private long editTimeStamp;
     //TODO If it has an originalCreatorUid it is an original that is saved also in Main Module List
     private String originalCreatorUid;
     private List<ModulElement> modulElements;
@@ -51,19 +51,19 @@ public class Modul implements Serializable {
         this.creatorUid = creatorUid;
     }
 
-    public int getCreationTimestamp() {
+    public long getCreationTimestamp() {
         return creationTimestamp;
     }
 
-    public void setCreationTimestamp(int creationTimestamp) {
+    public void setCreationTimestamp(long creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
     }
 
-    public int getEditTimeStamp() {
+    public long getEditTimeStamp() {
         return editTimeStamp;
     }
 
-    public void setEditTimeStamp(int editTimeStamp) {
+    public void setEditTimeStamp(long editTimeStamp) {
         this.editTimeStamp = editTimeStamp;
     }
 

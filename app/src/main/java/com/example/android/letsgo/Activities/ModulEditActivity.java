@@ -158,7 +158,8 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                     modulElements = mAdapter.getModulElements();
                     String titleText = mTitleView.getText().toString();
                     currentModul.setModulElements(modulElements);
-                    //TODO Add Fitting CreatorUid here
+                    currentModul.setCreatorUid(uId);
+                    currentModul.setCreationTimestamp(System.currentTimeMillis());
                     currentModul.setTitle(titleText);
                     saveModulToDb(currentModul);
                 }else{

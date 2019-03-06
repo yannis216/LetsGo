@@ -100,7 +100,7 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
-                                    //TODO Might wanna enable this before launch
+                                    //TODO Might wanna enable following before launch
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.GoogleBuilder().build(),
@@ -128,7 +128,7 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
 
     private void getModulsFromDatabase(){
         moduls = new ArrayList<Modul>();
-        db.collection("moduls")
+        db.collection("user").document(authUser.getUid()).collection("createdModuls")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

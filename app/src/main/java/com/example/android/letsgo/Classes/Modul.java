@@ -8,7 +8,7 @@ public class Modul implements Serializable {
     private String title;
 
     private String creatorUid;
-    //TODO Insert String creatorName -> Denormalized, has to get updated on Creatorname changed
+    //TODO Insert String creatorName -> Denormalized, has to get updated on Creatorname changed, saves Document reads
     private int creationTimestamp;
     //TODO Save non-originals in Collection Associated with creatorUid and save Originals also there AND in Main Mouduls List
     private int editTimeStamp;

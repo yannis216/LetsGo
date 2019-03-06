@@ -8,16 +8,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.android.letsgo.Adapter.ModulElementEditListAdapter;
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
-import com.example.android.letsgo.Adapter.ModulElementEditListAdapter;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
 import com.example.android.letsgo.Utils.TouchHelper.SimpleItemTouchHelperCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
@@ -45,8 +47,11 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     RecyclerView mRvModulElements;
     RecyclerView.LayoutManager mLayoutManager;
     ModulElementEditListAdapter mAdapter;
+    String uId;
 
     FirebaseFirestore db;
+    private FirebaseAuth mFirebaseAuth;
+    FirebaseUser authUser;
 
 
     @Override
@@ -56,6 +61,16 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
 
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
+
+        //Get the current User from Auth
+        //TODO Do this in Utils? Is it best Practice to do this in every Activity?
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        authUser = mFirebaseAuth.getCurrentUser();
+        if(authUser != null){
+            uId = authUser.getUid();
+        }else{
+            Log.e("ModulEdit Auth", "No User authenticated");
+        }
 
         mTitleView = findViewById(R.id.et_modul_edit_title);
         mAddNewElement = (ImageButton) findViewById(R.id.ib_modul_edit_add_element);
@@ -159,7 +174,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     }
 
     //public Modul getModulFromDatabase(){
-        //TODO get Modul from Database
+        //TODO get Modul from Database for update functions
        //
        // return modul;
     //}
@@ -183,7 +198,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     }
 
     public void saveModulToDb(Modul modul){
-        db.collection("moduls")
+        db.collection("user").document(uId).collection("createdModuls")
                 .add(modul)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

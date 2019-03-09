@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Activities.ElementDetailActivity"
+    android:id="@+id/cl_do"
+    >
+
+    <ImageView
+        android:id="@+id/iv_do_modulelement"
+        android:layout_width="@dimen/element_picture_width"
+        android:layout_height="@dimen/element_picture_height"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".5"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:minWidth="@dimen/element_picture_width"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_do_modulelement_multiplier"
+        android:textSize="32sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_do_modulelement_title"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintWidth_percent=".5"
+        android:textAlignment="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:minWidth="@dimen/element_picture_width"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_do_modulelement_title"
+        android:textSize="32sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/ib_do_modulelement_info"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintWidth_percent=".5"
+        android:textAlignment="center"/>
+    <ImageButton
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/ib_do_modulelement_info"
+        android:src="@drawable/baseline_info_black_36dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/iv_do_modulelement_minHumans"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintWidth_percent=".5"
+        android:background="?android:selectableItemBackground"
+        />
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:id="@+id/iv_do_modulelement_minHumans"
+        android:src="@drawable/baseline_people_black_24dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/iv_do_modulelement"
+        android:layout_marginTop="4dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_do_modulelement_minHumans"
+        android:textSize="32sp"
+        app:layout_constraintLeft_toRightOf="@id/iv_do_modulelement_minHumans"
+        app:layout_constraintBottom_toTopOf="@id/iv_do_modulelement"
+        app:layout_constraintWidth_percent=".5"
+        android:textAlignment="viewStart"
+        android:gravity="start"/>
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:id="@+id/iv_do_modulelement_material"
+        android:src="@drawable/baseline_widgets_black_18dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/iv_do_modulelement" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cg_do_modulelement_material"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toLeftOf="@id/iv_do_modulelement_material"
+        app:layout_constraintBottom_toBottomOf="@id/iv_do_modulelement"
+        >
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- TODO Change bottom Constraint of two bottom thingies -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/ib_do_back"
+            android:src="@drawable/baseline_skip_previous_black_24dp"
+            app:layout_constraintWidth_percent=".5"
+            android:background="?android:selectableItemBackground"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:id="@+id/tv_next_modulelement"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/ib_do_next"
+            android:src="@drawable/baseline_play_arrow_black_24dp"
+            app:layout_constraintWidth_percent=".5"
+            android:background="?android:selectableItemBackground"
+            />
+
+
+    </LinearLayout>
+    <!--Todo Add scrollable List of other Moudlelements for fastforwearning and better overview -->
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

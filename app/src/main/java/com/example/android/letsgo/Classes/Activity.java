@@ -10,7 +10,7 @@ public class Activity implements Serializable {
     // about a modul he needs to click on it and data gets pulled from the original modul id
     private int modulId;
     private String modulTitle;
-    private List<Element> modulElements;
+    private List<ModulElement> modulElements;
     //TODO Add denormalized way to store user info
     private int uId;
     private long startTime;
@@ -20,7 +20,7 @@ public class Activity implements Serializable {
     public Activity() {
     }
 
-    public Activity(int modulId, String modulTitle, List<Element> modulElements, int uId, long startTime) {
+    public Activity(int modulId, String modulTitle, List<ModulElement> modulElements, int uId, long startTime) {
         this.modulId = modulId;
         this.modulTitle = modulTitle;
         this.modulElements = modulElements;
@@ -44,11 +44,11 @@ public class Activity implements Serializable {
         this.modulTitle = modulTitle;
     }
 
-    public List<Element> getModulElements() {
+    public List<ModulElement> getModulElements() {
         return modulElements;
     }
 
-    public void setModulElements(List<Element> modulElements) {
+    public void setModulElements(List<ModulElement> modulElements) {
         this.modulElements = modulElements;
     }
 

@@ -40,8 +40,9 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent startModulEditActivityIntent = new Intent(ModulDetailActivity.this, ModulEditActivity.class);
-                startActivity(startModulEditActivityIntent);
+                Intent startDoActivityIntent = new Intent(ModulDetailActivity.this, DoActivity.class);
+                startDoActivityIntent.putExtra("modul", displayedModul);
+                startActivity(startDoActivityIntent);
 
                 //TODO This Should trigger Doing-Mode at some point
             }

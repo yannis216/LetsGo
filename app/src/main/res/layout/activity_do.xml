@@ -98,7 +98,6 @@
         android:layout_height="48dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone"
         >
         <ImageButton
             android:layout_width="0dp"
@@ -126,11 +125,6 @@
             />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:id="@+id/ib_do_start"
-        app:layout_constraintBottom_toBottomOf="parent"/>
     <!--Todo Add scrollable List of other Moudlelements for fastforwearning and better overview -->
 
 

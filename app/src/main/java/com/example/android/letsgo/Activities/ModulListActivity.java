@@ -40,8 +40,8 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
     RecyclerView.Adapter mAdapter;
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser authUser;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     User user;
     List<Modul> moduls;
 

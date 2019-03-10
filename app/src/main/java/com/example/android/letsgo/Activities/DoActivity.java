@@ -2,6 +2,7 @@ package com.example.android.letsgo.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -33,6 +34,7 @@ public class DoActivity extends AppCompatActivity {
     ImageButton mNextElementButton;
     ImageButton mPreviousElementButton;
     Activity currentDoingActivity;
+    CountDownTimer countDown;
 
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
@@ -105,6 +107,21 @@ public class DoActivity extends AppCompatActivity {
                     .load(currentModulElement.getPictureUrl())
                     .into(mImageView);
         }
+
+        String[] typeStrings = this.getResources().getStringArray(R.array.multiplier_type_array);
+        if(currentModulElement.getMultiplier().getType().equals(typeStrings[1])
+                || currentModulElement.getMultiplier().getType().equals(typeStrings[2])  ){
+            int millis = 0;
+            if(currentModulElement.getMultiplier().getType().equals(typeStrings[1])){
+                millis = currentModulElement.getMultiplier().getTimesMultiplied() * 1000;
+            }
+            if(currentModulElement.getMultiplier().getType().equals(typeStrings[2])){
+                millis = currentModulElement.getMultiplier().getTimesMultiplied() * 1000 * 60;
+            }
+            startCountdownWithMillis(currentModulElement, millis);
+        }
+
+
         mMultiplierView.setText(currentModulElement.getMultiplier().getTimesMultiplied() + " " + currentModulElement.getMultiplier().getType());
         mTitleView.setText(currentModulElement.getTitle());
 
@@ -116,7 +133,7 @@ public class DoActivity extends AppCompatActivity {
         if(currentDoingActivity.getModulElements().size()-1 >currentDoingActivity.getCurrentPosition()) {
             ModulElement nextModulElement = currentDoingActivity.getModulElements().get(currentDoingActivity.getCurrentPosition() + 1);
             mNextTitleView.setText(nextModulElement.getTitle());
-            mNextElementButton.setVisibility(View.VISIBLE);
+            mNextElementButton.setImageResource(R.drawable.baseline_play_arrow_black_24dp);
             mNextElementButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
@@ -140,11 +157,17 @@ public class DoActivity extends AppCompatActivity {
     }
 
     private void nextStep(){
+        if(countDown!= null){
+            countDown.cancel();
+        }
         currentDoingActivity.setCurrentPosition(currentDoingActivity.getCurrentPosition()+1);
         updateUi();
     }
 
     private void previousStep(){
+        if(countDown!= null){
+            countDown.cancel();
+        }
         currentDoingActivity.setCurrentPosition(currentDoingActivity.getCurrentPosition()-1);
         updateUi();
     }
@@ -167,5 +190,24 @@ public class DoActivity extends AppCompatActivity {
                         Log.w("saveActivity", "Error adding document", e);
                     }
                 });
+    }
+
+    private void startCountdownWithMillis(final ModulElement currentModulElement, int millis){
+        //Constructs the countdown with a short delay of 499ms (Feels better for the user)
+        countDown = new CountDownTimer(millis+499, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                //TODO Make this show Minutes properly
+                mMultiplierView.setText(String.valueOf(millisUntilFinished/1000) + "s" );
+
+            }
+
+            public void onFinish() {
+                if((currentDoingActivity.getModulElements().size()-1 >currentDoingActivity.getCurrentPosition())) {
+                    nextStep();
+                }
+            }
+        }.start();
+
     }
 }

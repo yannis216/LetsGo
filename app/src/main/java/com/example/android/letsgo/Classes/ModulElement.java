@@ -1,7 +1,6 @@
 package com.example.android.letsgo.Classes;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class ModulElement extends Element implements Serializable {
     //TODO Might have to add "SourceElementId" here
@@ -11,29 +10,9 @@ public class ModulElement extends Element implements Serializable {
     // or "As many/fast as as you can"
     private String hint;
     private String sourceElementId;
-
-    //TODO Possible that I will never need this orderInModul!
+    //TODO Possible that I will never need orderInModul!
     private int orderInModul;
 
-    public ModulElement(String title, String shortDesc, List<String> usedFor, String pictureUrl,
-                        String videoId, int minNumberOfHumans, List<String> neededMaterialsIds,
-                        String timeCreated, ModulElementMultiplier multiplier, String hint, String sourceElementId, int orderInModul) {
-        super(title, shortDesc, usedFor, pictureUrl, videoId, minNumberOfHumans, neededMaterialsIds, timeCreated);
-        this.multiplier = multiplier;
-        this.hint = hint;
-        this.sourceElementId = sourceElementId;
-        this.orderInModul = orderInModul;
-    }
-
-    public ModulElement(Element baseElement, ModulElementMultiplier multiplier, String hint, String sourceElementId, int orderInModul){
-        super.copy(baseElement);
-        this.multiplier = multiplier;
-        this.hint = hint;
-        this.sourceElementId = sourceElementId;
-        this.orderInModul = orderInModul;
-    }
-
-    //TODO Experimental
     public ModulElement(Element baseElement){
         super.copy(baseElement);
     }

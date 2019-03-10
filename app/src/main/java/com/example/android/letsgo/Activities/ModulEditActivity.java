@@ -47,11 +47,12 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     RecyclerView mRvModulElements;
     RecyclerView.LayoutManager mLayoutManager;
     ModulElementEditListAdapter mAdapter;
-    String uId;
+
 
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
+    String uId;
 
     //TODO Make it so that List of Modulelelemnts does not forget every element that has been there before goind to add new ones
 

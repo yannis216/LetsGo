@@ -11,6 +11,7 @@
     <string name="element_edit_material_add">Add</string>
     <string name="element_edit_save">Save</string>
     <string name="element_edit_shortDesc">Type a short description here...</string>
+    <string name="do_activity_finish">FINISH</string>
 
     <string-array name="multiplier_type_array">
         <item>Times</item> <!-- First in this array is default! -->

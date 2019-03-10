@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Activity implements Serializable {
 
+
+    private String id;
     //Added the modul related data not as a full modul becauce I dont want the updateable data
     //(Description of module) to be denormalized. If the user needs more detailed information
     // about a modul he needs to click on it and data gets pulled from the original modul id
@@ -29,6 +31,15 @@ public class Activity implements Serializable {
         this.startTime = startTime;
         this.currentPosition = currentPosition;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 
     public String getModulId() {
         return modulId;

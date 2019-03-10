@@ -65,7 +65,8 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ModulListActivity.this, "Nothing happens here yet",  Toast.LENGTH_SHORT).show();
+                Intent startModulEditActivityIntent = new Intent(ModulListActivity.this, ModulEditActivity.class);
+                startActivity(startModulEditActivityIntent);
             }
         });
 

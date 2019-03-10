@@ -23,12 +23,11 @@
         android:minWidth="@dimen/element_picture_width"
         android:layout_height="wrap_content"
         android:id="@+id/tv_do_modulelement_multiplier"
-        android:textSize="32sp"
+        android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tv_do_modulelement_title"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintWidth_percent=".5"
         android:textAlignment="center"/>
     <TextView
@@ -67,9 +66,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_do_modulelement_minHumans"
-        android:textSize="32sp"
+        android:textSize="16sp"
         app:layout_constraintLeft_toRightOf="@id/iv_do_modulelement_minHumans"
-        app:layout_constraintBottom_toTopOf="@id/iv_do_modulelement"
+        app:layout_constraintBottom_toBottomOf="@id/iv_do_modulelement"
         app:layout_constraintWidth_percent=".5"
         android:textAlignment="viewStart"
         android:gravity="start"/>
@@ -111,7 +110,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="6"
-            android:id="@+id/tv_do_next_modulelement"/>
+            android:id="@+id/tv_do_next_modulelement"
+            android:textSize="24sp"/>
 
         <ImageButton
             android:layout_width="0dp"

@@ -201,12 +201,14 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     }
 
     public void saveModulToDb(Modul modul){
-        db.collection("user").document(uId).collection("createdModuls")
-                .add(modul)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        DocumentReference newModulRef = db.collection("user").document(uId).collection("createdModuls").document();
+        modul.setId(newModulRef.getId());
+        newModulRef
+                .set(modul)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.e("saveModul", "Document Snap added with id:" + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.e("saveModul", "Document Snap added");
 
                     }
                 })

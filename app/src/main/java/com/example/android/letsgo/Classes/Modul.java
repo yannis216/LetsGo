@@ -6,7 +6,7 @@ import java.util.List;
 public class Modul implements Serializable {
 
     private String title;
-
+    private String Id;
     private String creatorUid;
     //TODO Insert String creatorName -> Denormalized, has to get updated on Creatorname changed, saves Document reads
     private long creationTimestamp;
@@ -33,6 +33,14 @@ public class Modul implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
     }
 
     public List<ModulElement> getModulElements() {

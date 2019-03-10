@@ -28,7 +28,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tv_do_modulelement_title"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintWidth_percent=".5"
         android:textAlignment="center"/>
     <TextView
@@ -39,8 +39,7 @@
         android:textSize="32sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/ib_do_modulelement_info"
-        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@id/ib_do_modulelement_info"
         app:layout_constraintWidth_percent=".5"
         android:textAlignment="center"/>
     <ImageButton
@@ -112,7 +111,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="6"
-            android:id="@+id/tv_next_modulelement"/>
+            android:id="@+id/tv_do_next_modulelement"/>
 
         <ImageButton
             android:layout_width="0dp"

@@ -3,9 +3,11 @@ package com.example.android.letsgo.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.android.letsgo.Adapter.ModulElementEditListAdapter;
@@ -17,6 +19,7 @@ import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListC
 import com.example.android.letsgo.Utils.TouchHelper.SimpleItemTouchHelperCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,7 +43,6 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     Modul currentModul;
     List<ModulElement> modulElements = new ArrayList<ModulElement>();
     List<Element> addElements;
-    ImageButton mAddNewElement;
     EditText mTitleView;
     FloatingActionButton fab;
 
@@ -75,7 +77,6 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
         }
 
         mTitleView = findViewById(R.id.et_modul_edit_title);
-        mAddNewElement = (ImageButton) findViewById(R.id.ib_modul_edit_add_element);
         fab = findViewById(R.id.fab_modul_edit);
 
         mRvModulElements = findViewById(R.id.rv_modul_element_edit_list);
@@ -108,9 +109,39 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
         addOnClickListeners();
         updateUiWithModulElements();
 
+        BottomAppBar bottomAppBar = findViewById(R.id.bar_modul_edit);
+        setSupportActionBar(bottomAppBar);
+
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.modul_edit_bottom_menu, menu);
 
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_add_modulelement:
+                Log.e("onClick AddNew", "clicklistener Has been fired");
+                Intent addIntent = new Intent(ModulEditActivity.this, ElementListActivity.class);
+                addIntent.putExtra("modulEdit", true);
+                if(mTitleView.getText() != null){
+                    String titleText = mTitleView.getText().toString();
+                    currentModul.setTitle(titleText);
+                }
+                modulElements = mAdapter.getModulElements();
+                currentModul.setModulElements(modulElements);
+                addIntent.putExtra("modul", currentModul);
+                startActivity(addIntent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void updateUiWithModulElements(){
         mRvModulElements.setLayoutManager(mLayoutManager);
@@ -134,25 +165,6 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     }
 
     public void addOnClickListeners(){
-        mAddNewElement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("onClick AddNew", "clicklistener Has been fired");
-                Intent addIntent = new Intent(ModulEditActivity.this, ElementListActivity.class);
-                addIntent.putExtra("modulEdit", true);
-                if(mTitleView.getText() != null){
-                    //TODO Muss man hier wirklich das ganze Modul verschicken?
-                    String titleText = mTitleView.getText().toString();
-                    currentModul.setTitle(titleText);
-                }
-                modulElements = mAdapter.getModulElements();
-                currentModul.setModulElements(modulElements);
-                addIntent.putExtra("modul", currentModul);
-                startActivity(addIntent);
-
-            }
-
-        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

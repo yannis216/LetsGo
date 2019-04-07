@@ -34,9 +34,14 @@
             app:layout_constraintTop_toBottomOf="@id/et_modul_edit_title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="32dp"
+            app:layout_constraintBottom_toTopOf="@id/ib_modul_edit_add_element"
+            app:layout_constrainedHeight="true"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:paddingBottom="64dp"
+            android:clipToPadding="false"/>
+
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,6 +54,7 @@
             app:layout_constraintWidth_percent=".5"
             android:background="?android:selectableItemBackground"
             />
+        <!-- TODO Put this ImmageButton in AppBar (Solves also the problem that its disappearing on long lists) -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.bottomappbar.BottomAppBar
@@ -58,6 +64,8 @@
         android:layout_gravity="bottom"
         app:backgroundTint="@color/colorPrimary"
         app:fabAlignmentMode="center"
+        app:hideOnScroll="true"
+        app:layout_scrollFlags="scroll|enterAlways"
         />
     <!-- TODO den könnte man individuell (Form)im Sinne des Logos designen -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

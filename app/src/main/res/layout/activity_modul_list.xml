@@ -10,8 +10,11 @@
     <androidx.recyclerview.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rv_modul_list"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingBottom="64dp"
+        android:clipToPadding="false"/>
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bar_activity_modul_list"
         android:layout_width="match_parent"
@@ -19,6 +22,8 @@
         android:layout_gravity="bottom"
         app:backgroundTint="@color/colorPrimary"
         app:fabAlignmentMode="center"
+        app:hideOnScroll="true"
+        app:layout_scrollFlags="scroll|enterAlways"
         />
     <!-- TODO den könnte man individuell (Form)im Sinne des Logos designen -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

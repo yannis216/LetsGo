@@ -81,13 +81,6 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
         mRvModulElements = findViewById(R.id.rv_modul_element_edit_list);
         mLayoutManager = new LinearLayoutManager(this);
 
-        if(currentModul == null) {
-            currentModul = new Modul("title", "", modulElements);
-            modulElements = currentModul.getModulElements();
-        }
-
-        //TODO Set OrderinModul for new Modulelements somewhere
-
         Intent receivedIntent = getIntent();
         if(receivedIntent != null){
             Gson gson = new Gson();
@@ -107,6 +100,11 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
             }
         }
 
+        if(currentModul == null) {
+            currentModul = new Modul("title", "", modulElements);
+            modulElements = currentModul.getModulElements();
+        }
+        //TODO Set OrderinModul for new Modulelements somewhere
         addOnClickListeners();
         updateUiWithModulElements();
 
@@ -126,6 +124,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
 
 
     public List<ModulElement> generateModulElementsFromElements(){
+        modulElements = currentModul.getModulElements();
         for(Element element: addElements){
             // TODO Not sure if I can set other varaible when only using this simple Constructor
             ModulElement newModulElement = new ModulElement(element);
@@ -141,12 +140,13 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                 Log.e("onClick AddNew", "clicklistener Has been fired");
                 Intent addIntent = new Intent(ModulEditActivity.this, ElementListActivity.class);
                 addIntent.putExtra("modulEdit", true);
-                addIntent.putExtra("modul", currentModul);
                 if(mTitleView.getText() != null){
                     //TODO Muss man hier wirklich das ganze Modul verschicken?
                     String titleText = mTitleView.getText().toString();
                     currentModul.setTitle(titleText);
                 }
+                modulElements = mAdapter.getModulElements();
+                currentModul.setModulElements(modulElements);
                 addIntent.putExtra("modul", currentModul);
                 startActivity(addIntent);
 

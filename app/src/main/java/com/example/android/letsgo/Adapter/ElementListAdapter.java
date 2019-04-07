@@ -1,12 +1,11 @@
 package com.example.android.letsgo.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.CheckedTextView;
 
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.R;
@@ -39,28 +38,15 @@ public class ElementListAdapter extends RecyclerView.Adapter<ElementListAdapter.
 
         @Override
         public void onClick(View view) {
-            if(isModulEditMode){
-                int selectedColor = context.getResources().getColor(R.color.colorAccent);
-                int isColor = Color.TRANSPARENT;
-                if(view.getBackground() != null){
-                isColor = ((ColorDrawable)view.getBackground()).getColor();
-                }
-
-                if(isColor != selectedColor){
-                    view.setBackgroundColor(selectedColor);
-                }else{
-                    int unSelected = context.getResources().getColor(R.color.colorPrimary);
-                    view.setBackgroundColor(unSelected);
-                }
-
+            if(elements.get(getAdapterPosition()).isSelected()) {
+                elements.get(getAdapterPosition()).setSelected(false);
+            }else{
+                elements.get(getAdapterPosition()).setSelected(true);
             }
-            int adapterPosition = getAdapterPosition();
-            Element clickedElement = elements.get(adapterPosition);
-            mClickHandler.onClick(clickedElement);
-
-            //TODO Design: Make an Imageview that has previousply been gone to visible (with a green checkmark) or simply make it a checkbox
-
-
+            Log.e("Clicked Element", elements.get(getAdapterPosition()).toString());
+            Log.e("Element Selected?", String.valueOf(elements.get(getAdapterPosition()).isSelected()));
+            mClickHandler.onClick(elements.get(getAdapterPosition()));
+            notifyDataSetChanged();
         }
     }
 
@@ -83,8 +69,13 @@ public class ElementListAdapter extends RecyclerView.Adapter<ElementListAdapter.
     public void onBindViewHolder(@NonNull ElementViewHolder holder, int position) {
         Element currentElement = elements.get(position);
         String elementTitle = currentElement.getTitle();
-        TextView titleView = holder.itemView.findViewById(R.id.tv_element_list_item_title);
+        CheckedTextView titleView = holder.itemView.findViewById(R.id.ctv_element_list_item_title);
         titleView.setText(elementTitle);
+        if(currentElement.isSelected()){
+            titleView.setCheckMarkDrawable(R.drawable.baseline_check_circle_black_24dp);
+        }else{
+            titleView.setCheckMarkDrawable(null);
+        }
 
     }
 
@@ -92,4 +83,6 @@ public class ElementListAdapter extends RecyclerView.Adapter<ElementListAdapter.
     public int getItemCount() {
         return elements.size();
     }
+
+
 }

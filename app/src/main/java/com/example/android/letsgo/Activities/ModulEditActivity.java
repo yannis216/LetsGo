@@ -99,7 +99,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                 currentModul = (Modul) receivedIntent.getSerializableExtra("modul");
                 mTitleView.setText(currentModul.getTitle());
             }
-            Log.e("addElements: ", "" + addElements);
+            Log.e("addElements: ", "Received by Moduleditactivity" + addElements);
 
             //TODO May have to make this happen only after Database fetch is completed?
             if(addElements != null){

@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/ll_element_list_item">
-    <TextView
-        android:id="@+id/tv_element_list_item_title"
+    <CheckedTextView
+        android:id="@+id/ctv_element_list_item_title"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:textSize="24sp"

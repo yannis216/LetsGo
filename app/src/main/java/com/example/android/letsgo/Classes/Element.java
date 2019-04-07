@@ -22,6 +22,9 @@ public class Element implements Serializable {
     //TODO Add List of SubElements
     private String timeCreated;
 
+    //For easy itemSelection in Recyclerviews
+    private boolean isSelected;
+
     //TODO Does this need a short written description?
 
     public Element(String title) {
@@ -113,6 +116,15 @@ public class Element implements Serializable {
     public void setTimeCreated(String timeCreated) {
         this.timeCreated = timeCreated;
     }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
 
     //Copy function so that on creation of subclasses its not always necessary to input every single variable
     public void copy(Element element){

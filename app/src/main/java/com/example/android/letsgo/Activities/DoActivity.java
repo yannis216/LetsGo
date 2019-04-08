@@ -1,6 +1,7 @@
 package com.example.android.letsgo.Activities;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -40,6 +41,9 @@ public class DoActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
     String uId;
+
+    MediaPlayer mp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,16 +197,44 @@ public class DoActivity extends AppCompatActivity {
     }
 
     private void startCountdownWithMillis(final ModulElement currentModulElement, int millis){
+        mp = MediaPlayer.create(getApplicationContext(), R.raw.five_sound);
         //Constructs the countdown with a short delay of 499ms (Feels better for the user)
         countDown = new CountDownTimer(millis+499, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 //TODO Make this show Minutes properly
                 mMultiplierView.setText(String.valueOf(millisUntilFinished/1000) + "s" );
+                int currentSecondLeft = (int) millisUntilFinished/1000;
+
+                switch(currentSecondLeft){
+                    case 5:
+                        mp.start();
+                        break;
+                    case 4:
+                        mp = MediaPlayer.create(getApplicationContext(), R.raw.four_sound);
+                        mp.start();
+                        break;
+                    case 3:
+                        mp = MediaPlayer.create(getApplicationContext(), R.raw.three_sound);
+                        mp.start();
+                        break;
+                    case 2:
+                        mp = MediaPlayer.create(getApplicationContext(), R.raw.two_sound);
+                        mp.start();
+                        break;
+                    case 1:
+                        mp = MediaPlayer.create(getApplicationContext(), R.raw.one_sound);
+                        mp.start();
+                        break;
+
+                }
+
+
 
             }
 
             public void onFinish() {
+                mp.release();
                 if((currentDoingActivity.getModulElements().size()-1 >currentDoingActivity.getCurrentPosition())) {
                     nextStep();
                 }

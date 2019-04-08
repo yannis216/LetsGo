@@ -34,7 +34,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.Adapter mAdapter;
     FirebaseFirestore db;
-    boolean isModulEditMode = false;
+    boolean isModulElementsEditMode = false;
     List<Element> selectedElementsForModul;
     Modul currentModul;
 
@@ -47,8 +47,8 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
         selectedElementsForModul = new ArrayList<Element>();
 
         Intent intent = getIntent();
-        isModulEditMode =  intent.getBooleanExtra("modulEdit", false);
-        if(isModulEditMode){
+        isModulElementsEditMode =  intent.getBooleanExtra("modulElementsEdit", false);
+        if(isModulElementsEditMode){
             currentModul = (Modul) intent.getSerializableExtra("modul");
         }
 
@@ -76,7 +76,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isModulEditMode){
+                if(isModulElementsEditMode){
                     Intent fabIntent = new Intent(ElementListActivity.this, ModulEditActivity.class);
                     String selectedElementsListSerialized = new Gson().toJson(selectedElementsForModul);
                     fabIntent.putExtra("selectedElements", selectedElementsListSerialized);
@@ -115,14 +115,14 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
     }
 
     public void updateUiWithFetchedElements(List<Element> elements){
-        mAdapter = new ElementListAdapter(this, elements, this, isModulEditMode);
+        mAdapter = new ElementListAdapter(this, elements, this, isModulElementsEditMode);
         mRvElements.setAdapter(mAdapter);
     }
 
     @Override
     public void onClick(Element clickedElement) {
         Log.e("onClickElement", "was called with" +clickedElement);
-        if (isModulEditMode) {
+        if (isModulElementsEditMode) {
            if(clickedElement.isSelected()){
                selectedElementsForModul.add(clickedElement);
            }else {

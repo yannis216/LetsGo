@@ -3,14 +3,21 @@ package com.example.android.letsgo.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.android.letsgo.Adapter.ModulElementDetailListAdapter;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
-import com.example.android.letsgo.Adapter.ModulElementDetailListAdapter;
 import com.example.android.letsgo.R;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -25,11 +32,25 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
     private Modul displayedModul;
     private TextView mTvTitle;
 
+    private FirebaseAuth mFirebaseAuth;
+    FirebaseUser authUser;
+    String uId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modul_detail);
+
+        //Get the current User from Auth
+        //TODO Do this in Utils? Is it best Practice to do this in every Activity?
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        authUser = mFirebaseAuth.getCurrentUser();
+        if(authUser != null){
+            uId = authUser.getUid();
+        }else{
+            Log.e("ModulDetail Auth", "No User authenticated");
+        }
 
 
         mRvModulElements =(RecyclerView) findViewById(R.id.rv_modul_detail_modulelement__list);
@@ -56,6 +77,8 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
         generateModulElementsList(displayedModul.getModulElements());
 
         populateUi();
+        BottomAppBar bottomAppBar = findViewById(R.id.bar_modul_detail);
+        setSupportActionBar(bottomAppBar);
 
 
 
@@ -83,6 +106,33 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
         String title = displayedModul.getTitle();
         mTvTitle.setText(title);
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        if(uId.equals(displayedModul.getCreatorUid())){
+            inflater.inflate(R.menu.modul_detail_bottom_menu, menu);
+            //TODO Test if this works only when I am the creator!
+            //TODO Add for users that have not created this modul the option to copy and edit it
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_edit_modul:
+                Log.e("onClick EditModul", "User clicked that he wants to edit Modul");
+                Intent addIntent = new Intent(ModulDetailActivity.this, ModulEditActivity.class);
+                addIntent.putExtra("modulToEdit", displayedModul);
+                startActivity(addIntent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

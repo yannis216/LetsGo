@@ -50,14 +50,15 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     RecyclerView.LayoutManager mLayoutManager;
     ModulElementEditListAdapter mAdapter;
 
+    //Has to be true when user is editing an already existing Modul, not creating a new one
+    boolean modulEditMode;
+
 
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
     String uId;
-
-    //TODO Make it so that List of Modulelelemnts does not forget every element that has been there before goind to add new ones
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +94,14 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                 currentModul = (Modul) receivedIntent.getSerializableExtra("modul");
                 mTitleView.setText(currentModul.getTitle());
             }
+            if(receivedIntent.hasExtra("modulToEdit")) {
+                currentModul = (Modul) receivedIntent.getSerializableExtra("modulToEdit");
+                mTitleView.setText(currentModul.getTitle());
+                modulElements = currentModul.getModulElements();
+                modulEditMode = true;
+            }else{
+                modulEditMode = false;
+            }
             Log.e("addElements: ", "Received by Moduleditactivity" + addElements);
 
             //TODO May have to make this happen only after Database fetch is completed?
@@ -114,34 +123,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.modul_edit_bottom_menu, menu);
 
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.action_add_modulelement:
-                Log.e("onClick AddNew", "clicklistener Has been fired");
-                Intent addIntent = new Intent(ModulEditActivity.this, ElementListActivity.class);
-                addIntent.putExtra("modulEdit", true);
-                if(mTitleView.getText() != null){
-                    String titleText = mTitleView.getText().toString();
-                    currentModul.setTitle(titleText);
-                }
-                modulElements = mAdapter.getModulElements();
-                currentModul.setModulElements(modulElements);
-                addIntent.putExtra("modul", currentModul);
-                startActivity(addIntent);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     private void updateUiWithModulElements(){
         mRvModulElements.setLayoutManager(mLayoutManager);
@@ -174,9 +156,15 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                     String titleText = mTitleView.getText().toString();
                     currentModul.setModulElements(modulElements);
                     currentModul.setCreatorUid(uId);
-                    currentModul.setCreationTimestamp(System.currentTimeMillis());
                     currentModul.setTitle(titleText);
-                    saveModulToDb(currentModul);
+                    if(modulEditMode){
+                        updateModulInDb(currentModul);
+                    }else{
+                        currentModul.setOriginalCreatorUid(uId);
+                        currentModul.setCreationTimestamp(System.currentTimeMillis());
+                        saveModulToDb(currentModul);
+                    }
+
                 }else{
                     Toast.makeText(ModulEditActivity.this, "Your Modul needs a title and min. 1 ModulElement", Toast.LENGTH_SHORT).show();
                 }
@@ -231,6 +219,54 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                         Log.w("saveModul", "Error adding document", e);
                     }
                 });
+    }
+
+    public void updateModulInDb(Modul modul){
+        DocumentReference updateModulRef = db.collection("user").document(uId).collection("createdModuls").document(currentModul.getId());
+        updateModulRef
+                .set(modul)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.e("editModul", "Document Snap added");
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("editModul", "Error adding document", e);
+                    }
+                });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.modul_edit_bottom_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_add_modulelement:
+                Log.e("onClick AddNew", "clicklistener Has been fired");
+                Intent addIntent = new Intent(ModulEditActivity.this, ElementListActivity.class);
+                addIntent.putExtra("modulElementsEdit", true);
+                if(mTitleView.getText() != null){
+                    String titleText = mTitleView.getText().toString();
+                    currentModul.setTitle(titleText);
+                }
+                modulElements = mAdapter.getModulElements();
+                currentModul.setModulElements(modulElements);
+                addIntent.putExtra("modul", currentModul);
+                startActivity(addIntent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

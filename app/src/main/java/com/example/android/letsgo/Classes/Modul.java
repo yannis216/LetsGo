@@ -8,18 +8,19 @@ public class Modul implements Serializable {
     private String title;
     private String Id;
     private String creatorUid;
+    private String editorUid;
     //TODO Insert String creatorName -> Denormalized, has to get updated on Creatorname changed, saves Document reads
     private long creationTimestamp;
-    //TODO Save non-originals in Collection Associated with creatorUid and save Originals also there AND in Main Mouduls List
+    //TODO Save non-originals in Collection Associated with editorUid and save Originals also there AND in Main Mouduls List
     private long editTimeStamp;
-    //TODO If it has an originalCreatorUid it is an original that is saved also in Main Module List
-    private String originalCreatorUid;
+
+
     private List<ModulElement> modulElements;
 
 
-    public Modul(String title, String creatorUid,  List<ModulElement> modulElements) {
+    public Modul(String title, String editorUid, List<ModulElement> modulElements) {
         this.title = title;
-        this.creatorUid = creatorUid;
+        this.editorUid = editorUid;
         this.modulElements = modulElements;
     }
 
@@ -51,12 +52,12 @@ public class Modul implements Serializable {
         this.modulElements = modulElements;
     }
 
-    public String getCreatorUid() {
-        return creatorUid;
+    public String getEditorUid() {
+        return editorUid;
     }
 
-    public void setCreatorUid(String creatorUid) {
-        this.creatorUid = creatorUid;
+    public void setEditorUid(String editorUid) {
+        this.editorUid = editorUid;
     }
 
     public long getCreationTimestamp() {
@@ -75,12 +76,12 @@ public class Modul implements Serializable {
         this.editTimeStamp = editTimeStamp;
     }
 
-    public String getOriginalCreatorUid() {
-        return originalCreatorUid;
+    public String getCreatorUid() {
+        return creatorUid;
     }
 
-    public void setOriginalCreatorUid(String originalCreatorUid) {
-        this.originalCreatorUid = originalCreatorUid;
+    public void setCreatorUid(String creatorUid) {
+        this.creatorUid = creatorUid;
     }
 
 }

@@ -112,7 +112,7 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        if(uId.equals(displayedModul.getCreatorUid())){
+        if(uId.equals(displayedModul.getEditorUid())){
             inflater.inflate(R.menu.modul_detail_bottom_menu, menu);
             //TODO Test if this works only when I am the creator!
             //TODO Add for users that have not created this modul the option to copy and edit it
@@ -130,6 +130,12 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
                 Intent addIntent = new Intent(ModulDetailActivity.this, ModulEditActivity.class);
                 addIntent.putExtra("modulToEdit", displayedModul);
                 startActivity(addIntent);
+                break;
+            case R.id.action_copy_modul:
+                Log.e("onClick CopyModul", "User clicked that he wants to copy Modul");
+                Intent copyIntent = new Intent(ModulDetailActivity.this, ModulEditActivity.class);
+                copyIntent.putExtra("modulToCopy", displayedModul);
+                startActivity(copyIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);

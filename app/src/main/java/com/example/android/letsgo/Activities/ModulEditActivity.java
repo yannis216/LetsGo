@@ -50,15 +50,16 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     RecyclerView.LayoutManager mLayoutManager;
     ModulElementEditListAdapter mAdapter;
 
-    //Has to be true when user is editing an already existing Modul, not creating a new one
+    //Has to be true when user is editing(or copying) an already existing Modul, not creating a new one
     boolean modulEditMode;
+    boolean modulCopyMode;
 
 
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
     String uId;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +94,14 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
             if(receivedIntent.hasExtra("modul")) {
                 currentModul = (Modul) receivedIntent.getSerializableExtra("modul");
                 mTitleView.setText(currentModul.getTitle());
+            }
+            if(receivedIntent.hasExtra("modulToCopy")) {
+                currentModul = (Modul) receivedIntent.getSerializableExtra("modulToCopy");
+                mTitleView.setText(currentModul.getTitle());
+                modulElements = currentModul.getModulElements();
+                modulCopyMode = true;
+            }else{
+                modulCopyMode=false;
             }
             if(receivedIntent.hasExtra("modulToEdit")) {
                 currentModul = (Modul) receivedIntent.getSerializableExtra("modulToEdit");
@@ -155,12 +164,17 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                     modulElements = mAdapter.getModulElements();
                     String titleText = mTitleView.getText().toString();
                     currentModul.setModulElements(modulElements);
-                    currentModul.setCreatorUid(uId);
+                    currentModul.setEditorUid(uId);
                     currentModul.setTitle(titleText);
                     if(modulEditMode){
+                        currentModul.setEditTimeStamp(System.currentTimeMillis());
                         updateModulInDb(currentModul);
-                    }else{
-                        currentModul.setOriginalCreatorUid(uId);
+                    }else if (modulCopyMode){
+                        currentModul.setCreationTimestamp(System.currentTimeMillis());
+                        saveModulToDb(currentModul);
+                    }
+                    else{
+                        currentModul.setCreatorUid(uId);
                         currentModul.setCreationTimestamp(System.currentTimeMillis());
                         saveModulToDb(currentModul);
                     }

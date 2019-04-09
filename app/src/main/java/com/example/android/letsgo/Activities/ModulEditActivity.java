@@ -34,12 +34,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ModulEditActivity extends AppCompatActivity implements ModulElementEditListAdapter.ModulElementOnClickHandler, OnModulElementListChangedListener {
+public class ModulEditActivity extends BaseNavDrawActivity implements ModulElementEditListAdapter.ModulElementOnClickHandler, OnModulElementListChangedListener {
 
     Modul currentModul;
     List<ModulElement> modulElements = new ArrayList<ModulElement>();
@@ -50,6 +51,8 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     RecyclerView mRvModulElements;
     RecyclerView.LayoutManager mLayoutManager;
     ModulElementEditListAdapter mAdapter;
+
+    DrawerLayout drawerLayout;
 
 
     String mode = "create";
@@ -80,6 +83,18 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
 
         mTitleView = findViewById(R.id.et_modul_edit_title);
         fab = findViewById(R.id.fab_modul_edit);
+
+        BottomAppBar bar = findViewById(R.id.bar_modul_edit);
+        setSupportActionBar(bar);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        bar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
 
         mRvModulElements = findViewById(R.id.rv_modul_element_edit_list);
         mLayoutManager = new LinearLayoutManager(this);
@@ -124,9 +139,6 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
         //TODO Set OrderinModul for new Modulelements somewhere
         addOnClickListeners();
         updateUiWithModulElements();
-
-        BottomAppBar bottomAppBar = findViewById(R.id.bar_modul_edit);
-        setSupportActionBar(bottomAppBar);
 
     }
 

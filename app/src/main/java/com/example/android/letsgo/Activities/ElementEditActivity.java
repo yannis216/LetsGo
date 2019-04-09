@@ -37,11 +37,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 
 // TODO There is no Input Validation here. Think about security concerns etc
-public class ElementEditActivity extends AppCompatActivity {
+public class ElementEditActivity extends BaseNavDrawActivity {
     ImageView mPicture;
     EditText mTitleEdit;
     EditText mShortDescEdit;
@@ -71,6 +70,8 @@ public class ElementEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_element_edit, (ViewGroup) findViewById(R.id.content_frame));
+
+
 
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();

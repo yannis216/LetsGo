@@ -24,9 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
-public class DoActivity extends AppCompatActivity {
+public class DoActivity extends BaseNavDrawActivity {
 
     ImageView mImageView;
     TextView mMultiplierView;

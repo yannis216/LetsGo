@@ -118,6 +118,7 @@
         android:layout_gravity="bottom"
         app:backgroundTint="@color/colorPrimary"
         app:fabAlignmentMode="center"
+        app:navigationIcon="@drawable/ic_menu_black_24dp"
         />
     <!-- TODO den könnte man individuell (Form)im Sinne des Logos designen -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -22,11 +22,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ModulDetailActivity extends AppCompatActivity implements ModulElementDetailListAdapter.ModulElementOnClickHandler {
+public class ModulDetailActivity extends BaseNavDrawActivity implements ModulElementDetailListAdapter.ModulElementOnClickHandler {
     private RecyclerView mRvModulElements;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -36,6 +37,8 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
     String uId;
+
+    DrawerLayout drawerLayout;
 
 
     @Override
@@ -56,6 +59,19 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
 
         mRvModulElements =(RecyclerView) findViewById(R.id.rv_modul_detail_modulelement__list);
         mTvTitle = findViewById(R.id.tv_modul_detail_title);
+
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        BottomAppBar bar = findViewById(R.id.bar_modul_detail);
+        setSupportActionBar(bar);
+
+        bar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
 
         FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab_modul_detail);
 
@@ -78,8 +94,7 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
         generateModulElementsList(displayedModul.getModulElements());
 
         populateUi();
-        BottomAppBar bottomAppBar = findViewById(R.id.bar_modul_detail);
-        setSupportActionBar(bottomAppBar);
+
 
 
 

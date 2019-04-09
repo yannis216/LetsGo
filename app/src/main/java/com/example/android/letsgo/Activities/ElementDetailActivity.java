@@ -29,10 +29,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-public class ElementDetailActivity extends AppCompatActivity {
+public class ElementDetailActivity extends BaseNavDrawActivity {
     TextView mTitleView;
     ImageView mPictureView;
     TextView mMinHumansView;
@@ -46,6 +47,8 @@ public class ElementDetailActivity extends AppCompatActivity {
     ChipGroup mUsedForChipGroup;
     ChipGroup mMaterialChipGroup;
     FirebaseFirestore db;
+
+    DrawerLayout drawerLayout;
 
 
     @Override
@@ -66,6 +69,15 @@ public class ElementDetailActivity extends AppCompatActivity {
         mMaterialChipGroup = findViewById(R.id.cg_element_detail_material_chips);
         BottomAppBar bar= (BottomAppBar) findViewById(R.id.bar_activity_element_detail);
         FloatingActionButton fab = findViewById(R.id.fab_activity_element_detail);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        bar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
 
 
 

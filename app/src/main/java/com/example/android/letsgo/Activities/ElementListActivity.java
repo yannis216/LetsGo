@@ -24,12 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ElementListActivity extends AppCompatActivity implements ElementListAdapter.ElementOnClickHandler {
+public class ElementListActivity extends BaseNavDrawActivity implements ElementListAdapter.ElementOnClickHandler {
 
     RecyclerView mRvElements;
     RecyclerView.LayoutManager mLayoutManager;
@@ -39,6 +40,8 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
     List<Element> selectedElementsForModul;
     Modul currentModul;
     String updateOrEditMode;
+
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,15 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
         mRvElements.setLayoutManager(mLayoutManager);
         BottomAppBar bar= (BottomAppBar) findViewById(R.id.bar_activity_element_list);
         FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab_activity_element_list);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        bar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
 
         //TODO This Should take search Input paramters and category at some point
         getElementsFromDatabase();

@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -62,7 +63,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modul_edit);
+        getLayoutInflater().inflate(R.layout.activity_modul_edit, (ViewGroup) findViewById(R.id.content_frame));
 
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();

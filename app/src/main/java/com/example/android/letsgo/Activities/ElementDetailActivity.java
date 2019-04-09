@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,7 +51,7 @@ public class ElementDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_element_detail);
+        getLayoutInflater().inflate(R.layout.activity_element_detail, (ViewGroup) findViewById(R.id.content_frame));
 
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();

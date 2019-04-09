@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.letsgo.Adapter.ModulElementDetailListAdapter;
@@ -40,7 +41,7 @@ public class ModulDetailActivity extends AppCompatActivity implements ModulEleme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modul_detail);
+        getLayoutInflater().inflate(R.layout.activity_modul_detail, (ViewGroup) findViewById(R.id.content_frame));
 
         //Get the current User from Auth
         //TODO Do this in Utils? Is it best Practice to do this in every Activity?

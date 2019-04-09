@@ -50,9 +50,6 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
     //Arbitrary sign in code for google auth sign in flow
     private static final int RC_SIGN_IN = 567;
 
-
-
-    //TODO Drawerlayout
     DrawerLayout drawerLayout;
 
 
@@ -61,12 +58,10 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_modul_list, (ViewGroup) findViewById(R.id.content_frame));
 
-        context = ModulListActivity.this;
-
         db = FirebaseFirestore.getInstance();
         mFirebaseAuth =FirebaseAuth.getInstance();
 
-        drawerLayout = findViewById(R.id.drawer_layout);
+
 
         mRvModuls = findViewById(R.id.rv_modul_list);
         mLayoutManager = new LinearLayoutManager(this);

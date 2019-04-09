@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,7 +49,7 @@ public class DoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_do);
+        getLayoutInflater().inflate(R.layout.activity_do, (ViewGroup) findViewById(R.id.content_frame));
 
         mFirebaseAuth =FirebaseAuth.getInstance();
         authUser = mFirebaseAuth.getCurrentUser();

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.android.letsgo.Adapter.ElementListAdapter;
 import com.example.android.letsgo.Classes.Element;
@@ -42,7 +43,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_element_list);
+        getLayoutInflater().inflate(R.layout.activity_element_list, (ViewGroup) findViewById(R.id.content_frame));
 
         db = FirebaseFirestore.getInstance();
         selectedElementsForModul = new ArrayList<Element>();

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.android.letsgo.Adapter.ModulListAdapter;
@@ -29,11 +30,12 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ModulListActivity extends AppCompatActivity implements ModulListAdapter.ModulOnClickHandler {
+public class ModulListActivity extends BaseNavDrawActivity implements ModulListAdapter.ModulOnClickHandler {
 
     RecyclerView mRvModuls;
     RecyclerView.LayoutManager mLayoutManager;
@@ -48,19 +50,40 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
     //Arbitrary sign in code for google auth sign in flow
     private static final int RC_SIGN_IN = 567;
 
+
+
+    //TODO Drawerlayout
+    DrawerLayout drawerLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modul_list);
+        getLayoutInflater().inflate(R.layout.activity_modul_list, (ViewGroup) findViewById(R.id.content_frame));
+
+        context = ModulListActivity.this;
 
         db = FirebaseFirestore.getInstance();
         mFirebaseAuth =FirebaseAuth.getInstance();
+
+        drawerLayout = findViewById(R.id.drawer_layout);
 
         mRvModuls = findViewById(R.id.rv_modul_list);
         mLayoutManager = new LinearLayoutManager(this);
         mRvModuls.setLayoutManager(mLayoutManager);
         BottomAppBar bar= (BottomAppBar) findViewById(R.id.bar_activity_modul_list);
         FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab_activity_modul_list);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        bar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,4 +211,5 @@ public class ModulListActivity extends AppCompatActivity implements ModulListAda
     private void onSignedOutCleanUp(){
 
     }
+
 }

@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.DoActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".Activities.BaseNavDrawActivity"></activity>
+        <activity
+            android:name=".Activities.DoActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".Activities.UserCreationActivity" />
         <activity android:name=".Activities.ModulDetailActivity" />
         <activity android:name=".Activities.ModulEditActivity" />

@@ -37,6 +37,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
     boolean isModulElementsEditMode = false;
     List<Element> selectedElementsForModul;
     Modul currentModul;
+    String updateOrEditMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
         isModulElementsEditMode =  intent.getBooleanExtra("modulElementsEdit", false);
         if(isModulElementsEditMode){
             currentModul = (Modul) intent.getSerializableExtra("modul");
+            updateOrEditMode = intent.getStringExtra("mode");
         }
 
 
@@ -81,6 +83,7 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
                     String selectedElementsListSerialized = new Gson().toJson(selectedElementsForModul);
                     fabIntent.putExtra("selectedElements", selectedElementsListSerialized);
                     fabIntent.putExtra("modul", currentModul);
+                    fabIntent.putExtra("mode", updateOrEditMode);
                     startActivity(fabIntent);
 
                 }else {
@@ -133,9 +136,6 @@ public class ElementListActivity extends AppCompatActivity implements ElementLis
                    }
                }
            }
-
-
-
         }else {
             Intent startElementDetailActivityIntent = new Intent(this, ElementDetailActivity.class);
             startElementDetailActivityIntent.putExtra("element", clickedElement);

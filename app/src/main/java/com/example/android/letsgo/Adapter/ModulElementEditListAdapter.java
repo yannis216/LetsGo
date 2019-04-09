@@ -3,6 +3,7 @@ package com.example.android.letsgo.Adapter;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,13 +45,18 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
                 Collections.swap(modulElements, i, i + 1);
+                Log.e("ListModulElement", modulElements.toString());
             }
         } else {
             for (int i = fromPosition; i > toPosition; i--) {
                 Collections.swap(modulElements, i, i - 1);
+                Log.e("ListModulElement", modulElements.toString());
             }
         }
+        //Needed to update Listeners (e.g. TextChangedListener) so they update the right Modulelement
         notifyItemMoved(fromPosition, toPosition);
+        notifyItemChanged(fromPosition);
+        notifyItemChanged(toPosition);
         modulElementListChangedListener.onNoteListChanged(modulElements);
         return true;
     }
@@ -60,14 +66,17 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         modulElements.remove(position);
         modulElementListChangedListener.onNoteListChanged(modulElements);
         notifyItemRemoved(position);
+        //Added this to remove bug that crashes app with index out of bounds error after removing Items
+        notifyItemRangeChanged(position, modulElements.size() );
+
     }
 
 
     public class ModulElementViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public EditText mMultiplierEdit;
+        public Spinner spinner;
         public ModulElementEditTextListener editTextListener;
         public ModulElementSpinnerListener spinnerListener;
-        public Spinner spinner;
         public String givenType;
         public String defaultType;
         public int DEFAULT_SPINNER_POSITION = 0;

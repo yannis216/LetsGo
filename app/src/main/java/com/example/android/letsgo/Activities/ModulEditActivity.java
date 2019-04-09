@@ -50,9 +50,8 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
     RecyclerView.LayoutManager mLayoutManager;
     ModulElementEditListAdapter mAdapter;
 
-    //Has to be true when user is editing(or copying) an already existing Modul, not creating a new one
-    boolean modulEditMode;
-    boolean modulCopyMode;
+
+    String mode = "create";
 
 
     FirebaseFirestore db;
@@ -89,6 +88,9 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
             Gson gson = new Gson();
             Type listType = new TypeToken<List<Element>>(){}.getType();
             addElements = gson.fromJson(receivedIntent.getStringExtra("selectedElements"), listType);
+            if(receivedIntent.getStringExtra("mode")!=null){
+                mode = receivedIntent.getStringExtra("mode");
+            }
 
             //Adds already existing data to the display when returning from Moudlelement Selection
             if(receivedIntent.hasExtra("modul")) {
@@ -99,19 +101,14 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                 currentModul = (Modul) receivedIntent.getSerializableExtra("modulToCopy");
                 mTitleView.setText(currentModul.getTitle());
                 modulElements = currentModul.getModulElements();
-                modulCopyMode = true;
-            }else{
-                modulCopyMode=false;
+                mode = "copy";
             }
             if(receivedIntent.hasExtra("modulToEdit")) {
                 currentModul = (Modul) receivedIntent.getSerializableExtra("modulToEdit");
                 mTitleView.setText(currentModul.getTitle());
                 modulElements = currentModul.getModulElements();
-                modulEditMode = true;
-            }else{
-                modulEditMode = false;
+                mode = "edit";
             }
-            Log.e("addElements: ", "Received by Moduleditactivity" + addElements);
 
             //TODO May have to make this happen only after Database fetch is completed?
             if(addElements != null){
@@ -166,10 +163,10 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                     currentModul.setModulElements(modulElements);
                     currentModul.setEditorUid(uId);
                     currentModul.setTitle(titleText);
-                    if(modulEditMode){
+                    if(mode.equals("edit")){
                         currentModul.setEditTimeStamp(System.currentTimeMillis());
                         updateModulInDb(currentModul);
-                    }else if (modulCopyMode){
+                    }else if (mode.equals("copy")){
                         currentModul.setCreationTimestamp(System.currentTimeMillis());
                         saveModulToDb(currentModul);
                     }
@@ -270,6 +267,7 @@ public class ModulEditActivity extends AppCompatActivity implements ModulElement
                 Log.e("onClick AddNew", "clicklistener Has been fired");
                 Intent addIntent = new Intent(ModulEditActivity.this, ElementListActivity.class);
                 addIntent.putExtra("modulElementsEdit", true);
+                addIntent.putExtra("mode", mode);
                 if(mTitleView.getText() != null){
                     String titleText = mTitleView.getText().toString();
                     currentModul.setTitle(titleText);

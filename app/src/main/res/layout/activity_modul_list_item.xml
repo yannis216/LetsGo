@@ -25,7 +25,8 @@
                 android:id="@+id/tv_modul_list_modul_title"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:textAlignment="center"
+                android:textAlignment="viewStart"
+                android:gravity="start"
                 android:textSize="24sp"
                 android:text="Morning Routine"
                 android:ellipsize="end"
@@ -35,7 +36,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_modul_list_creator_name"
-                android:textAlignment="center"
+                android:textAlignment="viewStart"
+                android:gravity="start"
                 android:textSize="12sp"
                 android:text="by Yannis Beuke"/>
 

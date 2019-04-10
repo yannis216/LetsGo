@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.Activity;
@@ -34,6 +35,7 @@ public class DoActivity extends BaseNavDrawActivity {
     TextView mTitleView;
     TextView mNextTitleView;
     TextView mMinHumansView;
+    ProgressBar mSavingActivityBar;
     ConstraintLayout mConstraintLayout;
     ImageButton mNextElementButton;
     ImageButton mPreviousElementButton;
@@ -77,6 +79,7 @@ public class DoActivity extends BaseNavDrawActivity {
         mNextTitleView = findViewById(R.id.tv_do_next_modulelement);
         mNextElementButton = findViewById(R.id.ib_do_next);
         mPreviousElementButton = findViewById(R.id.ib_do_prev);
+        mSavingActivityBar = findViewById(R.id.pb_saving_activity);
 
         mPreviousElementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,7 +176,12 @@ public class DoActivity extends BaseNavDrawActivity {
                 @Override
                 public void onClick(View view) {
                     currentDoingActivity.setEndTime(System.currentTimeMillis());
+                    mNextElementButton.setVisibility(View.GONE);
+                    mSavingActivityBar.setVisibility(View.VISIBLE);
                     saveDoneActivityToDatabase();
+                    if(mp5 != null){
+                        mp5.stop();
+                    }
                 }
             });
         }
@@ -187,6 +195,9 @@ public class DoActivity extends BaseNavDrawActivity {
         if(countDown!= null){
             countDown.cancel();
         }
+        if(mp5 != null){
+            mp5.stop();
+        }
         currentDoingActivity.setCurrentPosition(currentDoingActivity.getCurrentPosition()+1);
         updateUi();
     }
@@ -194,6 +205,9 @@ public class DoActivity extends BaseNavDrawActivity {
     private void previousStep(){
         if(countDown!= null){
             countDown.cancel();
+        }
+        if(mp5 != null){
+            mp5.stop();
         }
         currentDoingActivity.setCurrentPosition(currentDoingActivity.getCurrentPosition()-1);
         updateUi();
@@ -208,6 +222,12 @@ public class DoActivity extends BaseNavDrawActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.e("saveActivity", "Document Snap added");
+                        mNextElementButton.setVisibility(View.VISIBLE);
+                        mSavingActivityBar.setVisibility(View.GONE);
+                        Intent startModulListActivityIntent = new Intent(getApplicationContext(), ModulListActivity.class);
+                        startActivity(startModulListActivityIntent);
+                        finish();
+
 
                     }
                 })
@@ -247,5 +267,13 @@ public class DoActivity extends BaseNavDrawActivity {
             }
         }.start();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mp5 != null){
+            mp5.release();
+        }
     }
 }

@@ -122,6 +122,16 @@
             app:layout_constraintWidth_percent=".5"
             android:background="?android:selectableItemBackground"
             />
+
+        <ProgressBar
+            android:id="@+id/pb_saving_activity"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:layout_constraintWidth_percent=".5"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:background="?android:selectableItemBackground"/>
     </LinearLayout>
 
     <!--Todo Add scrollable List of other Moudlelements for fastforwearning and better overview -->

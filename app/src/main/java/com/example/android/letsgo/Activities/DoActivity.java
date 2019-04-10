@@ -15,6 +15,7 @@ import com.example.android.letsgo.Classes.Activity;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.R;
+import com.example.android.letsgo.Utils.OnSwipeTouchListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class DoActivity extends BaseNavDrawActivity {
 
@@ -32,6 +34,7 @@ public class DoActivity extends BaseNavDrawActivity {
     TextView mTitleView;
     TextView mNextTitleView;
     TextView mMinHumansView;
+    ConstraintLayout mConstraintLayout;
     ImageButton mNextElementButton;
     ImageButton mPreviousElementButton;
     Activity currentDoingActivity;
@@ -66,6 +69,7 @@ public class DoActivity extends BaseNavDrawActivity {
             Log.e("DoActivity Auth", "No User authenticated");
         }
 
+        mConstraintLayout = findViewById(R.id.cl_do);
         mImageView = findViewById(R.id.iv_do_modulelement);
         mMultiplierView =  findViewById(R.id.tv_do_modulelement_multiplier);
         mTitleView = findViewById(R.id.tv_do_modulelement_title);
@@ -85,6 +89,22 @@ public class DoActivity extends BaseNavDrawActivity {
         Intent intent = getIntent();
         Modul givenModul = (Modul) intent.getSerializableExtra("modul");
         currentDoingActivity = generateActivityFromModul(givenModul);
+
+        mConstraintLayout.setOnTouchListener(new OnSwipeTouchListener(context) {
+            @Override
+            public void onSwipeLeft() {
+                if(currentDoingActivity.getModulElements().size()-1 >currentDoingActivity.getCurrentPosition()) {
+                    nextStep();
+                }
+            }
+
+            @Override
+            public void onSwipeRight(){
+                if(!(currentDoingActivity.getCurrentPosition() == 0)) {
+                    previousStep();
+                }
+            }
+        });
 
         updateUi();
     }
@@ -158,7 +178,10 @@ public class DoActivity extends BaseNavDrawActivity {
             });
         }
 
+
+
     }
+
 
     private void nextStep(){
         if(countDown!= null){

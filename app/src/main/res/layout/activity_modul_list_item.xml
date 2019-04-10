@@ -13,15 +13,17 @@
         >
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_modul_list_modul_title"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:textSize="32sp"
+                android:textSize="24sp"
                 android:text="test"
+                android:ellipsize="end"
+                android:maxLines="1"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -38,8 +40,8 @@
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <RatingBar
@@ -49,11 +51,13 @@
                 android:layout_height="wrap_content"
                 android:isIndicator="true"
                 android:numStars ="5"
-                style="?android:attr/ratingBarStyleSmall"/>
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_marginTop="8dp"/>
             <TextView
                 android:id="@+id/tv_modul_list_item_number_votes"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:gravity="end"
                 android:text="1000 Votes"
                 android:textSize="12sp"
@@ -119,7 +123,7 @@
             android:text="@string/modul_list_item_more_info"
             android:textAlignment="center"
             android:gravity="center"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"

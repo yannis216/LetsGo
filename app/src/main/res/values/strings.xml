@@ -22,4 +22,9 @@
         <item>Meters</item>
     </string-array>
 
+    <!-- For Modul List Items -->
+    <string name="modul_list_item_share">Share</string>
+    <string name="modul_list_item_do">Do</string>
+    <string name="modul_list_item_more_info">More info</string>
+
 </resources>

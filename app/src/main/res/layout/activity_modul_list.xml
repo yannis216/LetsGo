@@ -12,7 +12,9 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:paddingBottom="64dp"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            android:divider="@color/colorPrimary"
+            android:dividerHeight="1px"/>
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bar_activity_modul_list"

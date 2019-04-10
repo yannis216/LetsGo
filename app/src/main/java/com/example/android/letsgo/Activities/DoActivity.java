@@ -54,9 +54,10 @@ public class DoActivity extends BaseNavDrawActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //Screen should stay on in this activity
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        
+
         getLayoutInflater().inflate(R.layout.activity_do, (ViewGroup) findViewById(R.id.content_frame));
 
         mFirebaseAuth =FirebaseAuth.getInstance();

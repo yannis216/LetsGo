@@ -11,15 +11,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_launcher_round"/>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_modul_list_modul_title"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:textAlignment="center"
                 android:textSize="24sp"
                 android:text="test"
                 android:ellipsize="end"
@@ -29,21 +35,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_modul_list_creator_name"
+                android:textAlignment="viewEnd"
                 android:textSize="12sp"
                 android:text="by Yannis Beuke"/>
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/cg_modul_list_usedFor_chips"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_weight="0"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/baseline_play_arrow_black_24dp"
+                />
+            <TextView
+                android:id="@+id/tv_modul_list_item_times_done"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="1838x"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_access_time_black_24dp"/>
+            <TextView
+                android:id="@+id/tv_modul_list_item_avg_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="~ 20min"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
             <RatingBar
                 android:id="@+id/rb_modul_list_item"
                 android:layout_width="wrap_content"
@@ -53,40 +98,8 @@
                 android:numStars ="5"
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_marginTop="8dp"/>
-            <TextView
-                android:id="@+id/tv_modul_list_item_number_votes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:gravity="end"
-                android:text="1000 Votes"
-                android:textSize="12sp"
-                />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="end">
-                <TextView
-                    android:id="@+id/tv_modul_list_item_avg_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="~ 10min"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_access_time_black_24dp"/>
-
-            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_modul_list_item_do"
             android:layout_width="wrap_content"

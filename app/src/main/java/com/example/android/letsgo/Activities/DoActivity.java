@@ -184,9 +184,6 @@ public class DoActivity extends BaseNavDrawActivity {
                     mNextElementButton.setVisibility(View.GONE);
                     mSavingActivityBar.setVisibility(View.VISIBLE);
                     saveDoneActivityToDatabase();
-                    if(mp5 != null){
-                        mp5.stop();
-                    }
                 }
             });
         }
@@ -200,9 +197,6 @@ public class DoActivity extends BaseNavDrawActivity {
         if(countDown!= null){
             countDown.cancel();
         }
-        if(mp5 != null){
-            mp5.stop();
-        }
         currentDoingActivity.setCurrentPosition(currentDoingActivity.getCurrentPosition()+1);
         updateUi();
     }
@@ -210,9 +204,6 @@ public class DoActivity extends BaseNavDrawActivity {
     private void previousStep(){
         if(countDown!= null){
             countDown.cancel();
-        }
-        if(mp5 != null){
-            mp5.stop();
         }
         currentDoingActivity.setCurrentPosition(currentDoingActivity.getCurrentPosition()-1);
         updateUi();

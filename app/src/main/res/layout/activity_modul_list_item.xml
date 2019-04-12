@@ -56,37 +56,37 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_weight="1"
             android:gravity="center">
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:src="@drawable/baseline_play_arrow_black_24dp"
                 />
             <TextView
                 android:id="@+id/tv_modul_list_item_times_done"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="1838"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_weight="1"
             android:gravity="center">
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:src="@drawable/ic_access_time_black_24dp"/>
             <TextView
                 android:id="@+id/tv_modul_list_item_avg_duration"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="~ 20min"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"/>
@@ -94,15 +94,15 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_weight="1"
             android:gravity="center">
             <RatingBar
                 android:id="@+id/rb_modul_list_item"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
                 android:isIndicator="true"
                 android:numStars ="5"
                 style="?android:attr/ratingBarStyleSmall"

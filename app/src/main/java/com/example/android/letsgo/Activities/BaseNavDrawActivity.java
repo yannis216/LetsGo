@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.android.letsgo.R;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -14,6 +18,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 public class BaseNavDrawActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     Context context;
+    private FirebaseAuth mFirebaseAuth;
+    FirebaseUser authUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +28,17 @@ public class BaseNavDrawActivity extends AppCompatActivity {
 
         //TODO DrawerLayout
         drawerLayout = findViewById(R.id.drawer_layout);
+        TextView userNameView = findViewById(R.id.tv_nav_drawer_header_userName);
+
+        mFirebaseAuth =FirebaseAuth.getInstance();
+        authUser = mFirebaseAuth.getCurrentUser();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.tv_nav_drawer_header_userName);
+        navUsername.setText(authUser.getDisplayName());
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override

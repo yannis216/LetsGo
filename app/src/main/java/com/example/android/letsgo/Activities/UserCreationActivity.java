@@ -10,6 +10,7 @@ import com.example.android.letsgo.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,11 @@ public class UserCreationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String userName = mUsernameEdit.getText().toString();
                 User newUser = new User(userName);
+
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(userName).build();
+
+                authUser.updateProfile(profileUpdates);
 
                 db.collection("user").document(authUser.getUid()).set(newUser);
 

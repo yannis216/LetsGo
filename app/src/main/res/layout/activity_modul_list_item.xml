@@ -35,11 +35,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_modul_list_creator_name"
+                android:id="@+id/tv_modul_list_item_editor_name"
                 android:textAlignment="viewStart"
                 android:gravity="start"
                 android:textSize="12sp"
-                android:text="by Yannis Beuke"/>
+                android:text="Editor Name"/>
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/cg_modul_list_usedFor_chips"

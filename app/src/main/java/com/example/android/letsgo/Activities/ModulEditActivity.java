@@ -176,6 +176,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     currentModul.setModulElements(modulElements);
                     currentModul.setEditorUid(uId);
                     currentModul.setTitle(titleText);
+                    currentModul.setEditorName(authUser.getDisplayName());
                     if(mode.equals("edit")){
                         currentModul.setEditTimeStamp(System.currentTimeMillis());
                         updateModulInDb(currentModul);

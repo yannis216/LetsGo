@@ -69,6 +69,10 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_list_modul_title);
         titleView.setText(modulTitle);
 
+        TextView editorNameView = holder.itemView.findViewById(R.id.tv_modul_list_item_editor_name);
+        String editorNameViewText = "by " + currentModul.getEditorName();
+        editorNameView.setText(editorNameViewText);
+
 
     }
 

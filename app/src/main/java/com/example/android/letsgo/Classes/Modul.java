@@ -9,7 +9,8 @@ public class Modul implements Serializable {
     private String Id;
     private String creatorUid;
     private String editorUid;
-    //TODO Insert String creatorName -> Denormalized, has to get updated on Creatorname changed, saves Document reads
+    //TODO Insert editorName Denormalized, has to get updated on Creatorname changed
+    private String editorName;
     private long creationTimestamp;
     //TODO Save non-originals in Collection Associated with editorUid and save Originals also there AND in Main Mouduls List
     private long editTimeStamp;
@@ -82,6 +83,14 @@ public class Modul implements Serializable {
 
     public void setCreatorUid(String creatorUid) {
         this.creatorUid = creatorUid;
+    }
+
+    public String getEditorName() {
+        return editorName;
+    }
+
+    public void setEditorName(String editorName) {
+        this.editorName = editorName;
     }
 
 }

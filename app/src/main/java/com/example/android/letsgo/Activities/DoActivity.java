@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
@@ -42,6 +44,7 @@ public class DoActivity extends BaseNavDrawActivity {
     ImageButton mPreviousElementButton;
     Activity currentDoingActivity;
     CountDownTimer countDown;
+    Modul givenModul;
 
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
@@ -95,7 +98,7 @@ public class DoActivity extends BaseNavDrawActivity {
 
 
         Intent intent = getIntent();
-        Modul givenModul = (Modul) intent.getSerializableExtra("modul");
+        givenModul = (Modul) intent.getSerializableExtra("modul");
         currentDoingActivity = generateActivityFromModul(givenModul);
 
         mConstraintLayout.setOnTouchListener(new OnSwipeTouchListener(context) {
@@ -209,30 +212,57 @@ public class DoActivity extends BaseNavDrawActivity {
         updateUi();
     }
 
-    private void saveDoneActivityToDatabase(){
-        DocumentReference newActivityRef = db.collection("user").document(uId).collection("doneActivities").document();
+
+
+    private void saveDoneActivityToDatabase() {
+        final DocumentReference newActivityRef = db.collection("user")
+                .document(uId).collection("doneActivities")
+                .document();
         currentDoingActivity.setId(newActivityRef.getId());
-        newActivityRef
-                .set(currentDoingActivity)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.e("saveActivity", "Document Snap added");
-                        mNextElementButton.setVisibility(View.VISIBLE);
-                        mSavingActivityBar.setVisibility(View.GONE);
-                        Intent startModulListActivityIntent = new Intent(getApplicationContext(), ModulListActivity.class);
-                        startActivity(startModulListActivityIntent);
-                        finish();
 
+        final DocumentReference doneModulRef = db.collection("user")
+                .document(givenModul.getEditorUid())
+                .collection("createdModuls")
+                .document(givenModul.getId());
+        //TODO May cause issues when implementing securioty rules to moduls
 
-                    }
-                })
+        // In a transaction, add the new rating and update the aggregate totals
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                Modul modul = transaction.get(doneModulRef).toObject(Modul.class);
+
+                // Compute new DoneCOunt
+                int newDoneCount = modul.getDoneCount() +1;
+                modul.setDoneCount(newDoneCount);
+
+                // Update Modul
+                //TODO Maybe should se SetOption:Merge (Firestore special) here for more efficeny
+                transaction.set(doneModulRef, modul);
+
+                // Save Activity
+                transaction.set(newActivityRef, currentDoingActivity);
+
+                return null;
+                //TODO Should catch Exception somewhere
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("saveActivity", "Document Snap added" );
+                mNextElementButton.setVisibility(View.VISIBLE);
+                mSavingActivityBar.setVisibility(View.GONE);
+                Intent startModulListActivityIntent = new Intent(getApplicationContext(), ModulListActivity.class);
+                startActivity(startModulListActivityIntent);
+                finish();
+            }
+        })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("saveActivity", "Error adding document", e);
+                        Log.w("Tag", "Transaction failure.", e);
                     }
-                });
+                });;
     }
 
     private void startCountdownWithMillis(final ModulElement currentModulElement, int millis){

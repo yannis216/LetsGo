@@ -241,12 +241,13 @@ public class DoActivity extends BaseNavDrawActivity {
                 int newDoneCount = socialModulInfoAvg.getDoneCount() +1;
                 socialModulInfoAvg.setDoneCount(newDoneCount);
 
-                long duration = currentDoingActivity.getStartTime() - currentDoingActivity.getEndTime();
+                //Compute avgDuration
+                long duration = currentDoingActivity.getEndTime() - currentDoingActivity.getStartTime();
                 long newAvgDuration = (socialModulInfoAvg.getDurationAvg() *( newDoneCount-1) +duration)/newDoneCount;
                 socialModulInfoAvg.setDurationAvg(newAvgDuration);
 
                 // Update Modul
-                //TODO Maybe should se SetOption:Merge (Firestore special) here for more efficeny
+                //TODO Maybe should se SetOption:Merge (Firestore special option) here for more efficeny
                 transaction.set(socialModulInfoAvgRef, socialModulInfoAvg);
 
                 // Save Activity

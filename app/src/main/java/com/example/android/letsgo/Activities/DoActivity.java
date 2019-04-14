@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.android.letsgo.Classes.Activity;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
+import com.example.android.letsgo.Classes.SocialModulInfo;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.OnSwipeTouchListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -220,25 +221,33 @@ public class DoActivity extends BaseNavDrawActivity {
                 .document();
         currentDoingActivity.setId(newActivityRef.getId());
 
-        final DocumentReference doneModulRef = db.collection("user")
+        final DocumentReference socialModulInfoAvgRef = db.collection("user")
                 .document(givenModul.getEditorUid())
                 .collection("createdModuls")
-                .document(givenModul.getId());
-        //TODO May cause issues when implementing securioty rules to moduls
+                .document(givenModul.getId())
+                .collection("socialModulInfo")
+                .document("avg");
 
         // In a transaction, add the new rating and update the aggregate totals
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
-                Modul modul = transaction.get(doneModulRef).toObject(Modul.class);
+                SocialModulInfo socialModulInfoAvg = transaction.get(socialModulInfoAvgRef).toObject(SocialModulInfo.class);
+                if(socialModulInfoAvg == null){
+                    socialModulInfoAvg = new SocialModulInfo();
+                }
 
                 // Compute new DoneCOunt
-                int newDoneCount = modul.getDoneCount() +1;
-                modul.setDoneCount(newDoneCount);
+                int newDoneCount = socialModulInfoAvg.getDoneCount() +1;
+                socialModulInfoAvg.setDoneCount(newDoneCount);
+
+                long duration = currentDoingActivity.getStartTime() - currentDoingActivity.getEndTime();
+                long newAvgDuration = (socialModulInfoAvg.getDurationAvg() *( newDoneCount-1) +duration)/newDoneCount;
+                socialModulInfoAvg.setDurationAvg(newAvgDuration);
 
                 // Update Modul
                 //TODO Maybe should se SetOption:Merge (Firestore special) here for more efficeny
-                transaction.set(doneModulRef, modul);
+                transaction.set(socialModulInfoAvgRef, socialModulInfoAvg);
 
                 // Save Activity
                 transaction.set(newActivityRef, currentDoingActivity);

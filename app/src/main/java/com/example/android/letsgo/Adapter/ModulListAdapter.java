@@ -74,7 +74,7 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
         editorNameView.setText(editorNameViewText);
 
         TextView doneCountView = holder.itemView.findViewById(R.id.tv_modul_list_item_times_done);
-        doneCountView.setText(""+currentModul.getDoneCount());
+        doneCountView.setText("Placeholder");
 
 
     }

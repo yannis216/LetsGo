@@ -14,7 +14,6 @@ public class Modul implements Serializable {
     private long creationTimestamp;
     //TODO Save non-originals in Collection Associated with editorUid and save Originals also there AND in Main Mouduls List
     private long editTimeStamp;
-    private int doneCount;
     //TODO Add lastDateDone = timestamp when some user did it the last time.
     // Moduls that haven been done for time x can be deleted
 
@@ -96,11 +95,4 @@ public class Modul implements Serializable {
         this.editorName = editorName;
     }
 
-    public int getDoneCount() {
-        return doneCount;
-    }
-
-    public void setDoneCount(int doneCount) {
-        this.doneCount = doneCount;
-    }
 }

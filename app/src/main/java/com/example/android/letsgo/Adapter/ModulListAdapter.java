@@ -73,6 +73,9 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
         String editorNameViewText = "by " + currentModul.getEditorName();
         editorNameView.setText(editorNameViewText);
 
+        TextView doneCountView = holder.itemView.findViewById(R.id.tv_modul_list_item_times_done);
+        doneCountView.setText(""+currentModul.getDoneCount());
+
 
     }
 

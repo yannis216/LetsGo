@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.android.letsgo.Adapter.ModulListAdapter;
 import com.example.android.letsgo.Classes.Modul;
+import com.example.android.letsgo.Classes.SocialModulInfo;
 import com.example.android.letsgo.Classes.User;
 import com.example.android.letsgo.R;
 import com.firebase.ui.auth.AuthUI;
@@ -46,6 +47,8 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     User user;
     List<Modul> moduls;
+    List<SocialModulInfo> socialModulInfos;
+    int counter;
 
     //Arbitrary sign in code for google auth sign in flow
     private static final int RC_SIGN_IN = 567;
@@ -60,7 +63,7 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
 
         db = FirebaseFirestore.getInstance();
         mFirebaseAuth =FirebaseAuth.getInstance();
-        
+
 
 
 
@@ -153,15 +156,45 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
                         if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document : task.getResult()){
+                            final int resultSize = task.getResult().size();
+                            counter = 0;
+                            final SocialModulInfo[] socialModulInfos = new SocialModulInfo[resultSize];
+                            for(final QueryDocumentSnapshot document : task.getResult()){
                                 Modul modul = document.toObject(Modul.class);
                                 moduls.add(modul);
+                                final int currentsize = moduls.size();
 
-                            }
+                                db.collection("user")
+                                        .document(modul.getEditorUid())
+                                        .collection("createdModuls")
+                                        .document(modul.getId())
+                                        .collection("socialModulInfo")
+                                        .document("avg")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if(task.isSuccessful()){
+                                                    SocialModulInfo soc = task.getResult().toObject(SocialModulInfo.class);
+                                                    socialModulInfos[currentsize-1] = soc;
+
+                                                    //This was the only solution I found to make sure that Ui
+                                                    // gets only updated after every single SocialModulinfo has been retrieved
+                                                    // as I did not find a solution to batch read all the socialModulInfos
+                                                    if(counter+1==resultSize){
+                                                        updateUiWithFetchedModuls(moduls, socialModulInfos);
+                                                    }
+                                                    counter++;
+                                            }
+                                        };
+
+                            });
+                        }
                             Log.e("ModulListActivity", "Has read Moduls from db");
-                            updateUiWithFetchedModuls(moduls);
-                        }else{
+                        }
+                        else{
                             Log.d("getModulsFromDB", "Error getting documents: " + task.getException());
                         }
                     }
@@ -169,8 +202,9 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
 
     }
 
-    private void updateUiWithFetchedModuls(List<Modul> moduls){
-        mAdapter = new ModulListAdapter(this, moduls, this);
+    private void updateUiWithFetchedModuls(List<Modul> moduls, SocialModulInfo[] socialModulInfosArray){
+        List<SocialModulInfo> socialModulInfos = new ArrayList<SocialModulInfo>(Arrays.asList(socialModulInfosArray));
+        mAdapter = new ModulListAdapter(this, moduls, socialModulInfos, this);
         mRvModuls.setAdapter(mAdapter);
     }
 

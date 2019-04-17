@@ -166,6 +166,9 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
                                 moduls.add(modul);
                                 final int currentsize = moduls.size();
 
+                                //TODO This is a complicated way to retrieve the Infos. Maybe think about restrcuturing database
+                                // or find a batched read solution or use transactions when they have offline support
+                                //But Maybe its not a problem at all for performance? Dont know
                                 db.collection("user")
                                         .document(modul.getEditorUid())
                                         .collection("createdModuls")

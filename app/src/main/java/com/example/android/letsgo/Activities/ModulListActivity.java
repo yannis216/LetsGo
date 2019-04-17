@@ -60,6 +60,7 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
 
         db = FirebaseFirestore.getInstance();
         mFirebaseAuth =FirebaseAuth.getInstance();
+        
 
 
 
@@ -156,7 +157,9 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
                             for(QueryDocumentSnapshot document : task.getResult()){
                                 Modul modul = document.toObject(Modul.class);
                                 moduls.add(modul);
+
                             }
+                            Log.e("ModulListActivity", "Has read Moduls from db");
                             updateUiWithFetchedModuls(moduls);
                         }else{
                             Log.d("getModulsFromDB", "Error getting documents: " + task.getException());

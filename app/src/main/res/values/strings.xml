@@ -27,4 +27,7 @@
     <string name="modul_list_item_do">Do</string>
     <string name="modul_list_item_more_info">More info</string>
 
+    <string name="add_modul_rating_pleaserate">How much did you like it?</string>
+    <string name="add_modul_rating_rateFirst">Please give a rating first</string>
+
 </resources>

@@ -6,17 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="64dp"
+        android:id="@+id/tv_add_modul_rating_header"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:text="@string/add_modul_rating_pleaserate"/>
 
+    <RatingBar
+        android:id="@+id/rb_modul_rating"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:numStars ="5"
+        android:stepSize="0.5"
+        />
 
-    <ProgressBar
-    android:id="@+id/pb_saving_activity"
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    app:layout_constraintWidth_percent=".5"
-    android:indeterminate="true"
-    android:visibility="gone"
-    android:background="?android:selectableItemBackground"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bar_add_modul_rating"
@@ -34,5 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_save_black_24dp"
-        app:layout_anchor="@id/bar_add_modul_rating"/>
+        app:layout_anchor="@id/bar_add_modul_rating"
+        app:backgroundTint="@color/browser_actions_bg_grey"
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

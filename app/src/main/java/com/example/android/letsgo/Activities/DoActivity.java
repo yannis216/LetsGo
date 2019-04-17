@@ -173,7 +173,7 @@ public class DoActivity extends BaseNavDrawActivity {
         }else{
             //If in the last Element let user upload his activity to database when finished
             mNextTitleView.setText(getResources().getText(R.string.do_activity_finish));
-            mNextElementButton.setImageResource(R.drawable.baseline_save_black_24dp);
+            mNextElementButton.setImageResource(R.drawable.baseline_check_circle_black_24dp);
             mNextElementButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {

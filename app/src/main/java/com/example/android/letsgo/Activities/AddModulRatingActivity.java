@@ -1,10 +1,13 @@
 package com.example.android.letsgo.Activities;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
+import android.widget.Toast;
 
 import com.example.android.letsgo.Classes.Activity;
 import com.example.android.letsgo.Classes.Modul;
@@ -35,6 +38,8 @@ public class AddModulRatingActivity extends BaseNavDrawActivity {
     String uId;
     Activity doneActivity;
     Modul givenModul;
+    RatingBar rateBar;
+    FloatingActionButton fab;
 
     DrawerLayout drawerLayout;
 
@@ -54,12 +59,25 @@ public class AddModulRatingActivity extends BaseNavDrawActivity {
 
 
         BottomAppBar bar= (BottomAppBar) findViewById(R.id.bar_add_modul_rating);
-        FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab_add_modul_rating);
+        fab =(FloatingActionButton) findViewById(R.id.fab_add_modul_rating);
+        rateBar = (RatingBar) findViewById(R.id.rb_modul_rating);
+        rateBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        saveDoneActivityToDatabase();
+                    }
+                });
+                fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveDoneActivityToDatabase();
+                Toast.makeText(AddModulRatingActivity.this , getResources().getText(R.string.add_modul_rating_rateFirst).toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -102,6 +120,17 @@ public class AddModulRatingActivity extends BaseNavDrawActivity {
                 socialModulInfoAvg.setDurationAvg(newAvgDuration);
 
                 //Compute new avg Rating
+                float newRating = rateBar.getRating();
+                float oldAvgRating = socialModulInfoAvg.getRating();
+                float oldRateNum = socialModulInfoAvg.getRatingNum();
+                float newRateNum = oldRateNum +1;
+                float newAvgRating = (oldAvgRating * oldRateNum + newRating) /newRateNum;
+
+                socialModulInfoAvg.setRating(newAvgRating);
+                socialModulInfoAvg.setRatingNum(newRateNum);
+
+                //Add LastDoneTimeStamp
+                socialModulInfoAvg.setLastDoneTimestamp(doneActivity.getEndTime());
 
                 // Update SocialModulInfo
                 //TODO Maybe should set SetOption:Merge (Firestore special option) here for more efficeny

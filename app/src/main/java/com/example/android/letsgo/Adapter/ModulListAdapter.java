@@ -1,7 +1,6 @@
 package com.example.android.letsgo.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,11 @@ import android.widget.TextView;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.SocialModulInfo;
 import com.example.android.letsgo.R;
+import com.example.android.letsgo.Utils.UsedForSorter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
@@ -84,8 +86,6 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
         TextView doneCountView = holder.itemView.findViewById(R.id.tv_modul_list_item_times_done);
         TextView avgDurationView = holder.itemView.findViewById(R.id.tv_modul_list_item_avg_duration);
         RatingBar avgRatingView = holder.itemView.findViewById(R.id.rb_modul_list_item);
-        Log.e("Adapter", ""+ position);
-        Log.e("SMI", ""+currentSocialModulInfo);
 
         if(currentSocialModulInfo!=null) {
             doneCountView.setText(String.valueOf(currentSocialModulInfo.getDoneCount()));
@@ -107,12 +107,24 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
             avgRatingView.setVisibility(View.GONE);
         }
 
+        UsedForSorter sorter = new UsedForSorter(moduls.get(position), context2);
+        Map<String, Integer> sortedUsedFors = sorter.getMostImportantUsedFor();
+        final List<String> usedForStrings = new ArrayList<String>();
+        for(int i = 0; i <3 && i <sortedUsedFors.size() ; i++ ){
+            usedForStrings.add(sortedUsedFors.keySet().toArray()[i].toString());
+        }
+
+
+
+
 
     }
 
     public int getItemCount(){
         return moduls.size();
     }
+
+
 
 
 

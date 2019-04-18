@@ -17,7 +17,7 @@
         <item>Times</item> <!-- First in this array is default! -->
         <item>Seconds</item> <!-- Second must be seconds -->
         <item>Minutes</item> <!-- Third must be minutes -->
-        <item>Hours</item>
+        <item>Hours</item>  <!-- Third must be hours -->
         <item>Days</item>
         <item>Meters</item>
     </string-array>

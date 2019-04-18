@@ -11,6 +11,9 @@ import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.SocialModulInfo;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.UsedForSorter;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +116,10 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
         for(int i = 0; i <3 && i <sortedUsedFors.size() ; i++ ){
             usedForStrings.add(sortedUsedFors.keySet().toArray()[i].toString());
         }
+        ChipGroup usedForChipGroup = holder.itemView.findViewById(R.id.cg_modul_list_usedFor_chips);
+        setChips(usedForStrings, usedForChipGroup);
+
+
 
 
 
@@ -122,6 +129,21 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
 
     public int getItemCount(){
         return moduls.size();
+    }
+
+    private void setChips(List<String> strings, ChipGroup usedForChipGroup){
+        for(int i=0; i<strings.size(); i++){
+            final Chip thisChip = getChip(usedForChipGroup, strings.get(i));
+            usedForChipGroup.addView(thisChip);
+        }
+    }
+
+    private Chip getChip(final ChipGroup entryChipGroup, String text) {
+        final Chip chip = new Chip(context2);
+        chip.setChipDrawable(ChipDrawable.createFromResource(context2, R.xml.used_for_modullist_chip));
+        chip.setText(text);
+
+        return chip;
     }
 
 

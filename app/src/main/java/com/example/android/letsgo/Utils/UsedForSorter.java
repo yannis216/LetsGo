@@ -53,12 +53,12 @@ public class UsedForSorter {
                 }
             }
         }
-
         Map<String, Integer> sortedMap = sortByComparator(hashMap, false);
 
         Log.e("Hashmap", sortedMap.toString());
         return  sortedMap;
     }
+
 
     private static Map<String, Integer> sortByComparator(Map<String, Integer> unsortMap, final boolean order)
     {
@@ -73,10 +73,12 @@ public class UsedForSorter {
             {
                 if (order)
                 {
+                    //Ascending
                     return o1.getValue().compareTo(o2.getValue());
                 }
                 else
                 {
+                    //Descending
                     return o2.getValue().compareTo(o1.getValue());
 
                 }

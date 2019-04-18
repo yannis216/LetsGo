@@ -207,12 +207,7 @@ public class DoActivity extends BaseNavDrawActivity {
         updateUi();
     }
 
-
-
-
-
     private void startCountdownWithMillis(final ModulElement currentModulElement, int millis){
-        mp5 = MediaPlayer.create(getApplicationContext(), R.raw.countdown_from_five);
 
 
         //Constructs the countdown with a short delay of 499ms (Feels better for the user)
@@ -225,6 +220,7 @@ public class DoActivity extends BaseNavDrawActivity {
 
                 switch(currentSecondLeft){
                     case 5:
+                        mp5 = MediaPlayer.create(getApplicationContext(), R.raw.countdown_from_five);
                         mp5.start();
                         break;
                 }
@@ -259,7 +255,17 @@ public class DoActivity extends BaseNavDrawActivity {
             mp5.release();
         }
         if(countDown!= null){
+            //TODO May have to adapt this behaviour onPause and onResume
             countDown.cancel();
+        }
+    }
+
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(countDown!=null){
+            countDown.start();
         }
     }
 }

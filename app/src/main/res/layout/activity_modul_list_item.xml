@@ -34,12 +34,13 @@
                 android:maxLines="1"
                 />
 
-            <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_modul_list_usedFor_chips"
+            <LinearLayout
+            android:id="@+id/ll_modul_list_usedFor_layout"
             android:layout_width="match_parent"
             android:layout_height="16sp"
-            >
-        </com.google.android.material.chip.ChipGroup>
+            android:orientation="horizontal">
+
+            </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

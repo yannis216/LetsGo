@@ -151,7 +151,7 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
 
     private void getModulsFromDatabase(){
         moduls = new ArrayList<Modul>();
-        db.collection("user").document(authUser.getUid()).collection("createdModuls")
+        db.collection("moduls").whereEqualTo("editorUid", authUser.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

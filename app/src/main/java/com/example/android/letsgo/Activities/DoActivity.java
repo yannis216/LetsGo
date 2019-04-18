@@ -247,5 +247,19 @@ public class DoActivity extends BaseNavDrawActivity {
         if(mp5 != null){
             mp5.release();
         }
+        if(countDown!= null){
+            countDown.cancel();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mp5 != null){
+            mp5.release();
+        }
+        if(countDown!= null){
+            countDown.cancel();
+        }
     }
 }

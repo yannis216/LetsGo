@@ -227,7 +227,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     }
 
     public void saveModulToDb(Modul modul){
-        DocumentReference newModulRef = db.collection("user").document(uId).collection("createdModuls").document();
+        DocumentReference newModulRef = db.collection("moduls").document();
         modul.setId(newModulRef.getId());
         newModulRef
                 .set(modul)
@@ -247,7 +247,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     }
 
     public void updateModulInDb(Modul modul){
-        DocumentReference updateModulRef = db.collection("user").document(uId).collection("createdModuls").document(currentModul.getId());
+        DocumentReference updateModulRef = db.collection("moduls").document(currentModul.getId());
         updateModulRef
                 .set(modul)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

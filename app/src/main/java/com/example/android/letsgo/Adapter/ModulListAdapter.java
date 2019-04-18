@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -89,6 +90,7 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
         TextView doneCountView = holder.itemView.findViewById(R.id.tv_modul_list_item_times_done);
         TextView avgDurationView = holder.itemView.findViewById(R.id.tv_modul_list_item_avg_duration);
         RatingBar avgRatingView = holder.itemView.findViewById(R.id.rb_modul_list_item);
+        ImageView durationClock = holder.itemView.findViewById(R.id.iv_modul_list_item_duration_clock);
 
         if(currentSocialModulInfo!=null) {
             doneCountView.setText(String.valueOf(currentSocialModulInfo.getDoneCount()));
@@ -99,15 +101,24 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
             avgDurationView.setText("~ " +hms);
 
             if(currentSocialModulInfo.getRatingNum()>0) {
+                avgRatingView.setVisibility(View.VISIBLE);
                 avgRatingView.setRating(currentSocialModulInfo.getRating());
             }else{
                 avgRatingView.setVisibility(View.GONE);
             }
-
+            if(!(currentSocialModulInfo.getDoneCount()==0)){
+                avgDurationView.setVisibility(View.VISIBLE);
+                durationClock.setVisibility(View.VISIBLE);
+            }else{
+                avgDurationView.setVisibility(View.GONE);
+                durationClock.setVisibility(View.GONE);
+            }
         }else{
             doneCountView.setText("0");
             avgDurationView.setText(" -");
             avgRatingView.setVisibility(View.GONE);
+            avgDurationView.setVisibility(View.GONE);
+            durationClock.setVisibility(View.GONE);
         }
 
         UsedForSorter sorter = new UsedForSorter(moduls.get(position), context2);

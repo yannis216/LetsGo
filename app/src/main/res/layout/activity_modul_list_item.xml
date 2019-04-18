@@ -82,6 +82,7 @@
             android:layout_weight="1"
             android:gravity="center">
             <ImageView
+                android:id="@+id/iv_modul_list_item_duration_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_access_time_black_24dp"/>

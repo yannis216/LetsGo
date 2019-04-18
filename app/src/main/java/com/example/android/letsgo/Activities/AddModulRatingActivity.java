@@ -56,8 +56,6 @@ public class AddModulRatingActivity extends BaseNavDrawActivity {
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
-
-
         BottomAppBar bar= (BottomAppBar) findViewById(R.id.bar_add_modul_rating);
         fab =(FloatingActionButton) findViewById(R.id.fab_add_modul_rating);
         rateBar = (RatingBar) findViewById(R.id.rb_modul_rating);
@@ -89,14 +87,11 @@ public class AddModulRatingActivity extends BaseNavDrawActivity {
 
 
     private void saveDoneActivityToDatabase() {
-        final DocumentReference newActivityRef = db.collection("user")
-                .document(uId).collection("doneActivities")
+        final DocumentReference newActivityRef = db.collection("activities")
                 .document();
         doneActivity.setId(newActivityRef.getId());
 
-        final DocumentReference socialModulInfoAvgRef = db.collection("user")
-                .document(givenModul.getEditorUid())
-                .collection("createdModuls")
+        final DocumentReference socialModulInfoAvgRef = db.collection("moduls")
                 .document(givenModul.getId())
                 .collection("socialModulInfo")
                 .document("avg");

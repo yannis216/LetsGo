@@ -169,9 +169,7 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
                                 //TODO This is a complicated way to retrieve the Infos. Maybe think about restrcuturing database
                                 // or find a batched read solution or use transactions when they have offline support
                                 //But Maybe its not a problem at all for performance? Dont know
-                                db.collection("user")
-                                        .document(modul.getEditorUid())
-                                        .collection("createdModuls")
+                                db.collection("moduls")
                                         .document(modul.getId())
                                         .collection("socialModulInfo")
                                         .document("avg")

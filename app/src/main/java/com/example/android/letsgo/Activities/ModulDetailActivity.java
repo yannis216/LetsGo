@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.letsgo.Adapter.ModulElementDetailListAdapter;
+import com.example.android.letsgo.Adapter.ModulDetailElementListAdapter;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.R;
@@ -27,7 +27,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ModulDetailActivity extends BaseNavDrawActivity implements ModulElementDetailListAdapter.ModulElementOnClickHandler {
+public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDetailElementListAdapter.ModulElementOnClickHandler {
     private RecyclerView mRvModulElements;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -113,7 +113,7 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulEle
 
 
     private void generateModulElementsList(List<ModulElement> modulElements){
-        mAdapter = new ModulElementDetailListAdapter(this, modulElements, this );
+        mAdapter = new ModulDetailElementListAdapter(this, modulElements, this );
         mRvModulElements.setAdapter(mAdapter);
 
     }

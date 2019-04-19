@@ -1,30 +1,37 @@
 package com.example.android.letsgo.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.R;
+import com.example.android.letsgo.Utils.CallbackHelper;
+import com.example.android.letsgo.Utils.PictureUtil;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ModulElementDetailListAdapter extends RecyclerView.Adapter<ModulElementDetailListAdapter.ModulElementsViewHolder> {
+public class ModulDetailElementListAdapter extends RecyclerView.Adapter<ModulDetailElementListAdapter.ModulElementsViewHolder> {
     private List<ModulElement> modulElements;
     private LayoutInflater mInflater;
     private final ModulElementOnClickHandler mClickHandler;
     Context context2;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public interface ModulElementOnClickHandler {
         void onClick(ModulElement requestedModulElement);
     }
 
-    public ModulElementDetailListAdapter(Context context, List<ModulElement> modulElements, ModulElementOnClickHandler clickHandler){
+    public ModulDetailElementListAdapter(Context context, List<ModulElement> modulElements, ModulElementOnClickHandler clickHandler){
         mInflater = LayoutInflater.from(context);
         context2 = context;
         this.modulElements = modulElements;
@@ -62,13 +69,43 @@ public class ModulElementDetailListAdapter extends RecyclerView.Adapter<ModulEle
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ModulElementDetailListAdapter.ModulElementsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ModulDetailElementListAdapter.ModulElementsViewHolder holder, int position) {
         ModulElement currentModulElement = modulElements.get(position);
+
         String modulElementTitle = currentModulElement.getTitle();
         String timesMultiplied = ""+currentModulElement.getMultiplier().getTimesMultiplied()+" ";
         String multiplier_type = currentModulElement.getMultiplier().getType();
+        String modulElementPictureUrl = currentModulElement.getPictureUrl();
+
+        final ImageView imageView = holder.itemView.findViewById(R.id.iv_modul_detail_modulelement_picture);
+        final ProgressBar progressBar = holder.itemView.findViewById(R.id.pb_modul_detail_modulelement_picture_load);
 
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_detail_modulelement_title);
+        if(modulElementPictureUrl == null){
+
+        }else{
+            imageView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+
+            CallbackHelper listenIfImageLoadedSuccessfullyHelper = new CallbackHelper() {
+                @Override
+                public void onSuccess() {
+                    imageView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                }
+                @Override
+                public void onFailure() {
+                    Log.e("ModulElementPicture", "Not loaded correctly");
+                }
+            };
+            PictureUtil pictureUtil = new PictureUtil(context2, imageView, listenIfImageLoadedSuccessfullyHelper);
+            pictureUtil.saveElementThumbnailFromDatabaseToLocalStorage(storage, currentModulElement);
+
+        }
+
+
+
+
         TextView timesMultipliedView = holder.itemView.findViewById(R.id.tv_modul_detail_modulelement_times_multiplied);
         TextView multiplierTypeView = holder.itemView.findViewById(R.id.tv_modul_detail_modulelement_multiplier_type);
         titleView.setText(modulElementTitle);

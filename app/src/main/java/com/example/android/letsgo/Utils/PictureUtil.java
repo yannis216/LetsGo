@@ -32,11 +32,18 @@ public class PictureUtil {
     int titleBackgroundColor;
     ImageView imageView;
     TextView titleView;
+    CallbackHelper callbackHelper;
 
     public PictureUtil(Context current, ImageView imageView, TextView titleView){
         this.context = current;
         this.imageView = imageView;
         this.titleView = titleView;
+    }
+
+    public PictureUtil(Context current, ImageView imageView, CallbackHelper callbackHelper){
+        this.context = current;
+        this.imageView = imageView;
+        this.callbackHelper = callbackHelper;
     }
 
      public void initializePictureWithColours(String pictureUrl){
@@ -110,6 +117,9 @@ public class PictureUtil {
         Log.e("LocalFilePath" , localFile.getAbsolutePath());
         if(localFile.exists()){
             Picasso.get().load(localFile).into(imageView);
+            if(callbackHelper != null){
+                callbackHelper.onSuccess();
+            }
             Log.e("LocalFileExists", "Loaded local Image into View");
         }else{
             StorageReference storageRef = storage.getReferenceFromUrl(element.getPictureUrl());
@@ -117,6 +127,9 @@ public class PictureUtil {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     // Local temp file has been created
+                    if(callbackHelper != null){
+                        callbackHelper.onSuccess();
+                    }
                     Picasso.get().load(localFile).into(imageView);
                     Log.e("onSuccess", "Image has been saved to localFile");
                 }
@@ -124,6 +137,63 @@ public class PictureUtil {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
                     // Handle any errors
+                    if(callbackHelper != null){
+                        callbackHelper.onFailure();
+                    }
+                }
+            });
+        }
+
+
+
+    }
+
+    public void saveElementThumbnailFromDatabaseToLocalStorage(FirebaseStorage storage, Element element){
+        final File localFile;
+        String elementId = element.getElementId();
+        //TODO Change Directory to an external storage (?)
+        String elementsPath = context.getFilesDir().getAbsolutePath() + File.separator + "elements";
+        File myDir = new File(elementsPath);
+        myDir.mkdirs();
+        String fname = elementId +"_thumbnail";
+        localFile = new File(myDir, fname);
+        Log.e("LocalFilePath" , localFile.getAbsolutePath());
+
+        final int dimens = (int) context.getResources().getDimension(R.dimen.element_thumbnail_dimens);
+        if(localFile.exists()){
+            Picasso.get()
+                    .load(localFile)
+                    .resize(dimens, dimens)
+                    .centerCrop()
+                    .into(imageView);
+            if(callbackHelper != null){
+                callbackHelper.onSuccess();
+            }
+            Log.e("LocalFileExists", "Loaded local Thumbnail into View");
+        }else{
+            StorageReference storageRef = storage.getReferenceFromUrl(element.getPictureUrl());
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+                    if(callbackHelper != null){
+                        callbackHelper.onSuccess();
+                    }
+                    Picasso.get()
+                            .load(localFile)
+                            .resize(dimens, dimens)
+                            .centerCrop()
+                            .into(imageView);
+
+                    Log.e("onSuccess", "Thumbnail has been saved to localFile");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    if(callbackHelper != null){
+                        callbackHelper.onFailure();
+                    }
                 }
             });
         }

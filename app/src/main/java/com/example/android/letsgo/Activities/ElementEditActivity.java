@@ -241,8 +241,8 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                     Uri inputUri = data.getData();
                     pictureUrl = inputUri.toString();
                     if (pictureUrl != null) {
-                        PictureUtil pictureUtil = new PictureUtil(ElementEditActivity.this);
-                        pictureUtil.initializePictureWithColours(pictureUrl, mPicture, mTitleEdit);
+                        PictureUtil pictureUtil = new PictureUtil(ElementEditActivity.this, mPicture, mTitleEdit);
+                        pictureUtil.initializePictureWithColours(pictureUrl);
                     }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -342,7 +342,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     }
 
     private void savePictureToStorage(final Element newElement){
-        final StorageReference elementImageRef = storage.getReference().child("images/"+authUser.getUid()+"/"+newElement.getElementId());
+        final StorageReference elementImageRef = storage.getReference().child("images/"+authUser.getUid()+"/elements/"+newElement.getElementId()+"_originalPicture");
 
         UploadTask uploadTask = elementImageRef.putStream(inputStream);
         uploadTask.addOnFailureListener(new OnFailureListener() {

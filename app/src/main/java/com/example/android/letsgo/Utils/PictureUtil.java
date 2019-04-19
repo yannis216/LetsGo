@@ -7,10 +7,19 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.File;
+
+import androidx.annotation.NonNull;
 import androidx.palette.graphics.Palette;
 
 public class PictureUtil {
@@ -21,12 +30,16 @@ public class PictureUtil {
     Palette.Swatch swatchDominant;
     int titleColor;
     int titleBackgroundColor;
+    ImageView imageView;
+    TextView titleView;
 
-    public PictureUtil(Context current){
+    public PictureUtil(Context current, ImageView imageView, TextView titleView){
         this.context = current;
+        this.imageView = imageView;
+        this.titleView = titleView;
     }
 
-     public void initializePictureWithColours(String pictureUrl, final ImageView imageview, final TextView titleview){
+     public void initializePictureWithColours(String pictureUrl){
         int imageHeight = (int) context.getResources().getDimension(R.dimen.element_picture_height);
         int imageWidth = (int) context.getResources().getDimension(R.dimen.element_picture_width);
         titleColor = context.getResources().getColor(R.color.colorAccent);
@@ -36,8 +49,8 @@ public class PictureUtil {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 Log.e("onBitmapLoaded","was called");
-                assert imageview != null;
-                imageview.setImageBitmap(bitmap);
+                assert imageView != null;
+                imageView.setImageBitmap(bitmap);
                 Palette.from(bitmap)
                         .generate(new Palette.PaletteAsyncListener() {
                             @Override
@@ -56,9 +69,9 @@ public class PictureUtil {
                                     titleBackgroundColor =swatchDominant.getRgb();
                                     //TODO May choose to do this only when vibrant colour is available
                                 }
-                                titleview.setTextColor(titleColor);
-                                titleview.setBackgroundColor(titleBackgroundColor);
-                                titleview.getBackground().setAlpha(200);
+                                titleView.setTextColor(titleColor);
+                                titleView.setBackgroundColor(titleBackgroundColor);
+                                titleView.getBackground().setAlpha(200);
 
                                 //TODO Adapt Default and SetColours in Design phase
                                 //TODO Change Colour of the Play video icon programmatically
@@ -75,13 +88,47 @@ public class PictureUtil {
                 Log.e("onPrepareLoad","was called");
             }
         };
-        imageview.setTag(target);
+        imageView.setTag(target);
 
 
         Picasso.get()
-                .load(pictureUrl)//TODO Replace with dynamic picture url
+                .load(pictureUrl)
                 .resize(imageWidth, imageHeight)
                 .centerCrop()
                 .into(target);
+    }
+
+    public void saveElementImageFromDatabaseToLocalStorage(FirebaseStorage storage, Element element){
+        final File localFile;
+        String elementId = element.getElementId();
+        //TODO Change Directory to an external storage (?)
+        String elementsPath = context.getFilesDir().getAbsolutePath() + File.separator + "elements";
+        File myDir = new File(elementsPath);
+        myDir.mkdirs();
+        String fname = elementId +"_originalPicture";
+        localFile = new File(myDir, fname);
+        Log.e("LocalFilePath" , localFile.getAbsolutePath());
+        if(localFile.exists()){
+            Picasso.get().load(localFile).into(imageView);
+            Log.e("LocalFileExists", "Loaded local Image into View");
+        }else{
+            StorageReference storageRef = storage.getReferenceFromUrl(element.getPictureUrl());
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+                    Picasso.get().load(localFile).into(imageView);
+                    Log.e("onSuccess", "Image has been saved to localFile");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                }
+            });
+        }
+
+
+
     }
 }

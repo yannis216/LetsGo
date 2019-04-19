@@ -17,7 +17,6 @@ import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Material;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.PictureUtil;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
@@ -28,15 +27,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -47,10 +42,6 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
     TextView mMinHumansView;
     Element displayedElement;
     TextView mShortDescView;
-
-    File localFile;
-
-
 
     ConstraintLayout mElementLayout;
     ImageButton mPlayVideoButton;
@@ -107,7 +98,8 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
             // e.g. take away opportunity to editcertain fields
         }
         if(displayedElement.getPictureUrl() != null){
-            getElementImageFromDatabase(displayedElement.getElementId());
+            PictureUtil pictureUtil = new PictureUtil(this, mPictureView, mTitleView);
+            pictureUtil.saveElementImageFromDatabaseToLocalStorage(storage, displayedElement);
         }
 
 
@@ -125,34 +117,6 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
 
     }
 
-    private void getElementImageFromDatabase(String elementId){
-        //TODO Move this to Utility class
-        StorageReference storageRef = storage.getReferenceFromUrl(displayedElement.getPictureUrl());
-
-        //TODO Change Directory to an external storage (?)
-
-        //TODO Definietly:Use this somewhere(Only fetch from Database if not exists locally)!!
-        String dirPath = getFilesDir().getAbsolutePath() + File.separator + "elements";
-        Log.e("MyDir", dirPath);
-        File myDir = new File(dirPath);
-        myDir.mkdirs();
-        String fname = elementId +"_bigPicture";
-        localFile = new File(myDir, fname);
-        Log.e("LocalFilePath" , localFile.getAbsolutePath());
-
-        storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                // Local temp file has been created
-                Log.e("onSuccess", "Image has been saved to localFile");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-    }
 
     private void populateUi(final Element element){
         mTitleView.setText(element.getTitle());
@@ -173,11 +137,6 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
                 }
             });
         }
-        if(element.getPictureUrl()!= null){
-            PictureUtil pictureUtil = new PictureUtil(ElementDetailActivity.this);
-            pictureUtil.initializePictureWithColours(element.getPictureUrl(), mPictureView, mTitleView);
-        }
-
     }
 
 

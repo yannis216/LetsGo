@@ -17,16 +17,22 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Material;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.PictureUtil;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -70,11 +76,14 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     ImageView mPicture;
     FirebaseStorage storage;
     InputStream inputStream;
+    DocumentReference elementReference;
 
     int PICK_PHOTO_FOR_ELEMENT = 2;
 
 
     FirebaseFirestore db;
+    private FirebaseAuth mFirebaseAuth;
+    FirebaseUser authUser;
 
 
     @Override
@@ -87,6 +96,8 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        authUser = mFirebaseAuth.getCurrentUser();
 
         mPicture =findViewById(R.id.iv_element_edit_picture);
         mTitleEdit = findViewById(R.id.et_element_title);
@@ -198,7 +209,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                 List<String> materialIds = saveMaterialsToDatabase(mCreatedNeededMaterials);
                 Element createdElement = getElementFromInputs(materialIds);
                 Log.e("MaterialIds", ""+createdElement.getNeededMaterialsIds());
-                saveElementToDatabase(createdElement);
+                prepareSaveElementToDatabase(createdElement);
 
                 //TODO Hand over List of Materials here via Intent to save time and Databasereads in DetailActivity
                 Intent intent = new Intent(ElementEditActivity.this, ElementDetailActivity.class);
@@ -286,19 +297,26 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         String timeOnSavePressed= String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
 
 
-        return new Element(createdTitle, createdShortDesc, createdUsedFor, pictureUrl, createdVideoUrl, createdMinHumans, materialIds, timeOnSavePressed);
+        return new Element(createdTitle, createdShortDesc, createdUsedFor, createdVideoUrl, createdMinHumans, materialIds, timeOnSavePressed, authUser.getUid());
     }
 
-    public void saveElementToDatabase(Element newElement){
-        db.collection("elements")
-                .add(newElement)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.e("saveElement", "Document Snap added with id:" + documentReference.getId());
-                        savePictureToStorage(documentReference.getId());
-                        //TODO May have to move this somewhere else for performance
+    public void prepareSaveElementToDatabase(Element newElement){
+        elementReference = db.collection("elements").document();
+        String elementId = elementReference.getId();
+        newElement.setElementId(elementId);
+        if(!(inputStream ==null)){
+            savePictureToStorage(newElement);
+        }else{
+            continueSaveElementToDatabase(newElement);
+        }
 
+    }
+    private void continueSaveElementToDatabase(Element newElement){
+        elementReference
+                .set(newElement)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -323,17 +341,52 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         return materialIds;
     }
 
-    private void savePictureToStorage(String elementId){
-        StorageReference elementImageRef = storage.getReference().child("userId/"+elementId);
+    private void savePictureToStorage(final Element newElement){
+        final StorageReference elementImageRef = storage.getReference().child("images/"+authUser.getUid()+"/"+newElement.getElementId());
 
         UploadTask uploadTask = elementImageRef.putStream(inputStream);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Toast.makeText(context, R.string.picture_upload_failed, Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
+                //TODO Give some Visual Feedback on Loading Process and so on
             }
         });
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return elementImageRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    String downloadUrl = downloadUri.toString();
+                    newElement.setPictureUrl(downloadUrl);
+                    continueSaveElementToDatabase(newElement);
+                    Log.e("DownloadUrl", downloadUrl);
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
+
+
     }
 
 }

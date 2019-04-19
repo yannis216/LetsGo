@@ -30,4 +30,7 @@
     <string name="add_modul_rating_pleaserate">How much did you like it?</string>
     <string name="add_modul_rating_rateFirst">Please give a rating first</string>
 
+
+    <!-- For Picture Uploads -->
+    <string name="picture_upload_failed">Your picture Upload failed, please try again</string>
 </resources>

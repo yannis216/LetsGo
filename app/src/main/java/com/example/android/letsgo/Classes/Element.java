@@ -5,7 +5,8 @@ import java.util.List;
 
 public class Element implements Serializable {
 
-
+    private String elementId;
+    private String creatorId;
     private String title;
     private String shortDesc;
     //What do you achieve with it, what do you use it for? E.G. Lower Back for Deadlift
@@ -34,15 +35,15 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, String shortDesc, List<String> usedFor, String pictureUrl, String videoId, int minNumberOfHumans, List<String> neededMaterialsIds, String timeCreated) {
+    public Element(String title, String shortDesc, List<String> usedFor, String videoId, int minNumberOfHumans, List<String> neededMaterialsIds, String timeCreated, String creatorId) {
         this.title = title;
         this.shortDesc =shortDesc;
         this.usedFor = usedFor;
-        this.pictureUrl = pictureUrl;
         this.videoId = videoId;
         this.minNumberOfHumans = minNumberOfHumans;
         this.neededMaterialsIds = neededMaterialsIds;
         this.timeCreated = timeCreated;
+        this.creatorId = creatorId;
     }
 
     public String getTitle() {
@@ -125,6 +126,21 @@ public class Element implements Serializable {
         isSelected = selected;
     }
 
+    public String getElementId() {
+        return elementId;
+    }
+
+    public void setElementId(String elementId) {
+        this.elementId = elementId;
+    }
+
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
+    }
 
     //Copy function so that on creation of subclasses its not always necessary to input every single variable
     public void copy(Element element){
@@ -137,6 +153,8 @@ public class Element implements Serializable {
         this.isFixedBasic = element.isFixedBasic();
         this.timeCreated = element.getTimeCreated();
         this.neededMaterialsIds = element.getNeededMaterialsIds();
+        this.creatorId = element.getCreatorId();
+        this.elementId = element.getElementId();
 
     }
 

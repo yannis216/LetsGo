@@ -29,6 +29,9 @@ import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -41,7 +44,6 @@ import androidx.annotation.NonNull;
 
 // TODO There is no Input Validation here. Think about security concerns etc
 public class ElementEditActivity extends BaseNavDrawActivity {
-    ImageView mPicture;
     EditText mTitleEdit;
     EditText mShortDescEdit;
     //TODO Set Maximum number of character for edittexts that result in chips.
@@ -49,8 +51,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     EditText mUsedForEdit;
     Button mUsedForAdder;
     ChipGroup mUsedForChipGroup;
-    ImageButton mPicturePicker;
-    String pictureUrl;
+
     EditText mVideoUrlEdit;
     //TODO Set Maximum number of character for edittexts that result in chips.
     // Otherwise error on display because long chips dont fit in a row and cant get textwrapped
@@ -62,7 +63,17 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     Button mSaveButton;
     ChipGroup mMaterialChipGroup;
     List<Material> mCreatedNeededMaterials = new ArrayList<Material>();
+
+
+    ImageButton mPickPictureButton;
+    String pictureUrl;
+    ImageView mPicture;
+    FirebaseStorage storage;
+    InputStream inputStream;
+
     int PICK_PHOTO_FOR_ELEMENT = 2;
+
+
     FirebaseFirestore db;
 
 
@@ -75,6 +86,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
 
         mPicture =findViewById(R.id.iv_element_edit_picture);
         mTitleEdit = findViewById(R.id.et_element_title);
@@ -82,7 +94,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mUsedForEdit = findViewById(R.id.et_element_usedFor);
         mUsedForAdder =findViewById(R.id.bn_element_usedFor_add);
         mUsedForChipGroup =findViewById(R.id.cg_element_edit_usedFor_chips);
-        mPicturePicker =findViewById(R.id.bn_element_picture_picker);
+        mPickPictureButton =findViewById(R.id.bn_element_picture_picker);
         mVideoUrlEdit=findViewById(R.id.et_element_videoUrl);
         mMinHumansPicker=findViewById(R.id.np_element_min_humans);
         mSaveButton = findViewById(R.id.bn_element_save);
@@ -100,38 +112,6 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
     }
 
-    private Element getElementFromInputs(List<String> materialIds){
-        String createdTitle = mTitleEdit.getText().toString();
-        String createdShortDesc =mShortDescEdit.getText().toString();
-        String createdVideoUrl = mVideoUrlEdit.getText().toString();
-        int createdMinHumans = mMinHumansPicker.getValue();
-        List<String> createdUsedFor = generateListFromChipGroup(mUsedForChipGroup);
-        String timeOnSavePressed= String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
-
-
-        return new Element(createdTitle, createdShortDesc, createdUsedFor, pictureUrl, createdVideoUrl, createdMinHumans, materialIds, timeOnSavePressed);
-    }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_PHOTO_FOR_ELEMENT && resultCode == Activity.RESULT_OK) {
-            if (data == null) {
-                //TODO Display an error
-                return;
-            }
-            try {
-                InputStream inputStream = ElementEditActivity.this.getContentResolver().openInputStream(data.getData()); //TODO delete is safe?
-                Uri inputUri = data.getData();
-                pictureUrl = inputUri.toString();
-                if(pictureUrl!= null){
-                    PictureUtil pictureUtil = new PictureUtil(ElementEditActivity.this);
-                    pictureUtil.initializePictureWithColours(pictureUrl, mPicture, mTitleEdit);
-                }
-            }catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     private Chip getChip(final ChipGroup entryChipGroup, String text) {
         final Chip chip = new Chip(this);
@@ -192,7 +172,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         });
 
 
-        mPicturePicker.setOnClickListener(new View.OnClickListener() {
+        mPickPictureButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -208,6 +188,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                 startActivityForResult(chooserIntent, PICK_PHOTO_FOR_ELEMENT);
             }
         });
+
 
 
         mSaveButton.setOnClickListener(new View.OnClickListener(){
@@ -234,6 +215,29 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                 handleNewMaterialChipAdded();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_PHOTO_FOR_ELEMENT && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                //TODO Display an error
+                return;
+            }else {
+                try {
+                    inputStream = ElementEditActivity.this.getContentResolver().openInputStream(data.getData()); //TODO delete is safe?
+                    Uri inputUri = data.getData();
+                    pictureUrl = inputUri.toString();
+                    if (pictureUrl != null) {
+                        PictureUtil pictureUtil = new PictureUtil(ElementEditActivity.this);
+                        pictureUtil.initializePictureWithColours(pictureUrl, mPicture, mTitleEdit);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void handleNewUsedForChipAdded(){
@@ -273,6 +277,18 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         }
     }
 
+    private Element getElementFromInputs(List<String> materialIds){
+        String createdTitle = mTitleEdit.getText().toString();
+        String createdShortDesc =mShortDescEdit.getText().toString();
+        String createdVideoUrl = mVideoUrlEdit.getText().toString();
+        int createdMinHumans = mMinHumansPicker.getValue();
+        List<String> createdUsedFor = generateListFromChipGroup(mUsedForChipGroup);
+        String timeOnSavePressed= String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
+
+
+        return new Element(createdTitle, createdShortDesc, createdUsedFor, pictureUrl, createdVideoUrl, createdMinHumans, materialIds, timeOnSavePressed);
+    }
+
     public void saveElementToDatabase(Element newElement){
         db.collection("elements")
                 .add(newElement)
@@ -280,6 +296,8 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.e("saveElement", "Document Snap added with id:" + documentReference.getId());
+                        savePictureToStorage(documentReference.getId());
+                        //TODO May have to move this somewhere else for performance
 
                     }
                 })
@@ -303,8 +321,19 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
         }
         return materialIds;
+    }
 
+    private void savePictureToStorage(String elementId){
+        StorageReference elementImageRef = storage.getReference().child("userId/"+elementId);
 
+        UploadTask uploadTask = elementImageRef.putStream(inputStream);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
     }
 
 }

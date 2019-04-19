@@ -18,6 +18,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ModulDetailElementListAdapter extends RecyclerView.Adapter<ModulDetailElementListAdapter.ModulElementsViewHolder> {
@@ -79,18 +80,21 @@ public class ModulDetailElementListAdapter extends RecyclerView.Adapter<ModulDet
 
         final ImageView imageView = holder.itemView.findViewById(R.id.iv_modul_detail_modulelement_picture);
         final ProgressBar progressBar = holder.itemView.findViewById(R.id.pb_modul_detail_modulelement_picture_load);
+        final CardView cardView = holder.itemView.findViewById(R.id.cv_modul_detail_modulelement_picture);
 
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_detail_modulelement_title);
         if(modulElementPictureUrl == null){
 
         }else{
             imageView.setVisibility(View.GONE);
+            cardView.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
 
             CallbackHelper listenIfImageLoadedSuccessfullyHelper = new CallbackHelper() {
                 @Override
                 public void onSuccess() {
                     imageView.setVisibility(View.VISIBLE);
+                    cardView.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                 }
                 @Override

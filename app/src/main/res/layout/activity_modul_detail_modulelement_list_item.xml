@@ -39,7 +39,7 @@
         android:id="@+id/tv_modul_detail_modulelement_title"
         android:layout_height="match_parent"
         android:layout_width="0dp"
-        android:layout_weight="2"
+        android:layout_weight="5"
         android:textSize="24sp"
         android:gravity="center_vertical"
         android:text="Pushups"
@@ -48,24 +48,17 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_marginEnd="5dp">
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_modul_detail_modulelement_times_multiplied"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_modul_detail_modulelement_times_multiplier"
+            android:gravity="center_vertical|end"
             android:textAlignment="viewEnd"
-            android:gravity="end"
             android:textSize="18sp"
-            android:text="100"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_modul_detail_modulelement_multiplier_type"
-            android:textAlignment="viewEnd"
-            android:gravity="end"
-            android:textSize="18sp"
-            android:text="Times"/>
+            android:text="100x"/>
+
 
     </LinearLayout>
 

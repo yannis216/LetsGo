@@ -74,7 +74,7 @@ public class ModulDetailElementListAdapter extends RecyclerView.Adapter<ModulDet
         ModulElement currentModulElement = modulElements.get(position);
 
         String modulElementTitle = currentModulElement.getTitle();
-        String timesMultiplied = ""+currentModulElement.getMultiplier().getTimesMultiplied()+" ";
+        String timesMultiplied = ""+currentModulElement.getMultiplier().getTimesMultiplied();
         String multiplier_type = currentModulElement.getMultiplier().getType();
         String modulElementPictureUrl = currentModulElement.getPictureUrl();
 
@@ -110,11 +110,9 @@ public class ModulDetailElementListAdapter extends RecyclerView.Adapter<ModulDet
 
 
 
-        TextView timesMultipliedView = holder.itemView.findViewById(R.id.tv_modul_detail_modulelement_times_multiplied);
-        TextView multiplierTypeView = holder.itemView.findViewById(R.id.tv_modul_detail_modulelement_multiplier_type);
+        TextView timesMultipliedView = holder.itemView.findViewById(R.id.tv_modul_detail_modulelement_times_multiplier);
         titleView.setText(modulElementTitle);
-        timesMultipliedView.setText(timesMultiplied);
-        multiplierTypeView.setText(multiplier_type);
+        timesMultipliedView.setText(timesMultiplied+multiplier_type);
 
 
 

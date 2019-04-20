@@ -14,10 +14,10 @@
     <string name="do_activity_finish">FINISH</string>
 
     <string-array name="multiplier_type_array">
-        <item>Times</item> <!-- First in this array is default! -->
-        <item>Sec.</item> <!-- Second must be seconds -->
+        <item>x</item> <!-- First in this array is default! -->
+        <item>s.</item> <!-- Second must be seconds -->
         <item>Min.</item> <!-- Third must be minutes -->
-        <item>Hours</item>  <!-- Third must be hours -->
+        <item>Hrs.</item>  <!-- Third must be hours -->
         <item>Days</item>
         <item>Meters</item>
     </string-array>

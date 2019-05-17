@@ -1,6 +1,8 @@
 package com.example.android.letsgo.Activities;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.android.letsgo.Adapter.ModulElementEditListAdapter;
@@ -16,6 +19,7 @@ import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.R;
+import com.example.android.letsgo.Utils.PictureUtil;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
 import com.example.android.letsgo.Utils.TouchHelper.SimpleItemTouchHelperCallback;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,9 +30,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +54,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     List<Element> addElements;
     EditText mTitleView;
     FloatingActionButton fab;
+    ImageButton mAddImageButton;
 
     RecyclerView mRvModulElements;
     RecyclerView.LayoutManager mLayoutManager;
@@ -62,6 +70,13 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
     String uId;
+
+    int PICK_PHOTO_FOR_Modul = 3;
+    String pictureUrl;
+    InputStream inputStream;
+
+    FirebaseStorage storage;
+    DocumentReference modulReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +97,9 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         }
 
         mTitleView = findViewById(R.id.et_modul_edit_title);
+        mAddImageButton = findViewById(R.id.bn_modul_edit_picture_picker);
+
+
         fab = findViewById(R.id.fab_modul_edit);
 
         BottomAppBar bar = findViewById(R.id.bar_modul_edit);
@@ -167,6 +185,23 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
     public void addOnClickListeners(){
 
+        mAddImageButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
+
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("image/*");
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+                startActivityForResult(chooserIntent, PICK_PHOTO_FOR_Modul);
+            }
+        });
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,6 +235,31 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
             }
         });
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_PHOTO_FOR_Modul && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                //TODO Display an error
+                return;
+            }else {
+                try {
+                    inputStream = ModulEditActivity.this.getContentResolver().openInputStream(data.getData()); //TODO delete is safe?
+                    Uri inputUri = data.getData();
+                    pictureUrl = inputUri.toString();
+                    if (pictureUrl != null) {
+                        PictureUtil pictureUtil = new PictureUtil(ModulEditActivity.this, mAddImageButton, mTitleView);
+                        pictureUtil.initializePictureWithColours(pictureUrl);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     //public Modul getModulFromDatabase(){

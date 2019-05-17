@@ -18,6 +18,12 @@
             android:layout_weight="1"
             android:id="@+id/iv_modul_list_item_thumb"
             android:src="@mipmap/ic_launcher_round"/>
+        <ProgressBar
+            android:id="@+id/pb_modul_list_modul_picture_load"
+            android:layout_width="@dimen/element_thumbnail_dimens"
+            android:layout_height="@dimen/element_thumbnail_dimens"
+            android:layout_marginEnd="5dp"
+            android:visibility="gone"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="3"

@@ -106,6 +106,9 @@ public class PictureUtil {
                 .into(target);
     }
 
+    //TODO The following picture loading routines do not support update of pictures
+    // (When new modulpicture is uploaded on update of modul, changed picture does not get displayed)
+
     public void saveElementImageFromDatabaseToLocalStorage(FirebaseStorage storage, Element element){
         final File localFile;
         String elementId = element.getElementId();

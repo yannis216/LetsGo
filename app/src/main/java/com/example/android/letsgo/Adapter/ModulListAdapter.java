@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -88,6 +89,7 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
 
         final ImageView modulThumbView = holder.itemView.findViewById(R.id.iv_modul_list_item_thumb);
         String modulPictureUrl=currentModul.getPictureUrl();
+        final ProgressBar progressBar = holder.itemView.findViewById(R.id.pb_modul_list_modul_picture_load);
 
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_list_modul_title);
         titleView.setText(modulTitle);
@@ -157,15 +159,13 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
 
         }else{
             modulThumbView.setVisibility(View.GONE);
-            //cardView.setVisibility(View.GONE);
-            //progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
 
             CallbackHelper listenIfImageLoadedSuccessfullyHelper = new CallbackHelper() {
                 @Override
                 public void onSuccess() {
                     modulThumbView.setVisibility(View.VISIBLE);
-                    //cardView.setVisibility(View.VISIBLE);
-                    //progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
                 }
                 @Override
                 public void onFailure() {

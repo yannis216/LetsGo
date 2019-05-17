@@ -28,13 +28,22 @@
             android:textAlignment="center"
             android:inputType="textAutoComplete|textCapSentences"/>
 
+        <ImageButton
+            android:id="@+id/bn_modul_edit_picture_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_add_photo_alternate_black_48dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_modul_edit_title" />
+
+
+
         <androidx.recyclerview.widget.RecyclerView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/rv_modul_element_edit_list"
-            app:layout_constraintTop_toBottomOf="@id/et_modul_edit_title"
+            app:layout_constraintTop_toBottomOf="@id/bn_modul_edit_picture_picker"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constrainedHeight="true"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"

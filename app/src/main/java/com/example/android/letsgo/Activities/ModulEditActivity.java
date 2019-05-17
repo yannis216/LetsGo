@@ -19,11 +19,13 @@ import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.R;
-import com.example.android.letsgo.Utils.PictureUtil;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
 import com.example.android.letsgo.Utils.TouchHelper.SimpleItemTouchHelperCallback;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +33,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -76,7 +80,8 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     InputStream inputStream;
 
     FirebaseStorage storage;
-    DocumentReference modulReference;
+    DocumentReference newModulRef;
+    DocumentReference updateModulRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +100,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         }else{
             Log.e("ModulEdit Auth", "No User authenticated");
         }
+        storage = FirebaseStorage.getInstance();
 
         mTitleView = findViewById(R.id.et_modul_edit_title);
         mAddImageButton = findViewById(R.id.bn_modul_edit_picture_picker);
@@ -214,15 +220,15 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     currentModul.setEditorName(authUser.getDisplayName());
                     if(mode.equals("edit")){
                         currentModul.setEditTimeStamp(System.currentTimeMillis());
-                        updateModulInDb(currentModul);
+                        prepareUpdateModulInDb(currentModul);
                     }else if (mode.equals("copy")){
                         currentModul.setCreationTimestamp(System.currentTimeMillis());
-                        saveModulToDb(currentModul);
+                        prepareSaveModulToDb(currentModul);
                     }
                     else{
                         currentModul.setCreatorUid(uId);
                         currentModul.setCreationTimestamp(System.currentTimeMillis());
-                        saveModulToDb(currentModul);
+                        prepareSaveModulToDb(currentModul);
                     }
 
                 }else{
@@ -235,8 +241,6 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
             }
         });
-
-
     }
 
     @Override
@@ -251,10 +255,6 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     inputStream = ModulEditActivity.this.getContentResolver().openInputStream(data.getData()); //TODO delete is safe?
                     Uri inputUri = data.getData();
                     pictureUrl = inputUri.toString();
-                    if (pictureUrl != null) {
-                        PictureUtil pictureUtil = new PictureUtil(ModulEditActivity.this, mAddImageButton, mTitleView);
-                        pictureUtil.initializePictureWithColours(pictureUrl);
-                    }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -286,16 +286,22 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
     }
 
-    public void saveModulToDb(Modul modul){
-        DocumentReference newModulRef = db.collection("moduls").document();
+    public void prepareSaveModulToDb(Modul modul){
+        newModulRef = db.collection("moduls").document();
         modul.setId(newModulRef.getId());
+        if(!(inputStream ==null)){
+            savePictureToStorage(modul);
+        }else{
+            continueSaveModulToDatabase(modul);
+        }
+    }
+
+    private void continueSaveModulToDatabase(Modul modul){
         newModulRef
                 .set(modul)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.e("saveModul", "Document Snap added");
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -304,10 +310,19 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                         Log.w("saveModul", "Error adding document", e);
                     }
                 });
+
     }
 
-    public void updateModulInDb(Modul modul){
-        DocumentReference updateModulRef = db.collection("moduls").document(currentModul.getId());
+    public void prepareUpdateModulInDb(Modul modul){
+        updateModulRef = db.collection("moduls").document(currentModul.getId());
+        if(!(inputStream ==null)){
+            savePictureToStorage(modul);
+        }else{
+            continueUpdateModulInDatabase(modul);
+        }
+    }
+
+    public void continueUpdateModulInDatabase(Modul modul){
         updateModulRef
                 .set(modul)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -324,6 +339,64 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     }
                 });
     }
+
+    private void savePictureToStorage(final Modul modul){
+
+        //TODO Handle special case where mode = edit and a picture already exists -> Currently the picture just gets
+        // replaced without warning to the user that the user one will be deleted permanently
+        final StorageReference modulImageRef = storage.getReference().child("images/"+authUser.getUid()+"/moduls/"+modul.getId()+"_originalPicture");
+        //TODO Sollten die wirklich in nem nach Nutzer differenzierten Ordner liegen? Selbe bei Elements
+
+        UploadTask uploadTask = modulImageRef.putStream(inputStream);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Toast.makeText(context, R.string.picture_upload_failed, Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                //TODO Give some Visual Feedback on Loading Process and so on
+            }
+        });
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return modulImageRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    String downloadUrl = downloadUri.toString();
+                    modul.setPictureUrl(downloadUrl);
+                    if(mode=="edit"){
+                        continueUpdateModulInDatabase(modul);
+                    }else{
+                        continueSaveModulToDatabase(modul);
+                    }
+
+                    Log.e("DownloadUrl", downloadUrl);
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

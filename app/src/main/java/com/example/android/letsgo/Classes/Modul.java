@@ -15,7 +15,8 @@ public class Modul implements Serializable {
     //TODO Save non-originals in Collection Associated with editorUid and save Originals also there AND in Main Mouduls List
     private long editTimeStamp;
     //TODO Add lastDateDone = timestamp when some user did it the last time.
-    // Moduls that haven been done for time x can be deleted
+    // Moduls that havent been done for time x can be deleted
+    private String pictureUrl;
 
 
     private List<ModulElement> modulElements;
@@ -95,4 +96,11 @@ public class Modul implements Serializable {
         this.editorName = editorName;
     }
 
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
 }

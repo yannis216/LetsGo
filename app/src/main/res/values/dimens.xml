@@ -4,4 +4,6 @@
     <dimen name="element_picture_height">300dp</dimen>
 
     <dimen name="element_thumbnail_dimens">50dp</dimen>
+
+    <dimen name="modul_thumbnail_dimens">50dp</dimen>
 </resources>

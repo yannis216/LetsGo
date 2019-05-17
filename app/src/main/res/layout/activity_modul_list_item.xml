@@ -16,6 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:id="@+id/iv_modul_list_item_thumb"
             android:src="@mipmap/ic_launcher_round"/>
         <LinearLayout
             android:layout_width="0dp"
@@ -62,10 +63,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="start"
             android:orientation="horizontal">
 
             <ImageView
+                android:layout_marginStart="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_play_arrow_black_24dp" />
@@ -78,30 +80,6 @@
                 android:gravity="center_vertical"
                 android:text="1838" />
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/iv_modul_list_item_duration_clock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_access_time_black_24dp" />
-
-            <TextView
-                android:id="@+id/tv_modul_list_item_avg_duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:text="~ 20min" />
-
-        </LinearLayout>
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -118,6 +96,35 @@
                 android:isIndicator="true"
                 android:numStars="5" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_modul_list_item_avg_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:text="~ 20min" />
+
+            <ImageView
+                android:id="@+id/iv_modul_list_item_duration_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_access_time_black_24dp" />
+
+
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
 

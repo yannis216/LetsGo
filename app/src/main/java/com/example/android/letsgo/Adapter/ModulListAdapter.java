@@ -1,6 +1,7 @@
 package com.example.android.letsgo.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,7 +15,10 @@ import android.widget.TextView;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.SocialModulInfo;
 import com.example.android.letsgo.R;
+import com.example.android.letsgo.Utils.CallbackHelper;
+import com.example.android.letsgo.Utils.PictureUtil;
 import com.example.android.letsgo.Utils.UsedForSorter;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,8 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
     private LayoutInflater mInflater;
     private final ModulOnClickHandler mClickHandler;
     Context context2;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public interface ModulOnClickHandler {
         void onClick(Modul requestedModul);
@@ -79,6 +85,9 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
         Modul currentModul = moduls.get(position);
         SocialModulInfo currentSocialModulInfo = socialModulInfos.get(position);
         String modulTitle = currentModul.getTitle();
+
+        final ImageView modulThumbView = holder.itemView.findViewById(R.id.iv_modul_list_item_thumb);
+        String modulPictureUrl=currentModul.getPictureUrl();
 
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_list_modul_title);
         titleView.setText(modulTitle);
@@ -142,6 +151,30 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
             textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setText(s);
             usedForLinearLayout.addView(textView);
+        }
+
+        if(modulPictureUrl == null){
+
+        }else{
+            modulThumbView.setVisibility(View.GONE);
+            //cardView.setVisibility(View.GONE);
+            //progressBar.setVisibility(View.VISIBLE);
+
+            CallbackHelper listenIfImageLoadedSuccessfullyHelper = new CallbackHelper() {
+                @Override
+                public void onSuccess() {
+                    modulThumbView.setVisibility(View.VISIBLE);
+                    //cardView.setVisibility(View.VISIBLE);
+                    //progressBar.setVisibility(View.GONE);
+                }
+                @Override
+                public void onFailure() {
+                    Log.e("ModulElementPicture", "Not loaded correctly");
+                }
+            };
+            PictureUtil pictureUtil = new PictureUtil(context2, modulThumbView, listenIfImageLoadedSuccessfullyHelper);
+            pictureUtil.saveModulThumbnailFromDatabaseToLocalStorage(storage, currentModul);
+
         }
 
     }

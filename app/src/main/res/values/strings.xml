@@ -33,4 +33,7 @@
 
     <!-- For Picture Uploads -->
     <string name="picture_upload_failed">Your picture Upload failed, please try again</string>
+
+    <!-- For Modul Detaiol Views -->
+    <string name="modul_detail_elements_tab_title">Elements</string>
 </resources>

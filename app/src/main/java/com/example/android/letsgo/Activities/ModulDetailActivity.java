@@ -58,6 +58,7 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
 
 
         mRvModulElements =(RecyclerView) findViewById(R.id.rv_modul_detail_modulelement__list);
+        mRvModulElements.setFocusable(false);
         mTvTitle = findViewById(R.id.tv_modul_detail_title);
 
 

@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -52,6 +55,7 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
     FirebaseStorage storage;
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
+    String uId;
 
     DrawerLayout drawerLayout;
 
@@ -65,6 +69,7 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
         db = FirebaseFirestore.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         authUser = mFirebaseAuth.getCurrentUser();
+        uId = authUser.getUid();
         storage = FirebaseStorage.getInstance();
 
         mElementLayout = findViewById(R.id.cl_element_layout);
@@ -86,6 +91,8 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
+        setSupportActionBar(bar);
+
 
 
 
@@ -212,6 +219,34 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
 
         return materials;
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        Log.e("ElementCreaterId", displayedElement.getCreatorId());
+        Log.e("uId", uId);
+        if(uId.equals(displayedElement.getCreatorId())){
+            inflater.inflate(R.menu.element_detail_bottom_menu, menu);
+            //TODO Test if this works only when I am the creator!
+            //TODO Add for users that have not created this modul the option to copy and edit it
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_edit_element:
+                Log.e("onClick EditElement", "User clicked that he wants to edit Element");
+                Intent addIntent = new Intent(ElementDetailActivity.this, ElementEditActivity.class);
+                addIntent.putExtra("elementToEdit", displayedElement);
+                startActivity(addIntent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

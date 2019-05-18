@@ -6,5 +6,7 @@
 
     <color name="backgroundUsedForChips">#EEEEEE</color>
 
+    <color name="backgroundModulTitle">#DDEEEEEE</color>
+
 
 </resources>

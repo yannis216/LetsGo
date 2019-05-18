@@ -203,6 +203,49 @@ public class PictureUtil {
         }
     }
 
+    public void saveModulImageFromDatabaseToLocalStorage(FirebaseStorage storage, Modul modul){
+        final File localFile;
+        String modulId = modul.getId();
+        //TODO Change Directory to an external storage (?)
+        String modulsPath = context.getFilesDir().getAbsolutePath() + File.separator + "moduls";
+        File myDir = new File(modulsPath);
+        myDir.mkdirs();
+        String fname = modulId +"_originalPicture";
+        localFile = new File(myDir, fname);
+        Log.e("LocalFilePath" , localFile.getAbsolutePath());
+        if(localFile.exists()){
+            Picasso.get().load(localFile).into(imageView);
+            if(callbackHelper != null){
+                callbackHelper.onSuccess();
+            }
+            Log.e("LocalFileExists", "Loaded local Image into View");
+        }else{
+            StorageReference storageRef = storage.getReferenceFromUrl(modul.getPictureUrl());
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+                    if(callbackHelper != null){
+                        callbackHelper.onSuccess();
+                    }
+                    Picasso.get().load(localFile).into(imageView);
+                    Log.e("onSuccess", "Image has been saved to localFile");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    if(callbackHelper != null){
+                        callbackHelper.onFailure();
+                    }
+                }
+            });
+        }
+
+
+
+    }
+
     public void saveModulThumbnailFromDatabaseToLocalStorage(FirebaseStorage storage, Modul modul){
         final File localFile;
         String modulId = modul.getId();

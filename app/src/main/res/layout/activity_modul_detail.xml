@@ -121,9 +121,9 @@
             app:layout_constraintTop_toBottomOf="@id/ll_modul_detail_social_info">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="64dp"
                 android:layout_height="32dp"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:gravity="start"
                 android:orientation="horizontal">
 
@@ -133,17 +133,35 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/baseline_widgets_black_18dp" />
 
-                <LinearLayout
-                    android:id="@+id/ll_modul_detail_usedFor"
+                <TextView
+                    android:id="@+id/tv_modul_detail_num_materials"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"/>
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="1"/>
 
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="32dp"
                 android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_modul_detail_usedFor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="64dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
                 android:gravity="right"
                 android:orientation="horizontal">
                 <TextView

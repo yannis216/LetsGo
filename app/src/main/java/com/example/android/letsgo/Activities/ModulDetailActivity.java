@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -21,13 +24,16 @@ import com.example.android.letsgo.Classes.SocialModulInfo;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.CallbackHelper;
 import com.example.android.letsgo.Utils.PictureUtil;
+import com.example.android.letsgo.Utils.UsedForSorter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import androidx.core.view.GravityCompat;
@@ -39,8 +45,13 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
     private RecyclerView mRvModulElements;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
     private Modul displayedModul;
     private SocialModulInfo displayedSocialModulInfo;
+    private List<ModulElement> modulElements;
+    List<String> neededMaterialsIds;
+    int minPeopleNeeded;
+
     private TextView mTvTitle;
     private ImageView mIvPicture;
     private ProgressBar progressBar;
@@ -48,6 +59,8 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
     private TextView avgDurationView;
     private  RatingBar avgRatingView;
     private  ImageView durationClock;
+    private TextView numMaterialsNeededView;
+    private TextView numMinPeopleNeededView;
 
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
@@ -86,6 +99,9 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
         avgRatingView = findViewById(R.id.rb_modul_detail);
         durationClock = findViewById(R.id.iv_modul_detail_duration_clock);
 
+        numMaterialsNeededView = findViewById(R.id.tv_modul_detail_num_materials);
+        numMinPeopleNeededView = findViewById(R.id.tv_modul_detail_num_humans);
+
         drawerLayout = findViewById(R.id.drawer_layout);
 
         BottomAppBar bar = findViewById(R.id.bar_modul_detail);
@@ -117,7 +133,11 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
         Intent intent = getIntent();
         displayedModul = (Modul) intent.getSerializableExtra("modul");
         displayedSocialModulInfo = (SocialModulInfo) intent.getSerializableExtra("socialModulInfo");
-        generateModulElementsList(displayedModul.getModulElements());
+
+        modulElements = displayedModul.getModulElements();
+        generateMaterialsInfo();
+        generateMinPeopleNeeded();
+        generateModulElementsList(modulElements);
 
 
 
@@ -148,6 +168,7 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
         mTvTitle.setText(title);
         loadPictureIntoHeader();
         populateSocialInfoBar();
+        populateRequirementsBar();
 
     }
 
@@ -234,6 +255,66 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
             avgRatingView.setVisibility(View.GONE);
             avgDurationView.setVisibility(View.GONE);
             durationClock.setVisibility(View.GONE);
+        }
+    }
+
+    public void generateMaterialsInfo(){
+        neededMaterialsIds = new ArrayList<String>();
+        for(int i = 0; i < modulElements.size(); i++){
+            ModulElement currentModulElement = modulElements.get(i);
+            List<String> newMaterialIds= currentModulElement.getNeededMaterialsIds();
+            Log.e("ModulElement loop", ""+i);
+            if(newMaterialIds.isEmpty()){
+                continue;
+            }
+            for(int j = 0; j <newMaterialIds.size(); j++){
+                String currentNewMaterialId = newMaterialIds.get(j);
+                if(!neededMaterialsIds.contains(currentNewMaterialId)){
+                    neededMaterialsIds.add(currentNewMaterialId);
+                }
+            }
+        }
+    }
+
+    public void generateMinPeopleNeeded(){
+        minPeopleNeeded = 0;
+        for(int i = 0; i < modulElements.size(); i++){
+            ModulElement currentModulElement = modulElements.get(i);
+            if(minPeopleNeeded<currentModulElement.getMinNumberOfHumans()){
+                minPeopleNeeded = currentModulElement.getMinNumberOfHumans();
+            }
+        }
+    }
+
+    public void populateRequirementsBar(){
+        if(neededMaterialsIds.isEmpty()){
+            numMaterialsNeededView.setText("0");
+        }else{
+            numMaterialsNeededView.setText(""+neededMaterialsIds.size());
+        }
+        numMinPeopleNeededView.setText("min. "+minPeopleNeeded);
+
+        UsedForSorter sorter = new UsedForSorter(displayedModul, this);
+        Map<String, Integer> sortedUsedFors = sorter.getMostImportantUsedFor();
+        final List<String> usedForStrings = new ArrayList<String>();
+        for(int i = 0; i <3 && i <sortedUsedFors.size() ; i++ ){
+            usedForStrings.add(sortedUsedFors.keySet().toArray()[i].toString());
+        }
+
+        for(String s : usedForStrings){
+            //Builds the Textview that holds the usedfor Strings
+            LinearLayout usedForLinearLayout = findViewById(R.id.ll_modul_detail_usedFor);
+            TextView textView = new TextView(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0,0,20,0);
+            textView.setLayoutParams(params);
+            textView.setBackgroundColor(this.getResources().getColor(R.color.backgroundUsedForChips));
+            textView.setPadding(5,0,5,0);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            textView.setGravity(Gravity.CENTER);
+            textView.setText(s);
+            usedForLinearLayout.addView(textView);
         }
     }
 }

@@ -76,14 +76,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_element_usedFor"></com.google.android.material.chip.ChipGroup>
 
-        <EditText
-            android:id="@+id/et_element_videoUrl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/element_edit_video_url"
-            android:inputType="textUri"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cg_element_edit_usedFor_chips" />
+
 
         <ImageButton
             android:id="@+id/bn_element_picture_picker"
@@ -92,7 +85,7 @@
             android:background="@color/colorAccent"
             android:src="@drawable/baseline_add_photo_alternate_black_48dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_element_videoUrl" />
+            app:layout_constraintTop_toBottomOf="@id/cg_element_edit_usedFor_chips" />
 
         <ImageView
             android:id="@+id/iv_element_edit_minHumans_icon"

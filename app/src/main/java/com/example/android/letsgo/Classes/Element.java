@@ -12,7 +12,6 @@ public class Element implements Serializable {
     //What do you achieve with it, what do you use it for? E.G. Lower Back for Deadlift
     private List<String> usedFor;
     private String pictureUrl;
-    private String videoId;
     //How may people do you need min. for successfully doing this element?
     private int minNumberOfHumans;
     //TODO To be set true when an Element is very basic (Like Pushups) and reviewed + edited by staff/(admins?). From then it can only be updated by admins
@@ -35,11 +34,10 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, String shortDesc, List<String> usedFor, String videoId, int minNumberOfHumans, List<String> neededMaterialsIds, String timeCreated, String creatorId) {
+    public Element(String title, String shortDesc, List<String> usedFor, int minNumberOfHumans, List<String> neededMaterialsIds, String timeCreated, String creatorId) {
         this.title = title;
         this.shortDesc =shortDesc;
         this.usedFor = usedFor;
-        this.videoId = videoId;
         this.minNumberOfHumans = minNumberOfHumans;
         this.neededMaterialsIds = neededMaterialsIds;
         this.timeCreated = timeCreated;
@@ -76,14 +74,6 @@ public class Element implements Serializable {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
-    }
-
-    public String getVideoId() {
-        return videoId;
-    }
-
-    public void setVideoId(String videoId) {
-        this.videoId = videoId;
     }
 
     public int getMinNumberOfHumans() {
@@ -148,7 +138,6 @@ public class Element implements Serializable {
         this.shortDesc = element.getShortDesc();
         this.usedFor = element.getUsedFor();
         this.pictureUrl = element.getPictureUrl();
-        this.videoId = element.getVideoId();
         this.minNumberOfHumans = element.getMinNumberOfHumans();
         this.isFixedBasic = element.isFixedBasic();
         this.timeCreated = element.getTimeCreated();

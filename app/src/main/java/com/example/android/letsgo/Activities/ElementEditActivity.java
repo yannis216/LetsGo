@@ -68,8 +68,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     NumberPicker mMinHumansPicker;
     Button mSaveButton;
     ChipGroup mMaterialChipGroup;
-    List<Material> mCreatedNeededMaterials = new ArrayList<Material>();
-
+    ArrayList<Material> materials = new ArrayList<Material>();
 
     ImageButton mPickPictureButton;
     String pictureUrl;
@@ -77,21 +76,21 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     FirebaseStorage storage;
     InputStream inputStream;
     DocumentReference elementReference;
+    DocumentReference updateElementRef;
 
     int PICK_PHOTO_FOR_ELEMENT = 2;
-
 
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
 
+    Element editableElement;
+    String mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_element_edit, (ViewGroup) findViewById(R.id.content_frame));
-
-
 
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
@@ -106,7 +105,6 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mUsedForAdder =findViewById(R.id.bn_element_usedFor_add);
         mUsedForChipGroup =findViewById(R.id.cg_element_edit_usedFor_chips);
         mPickPictureButton =findViewById(R.id.bn_element_picture_picker);
-        mVideoUrlEdit=findViewById(R.id.et_element_videoUrl);
         mMinHumansPicker=findViewById(R.id.np_element_min_humans);
         mSaveButton = findViewById(R.id.bn_element_save);
         mMaterialEdit=findViewById(R.id.et_element_material);
@@ -118,6 +116,13 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mMinHumansPicker.setMaxValue(32);
         //TODO Could add a 32+ Value -> Maybe use .setDisplayedValues
         mUsedForEdit.setOnEditorActionListener(new DoneOnEditorActionListener());
+
+        Intent intent = getIntent();
+        editableElement = (Element) intent.getSerializableExtra("elementToEdit");
+        if(editableElement!= null){
+            materials = (ArrayList<Material>) intent.getSerializableExtra("elementMaterials");
+            initiateUpdateMode();
+        }
 
         setOnClickListeners();
 
@@ -144,10 +149,10 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                 //For Materials: Find the Material with same title as deleted chip and delete it from list so it does not get passed to other activity
                 if(entryChipGroup == mMaterialChipGroup){
                     String currentChipText = chip.getText().toString();
-                    for(int i = 0; i<mCreatedNeededMaterials.size(); i++){
-                        if(currentChipText.equals(mCreatedNeededMaterials.get(i).getTitle())){
-                            Log.e("Deleted", "from List will be:"+mCreatedNeededMaterials.get(i).getTitle() );
-                            mCreatedNeededMaterials.remove(i);
+                    for(int i = 0; i< materials.size(); i++){
+                        if(currentChipText.equals(materials.get(i).getTitle())){
+                            Log.e("Deleted", "from List will be:"+ materials.get(i).getTitle() );
+                            materials.remove(i);
                             break;
                         }
                     }
@@ -206,10 +211,14 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
             @Override
             public void onClick(View view) {
-                List<String> materialIds = saveMaterialsToDatabase(mCreatedNeededMaterials);
+                List<String> materialIds = saveMaterialsToDatabase(materials);
                 Element createdElement = getElementFromInputs(materialIds);
-                Log.e("MaterialIds", ""+createdElement.getNeededMaterialsIds());
-                prepareSaveElementToDatabase(createdElement);
+                if(mode.equals("update")){
+                    prepareUpdateElementInDatabase(createdElement);
+                }else{
+                    prepareSaveElementToDatabase(createdElement);
+                }
+
 
                 //TODO Hand over List of Materials here via Intent to save time and Databasereads in DetailActivity
                 Intent intent = new Intent(ElementEditActivity.this, ElementDetailActivity.class);
@@ -253,9 +262,14 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
     private void handleNewUsedForChipAdded(){
         String newUsedForChipText = mUsedForEdit.getText().toString();
-        final Chip entryChip = getChip(mUsedForChipGroup, newUsedForChipText);
-        mUsedForChipGroup.addView(entryChip);
         mUsedForEdit.getText().clear();
+        addUsedForChip(newUsedForChipText);
+
+    }
+
+    private void addUsedForChip(String usedForTitle){
+        final Chip entryChip = getChip(mUsedForChipGroup, usedForTitle);
+        mUsedForChipGroup.addView(entryChip);
     }
 
     private void handleNewMaterialChipAdded(){
@@ -263,8 +277,13 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         boolean newMaterialGetsConsumed = mMaterialGetsConsumed.isChecked();
         List<String> newMaterialShoppingLinks = new ArrayList<>();
         Material newMaterial = new Material(newMaterialTitle, newMaterialGetsConsumed, newMaterialShoppingLinks);
-        mCreatedNeededMaterials.add(newMaterial);
+        materials.add(newMaterial);
 
+        addMaterialChip(newMaterialTitle);
+
+    }
+
+    private void addMaterialChip(String newMaterialTitle){
         final Chip entryChip = getChip(mMaterialChipGroup, newMaterialTitle);
         mMaterialChipGroup.addView(entryChip);
         mMaterialEdit.getText().clear();
@@ -291,13 +310,14 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     private Element getElementFromInputs(List<String> materialIds){
         String createdTitle = mTitleEdit.getText().toString();
         String createdShortDesc =mShortDescEdit.getText().toString();
-        String createdVideoUrl = mVideoUrlEdit.getText().toString();
         int createdMinHumans = mMinHumansPicker.getValue();
         List<String> createdUsedFor = generateListFromChipGroup(mUsedForChipGroup);
         String timeOnSavePressed= String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
-
-
-        return new Element(createdTitle, createdShortDesc, createdUsedFor, createdVideoUrl, createdMinHumans, materialIds, timeOnSavePressed, authUser.getUid());
+        Element element = new Element(createdTitle, createdShortDesc, createdUsedFor,createdMinHumans, materialIds, timeOnSavePressed, authUser.getUid());
+        if(mode.equals("update")){
+            element.setElementId(editableElement.getElementId());
+        }
+        return element;
     }
 
     public void prepareSaveElementToDatabase(Element newElement){
@@ -328,6 +348,33 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
     }
 
+    public void prepareUpdateElementInDatabase(Element updatedElement){
+        updateElementRef = db.collection("elements").document(updatedElement.getElementId());
+        if(!(inputStream ==null)){
+            savePictureToStorage(updatedElement);
+        }else{
+            continueUpdateElementInDatabase(updatedElement);
+        }
+    }
+
+    public void continueUpdateElementInDatabase(Element updatedElement){
+        updateElementRef
+                .set(updatedElement)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.e("editElement", "Document Snap added");
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("editElement", "Error adding document", e);
+                    }
+                });
+    }
+
     public List<String> saveMaterialsToDatabase(List<Material> newMaterials){
         List<String> materialIds= new ArrayList<>();
         for(int i = 0; i<newMaterials.size(); i++){
@@ -341,8 +388,8 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         return materialIds;
     }
 
-    private void savePictureToStorage(final Element newElement){
-        final StorageReference elementImageRef = storage.getReference().child("images/"+authUser.getUid()+"/elements/"+newElement.getElementId()+"_originalPicture");
+    private void savePictureToStorage(final Element element){
+        final StorageReference elementImageRef = storage.getReference().child("images/"+authUser.getUid()+"/elements/"+element.getElementId()+"_originalPicture");
 
         UploadTask uploadTask = elementImageRef.putStream(inputStream);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -376,8 +423,12 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     String downloadUrl = downloadUri.toString();
-                    newElement.setPictureUrl(downloadUrl);
-                    continueSaveElementToDatabase(newElement);
+                    element.setPictureUrl(downloadUrl);
+                    if(mode.equals("update")){
+                        continueUpdateElementInDatabase(element);
+                    }else{
+                        continueSaveElementToDatabase(element);
+                    }
                     Log.e("DownloadUrl", downloadUrl);
                 } else {
                     // Handle failures
@@ -386,6 +437,20 @@ public class ElementEditActivity extends BaseNavDrawActivity {
             }
         });
 
+
+    }
+
+    private void initiateUpdateMode(){
+        mTitleEdit.setText(editableElement.getTitle());
+        mShortDescEdit.setText(editableElement.getShortDesc());
+        for(String usedFor:editableElement.getUsedFor()){
+            addUsedForChip(usedFor);
+        }
+        for(Material material : materials){
+            addMaterialChip(material.getTitle());
+        }
+        mMinHumansPicker.setValue(editableElement.getMinNumberOfHumans());
+        mode = "update";
 
     }
 

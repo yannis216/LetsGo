@@ -1,9 +1,6 @@
 package com.example.android.letsgo.Activities;
 
-import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -56,6 +53,8 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
     String uId;
+
+    final ArrayList<Material> materials = new ArrayList<Material>();
 
     DrawerLayout drawerLayout;
 
@@ -110,9 +109,8 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
         }
 
 
-       getMaterialsFromDatabase(displayedElement.getNeededMaterialsIds());
+        getMaterialsFromDatabase(displayedElement.getNeededMaterialsIds());
         populateUi(displayedElement);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,34 +128,9 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
         mShortDescView.setText(element.getShortDesc());
         setChips(element.getUsedFor());
         mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));
-        if(element.getVideoId().equals("")){
-            mPlayVideoButton.setVisibility(View.GONE);
-        }else{
-            mPlayVideoButton.setVisibility(View.VISIBLE);
-            mPlayVideoButton.setOnClickListener(new View.OnClickListener(){
-
-                @Override
-                public void onClick(View view) {
-                    Log.e("onClickVideoButton", "was called");
-                    watchYoutubeVideo(ElementDetailActivity.this, element.getVideoId());
-
-                }
-            });
-        }
     }
 
 
-
-    public static void watchYoutubeVideo(Context context, String id){
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
-        Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v=" + id));
-        try {
-            context.startActivity(appIntent);
-        } catch (ActivityNotFoundException ex) {
-            context.startActivity(webIntent);
-        }
-    }
 
     private void setChips(List<String> strings){
         for(int i=0; i<strings.size(); i++){
@@ -199,7 +172,6 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
 
     private List<Material> getMaterialsFromDatabase(List<String> materialIds){
         //TODO Revisit this: This might be better done with a query or a batch request or sth. like that. Maybe a query with or(Not possible yet in Jan. 2019 but feature is requested onm github)?
-        final List<Material> materials = new ArrayList<Material>();
         for(int i = 0; i<materialIds.size(); i++){
             db.collection("materials")
                     .document(materialIds.get(i))
@@ -210,8 +182,6 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
                             Material material=documentSnapshot.toObject(Material.class);
                             materials.add(material);
                             addMaterialChip(material);
-
-
                         }
                     });
         }
@@ -241,9 +211,10 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
         switch (item.getItemId()) {
             case R.id.action_edit_element:
                 Log.e("onClick EditElement", "User clicked that he wants to edit Element");
-                Intent addIntent = new Intent(ElementDetailActivity.this, ElementEditActivity.class);
-                addIntent.putExtra("elementToEdit", displayedElement);
-                startActivity(addIntent);
+                Intent updateIntent = new Intent(ElementDetailActivity.this, ElementEditActivity.class);
+                updateIntent.putExtra("elementToEdit", displayedElement);
+                updateIntent.putExtra("elementMaterials", materials);
+                startActivity(updateIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);

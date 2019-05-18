@@ -210,11 +210,12 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
     }
 
     @Override
-    public void onClick(Modul clickedModul) {
+    public void onClick(Modul clickedModul, SocialModulInfo clickedSocialModulInfo) {
 
-            Intent startModulDetailActivityIntent = new Intent(this, ModulDetailActivity.class);
-            startModulDetailActivityIntent.putExtra("modul", clickedModul);
-            startActivity(startModulDetailActivityIntent);
+        Intent startModulDetailActivityIntent = new Intent(this, ModulDetailActivity.class);
+        startModulDetailActivityIntent.putExtra("modul", clickedModul);
+        startModulDetailActivityIntent.putExtra("socialModulInfo", clickedSocialModulInfo);
+        startActivity(startModulDetailActivityIntent);
 
     }
 

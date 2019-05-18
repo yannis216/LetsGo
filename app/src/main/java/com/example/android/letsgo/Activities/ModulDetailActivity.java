@@ -11,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.android.letsgo.Adapter.ModulDetailElementListAdapter;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
+import com.example.android.letsgo.Classes.SocialModulInfo;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.CallbackHelper;
 import com.example.android.letsgo.Utils.PictureUtil;
@@ -26,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -37,9 +40,14 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Modul displayedModul;
+    private SocialModulInfo displayedSocialModulInfo;
     private TextView mTvTitle;
     private ImageView mIvPicture;
     private ProgressBar progressBar;
+    private TextView doneCountView;
+    private TextView avgDurationView;
+    private  RatingBar avgRatingView;
+    private  ImageView durationClock;
 
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
@@ -73,7 +81,10 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
         mIvPicture = findViewById(R.id.iv_modul_detail_picture);
         progressBar = findViewById(R.id.pb_modul_detail_modul_picture_load);
 
-
+        doneCountView = findViewById(R.id.tv_modul_detail_times_done);
+        avgDurationView = findViewById(R.id.tv_modul_detail_avg_duration);
+        avgRatingView = findViewById(R.id.rb_modul_detail);
+        durationClock = findViewById(R.id.iv_modul_detail_duration_clock);
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -105,6 +116,7 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
 
         Intent intent = getIntent();
         displayedModul = (Modul) intent.getSerializableExtra("modul");
+        displayedSocialModulInfo = (SocialModulInfo) intent.getSerializableExtra("socialModulInfo");
         generateModulElementsList(displayedModul.getModulElements());
 
 
@@ -135,6 +147,7 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
         String title = displayedModul.getTitle();
         mTvTitle.setText(title);
         loadPictureIntoHeader();
+        populateSocialInfoBar();
 
     }
 
@@ -190,6 +203,37 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
             };
             PictureUtil pictureUtil = new PictureUtil(this, mIvPicture, listenIfImageLoadedSuccessfullyHelper);
             pictureUtil.saveModulImageFromDatabaseToLocalStorage(storage, displayedModul);
+        }
+    }
+
+    public void populateSocialInfoBar(){
+        if(displayedSocialModulInfo!=null) {
+            doneCountView.setText(String.valueOf(displayedSocialModulInfo.getDoneCount()));
+            String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(displayedSocialModulInfo.getDurationAvg()),
+                    TimeUnit.MILLISECONDS.toMinutes(displayedSocialModulInfo.getDurationAvg()) % TimeUnit.HOURS.toMinutes(1),
+                    TimeUnit.MILLISECONDS.toSeconds(displayedSocialModulInfo.getDurationAvg()) % TimeUnit.MINUTES.toSeconds(1));
+
+            avgDurationView.setText("~ " +hms);
+
+            if(displayedSocialModulInfo.getRatingNum()>0) {
+                avgRatingView.setVisibility(View.VISIBLE);
+                avgRatingView.setRating(displayedSocialModulInfo.getRating());
+            }else{
+                avgRatingView.setVisibility(View.GONE);
+            }
+            if(!(displayedSocialModulInfo.getDoneCount()==0)){
+                avgDurationView.setVisibility(View.VISIBLE);
+                durationClock.setVisibility(View.VISIBLE);
+            }else{
+                avgDurationView.setVisibility(View.GONE);
+                durationClock.setVisibility(View.GONE);
+            }
+        }else{
+            doneCountView.setText("0");
+            avgDurationView.setText(" -");
+            avgRatingView.setVisibility(View.GONE);
+            avgDurationView.setVisibility(View.GONE);
+            durationClock.setVisibility(View.GONE);
         }
     }
 }

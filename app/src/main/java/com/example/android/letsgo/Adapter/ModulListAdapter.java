@@ -39,7 +39,7 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public interface ModulOnClickHandler {
-        void onClick(Modul requestedModul);
+        void onClick(Modul requestedModul, SocialModulInfo requestedSocialModulInfo);
     }
 
     public ModulListAdapter(Context context, List<Modul> moduls, List<SocialModulInfo> socialModulInfos, ModulOnClickHandler clickHandler){
@@ -60,8 +60,9 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
             Modul requestedModul = moduls.get(adapterPosition);
+            SocialModulInfo requestedSocialModulInfo = socialModulInfos.get(adapterPosition);
             //TODO Send SocialModulInfos here
-            mClickHandler.onClick(requestedModul);
+            mClickHandler.onClick(requestedModul, requestedSocialModulInfo);
         }
     }
 

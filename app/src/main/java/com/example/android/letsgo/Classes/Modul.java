@@ -1,6 +1,7 @@
 package com.example.android.letsgo.Classes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Modul implements Serializable {
@@ -20,6 +21,7 @@ public class Modul implements Serializable {
 
 
     private List<ModulElement> modulElements;
+    private ArrayList<String> elementIds;
 
 
     public Modul(String title, String editorUid, List<ModulElement> modulElements) {
@@ -102,5 +104,13 @@ public class Modul implements Serializable {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public ArrayList<String> getElementIds() {
+        return elementIds;
+    }
+
+    public void setElementIds(ArrayList<String> elementIds) {
+        this.elementIds = elementIds;
     }
 }

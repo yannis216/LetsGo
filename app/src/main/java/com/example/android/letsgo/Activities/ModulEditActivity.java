@@ -215,6 +215,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     modulElements = mAdapter.getModulElements();
                     String titleText = mTitleView.getText().toString();
                     currentModul.setModulElements(modulElements);
+                    currentModul.setElementIds(generateElementIds());
                     currentModul.setEditorUid(uId);
                     currentModul.setTitle(titleText);
                     currentModul.setEditorName(authUser.getDisplayName());
@@ -426,6 +427,17 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public ArrayList<String> generateElementIds(){
+        ArrayList<String> elementIds = new ArrayList<>();
+        for(Element element : currentModul.getModulElements()){
+            String currentElementId = element.getElementId();
+            if(!elementIds.contains(currentElementId)){
+                elementIds.add(currentElementId);
+            }
+        }
+        return elementIds;
     }
 
 

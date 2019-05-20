@@ -373,6 +373,19 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                         Log.w("editElement", "Error adding document", e);
                     }
                 });
+
+
+        /**CollectionReference modulRef = db.collection("moduls");
+        modulRef.whereArrayContains("modulElements", "0")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        int sized = task.getResult().size();
+                        Log.e("List of Moduls", ""+sized);
+                    }
+                }); **/
+
     }
 
     public List<String> saveMaterialsToDatabase(List<Material> newMaterials){

@@ -10,7 +10,6 @@ public class ModulElement extends Element implements Serializable {
     // or "As many/fast as as you can"
     private String hint;
     private String sourceElementId;
-    //TODO Possible that I will never need orderInModul!
     private int orderInModul;
 
     public ModulElement(Element baseElement){
@@ -18,6 +17,14 @@ public class ModulElement extends Element implements Serializable {
     }
 
     public ModulElement() {
+    }
+
+    public ModulElement(Element baseElement, ModulElementMultiplier multiplier, String hint, String sourceElementId, int orderInModul) {
+        super.copy(baseElement);
+        this.multiplier = multiplier;
+        this.hint = hint;
+        this.sourceElementId = sourceElementId;
+        this.orderInModul = orderInModul;
     }
 
     public ModulElementMultiplier getMultiplier() {
@@ -51,5 +58,6 @@ public class ModulElement extends Element implements Serializable {
     public void setOrderInModul(int orderInModul) {
         this.orderInModul = orderInModul;
     }
+
 
 }

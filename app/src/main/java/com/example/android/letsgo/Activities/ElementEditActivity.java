@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Material;
+import com.example.android.letsgo.Classes.Modul;
+import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.PictureUtil;
 import com.google.android.gms.tasks.Continuation;
@@ -33,8 +35,12 @@ import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -122,6 +128,8 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         if(editableElement!= null){
             materials = (ArrayList<Material>) intent.getSerializableExtra("elementMaterials");
             initiateUpdateMode();
+        }else{
+            mode = "create";
         }
 
         setOnClickListeners();
@@ -357,7 +365,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         }
     }
 
-    public void continueUpdateElementInDatabase(Element updatedElement){
+    public void continueUpdateElementInDatabase(final Element updatedElement){
         updateElementRef
                 .set(updatedElement)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -375,16 +383,55 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                 });
 
 
-        /**CollectionReference modulRef = db.collection("moduls");
-        modulRef.whereArrayContains("modulElements", "0")
+        CollectionReference modulRef = db.collection("moduls");
+        //TODO May limit this to only editing Moduls of this user (And prompt/ask other users if they wanna update their moduls)
+        modulRef.whereArrayContains("elementIds", updatedElement.getElementId())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        int sized = task.getResult().size();
-                        Log.e("List of Moduls", ""+sized);
+                        //TODO May ask the user here for which moduls he wants the update
+                        final ArrayList<Modul> moduls = new ArrayList<>();
+                        if(task.isSuccessful()){
+                            int sizeOfResultSet = task.getResult().size();
+                            Log.e("List of Moduls", ""+sizeOfResultSet);
+                            if(sizeOfResultSet != 0){
+                                WriteBatch batch = db.batch();
+                                for(final QueryDocumentSnapshot document : task.getResult()){
+                                    Modul modul = document.toObject(Modul.class);
+                                    moduls.add(modul);
+                                }
+                                Log.e("FoundModuls", ""+moduls);
+                                for(Modul modul : moduls){
+                                    List<ModulElement> modulElements = modul.getModulElements();
+                                    for(ModulElement oldModulElement : modulElements){
+                                        if(oldModulElement.getElementId().equals(updatedElement.getElementId())){
+                                            Log.e("Found sameElementId", ""+updatedElement.getElementId());
+                                            ModulElement updatedModulElement = new ModulElement(
+                                                    updatedElement, oldModulElement.getMultiplier(), oldModulElement.getHint(), oldModulElement.getSourceElementId(), oldModulElement.getOrderInModul());
+                                            modulElements.set(oldModulElement.getOrderInModul(), updatedModulElement);
+                                        }
+                                    }
+                                    modul.setModulElements(modulElements);
+                                    DocumentReference updatedModulRef = db.collection("moduls").document(modul.getId());
+                                    batch.set(updatedModulRef, modul);
+                                }
+                                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Log.e("Batch Write", "Completed successfully");
+                                        }
+
+                                    }
+                                });
+                            }
+
+                        }
+
                     }
-                }); **/
+                });
 
     }
 

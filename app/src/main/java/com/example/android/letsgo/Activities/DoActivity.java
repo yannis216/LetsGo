@@ -23,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+import java.util.concurrent.TimeUnit;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class DoActivity extends BaseNavDrawActivity {
@@ -207,7 +209,7 @@ public class DoActivity extends BaseNavDrawActivity {
         updateUi();
     }
 
-    private void startCountdownWithMillis(final ModulElement currentModulElement, int millis){
+    private void startCountdownWithMillis(final ModulElement currentModulElement, final int millis){
 
 
         //Constructs the countdown with a short delay of 499ms (Feels better for the user)
@@ -215,8 +217,12 @@ public class DoActivity extends BaseNavDrawActivity {
 
             public void onTick(long millisUntilFinished) {
                 //TODO Make this show Minutes properly
-                mMultiplierView.setText(String.valueOf(millisUntilFinished/1000) + "s" );
+
                 int currentSecondLeft = (int) millisUntilFinished/1000;
+                String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % TimeUnit.HOURS.toMinutes(1),
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % TimeUnit.MINUTES.toSeconds(1));
+                mMultiplierView.setText(hms);
 
                 switch(currentSecondLeft){
                     case 5:

@@ -93,6 +93,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     Element editableElement;
     String mode;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +118,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mMaterialGetsConsumed=findViewById(R.id.cb_element_material_gets_consumed);
         mMaterialCommiter=findViewById(R.id.bn_element_material_commit);
         mMaterialChipGroup=findViewById(R.id.cg_element_edit_material_chips);
+
 
         mMinHumansPicker.setMinValue(1);
         mMinHumansPicker.setMaxValue(32);

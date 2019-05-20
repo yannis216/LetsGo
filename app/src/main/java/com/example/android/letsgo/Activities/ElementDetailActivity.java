@@ -84,16 +84,14 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
+        setSupportActionBar(bar);
         bar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.e("Navigation", "cliecked");
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-        setSupportActionBar(bar);
-
-
-
 
         Intent intent = getIntent();
 

@@ -1,75 +1,80 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/col_activity_modul_edit_coordinatorLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".Activities.ModulEditActivity"
-        android:id="@+id/cl_modul_edit_layout"
-        >
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:minWidth="@dimen/element_picture_width"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_modul_edit_title"
-            android:textSize="32sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="32dp"
-            app:layout_constraintWidth_percent=".5"
-            android:textAlignment="center"
-            android:inputType="textAutoComplete|textCapSentences"/>
-
-        <ImageButton
-            android:id="@+id/bn_modul_edit_picture_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_add_photo_alternate_black_48dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_modul_edit_title" />
-
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/rv_modul_element_edit_list"
-            app:layout_constraintTop_toBottomOf="@id/bn_modul_edit_picture_picker"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constrainedHeight="true"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
-            android:paddingBottom="64dp"
-            android:clipToPadding="false"/>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bar_modul_edit"
+        android:id="@+id/col_activity_modul_edit_coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:backgroundTint="@color/colorPrimary"
-        app:fabAlignmentMode="center"
-        app:hideOnScroll="true"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:navigationIcon="@drawable/ic_menu_black_24dp"
-        />
-    <!-- TODO den könnte man individuell (Form)im Sinne des Logos designen -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_modul_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_save_black_24dp"
-        app:layout_anchor="@id/bar_modul_edit"/>
-    <!-- TODO Change src on functionality change -->
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        android:layout_height="wrap_content">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                tools:context=".Activities.ModulEditActivity"
+                android:id="@+id/cl_modul_edit_layout"
+                >
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:minWidth="@dimen/element_picture_width"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/et_modul_edit_title"
+                    android:textSize="32sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintWidth_percent=".5"
+                    android:textAlignment="center"
+                    android:inputType="textAutoComplete|textCapSentences"/>
+
+                <ImageButton
+                    android:id="@+id/bn_modul_edit_picture_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_add_photo_alternate_black_48dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_modul_edit_title" />
+
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/rv_modul_element_edit_list"
+                    app:layout_constraintTop_toBottomOf="@id/bn_modul_edit_picture_picker"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:paddingBottom="64dp"
+                    android:clipToPadding="false"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bar_modul_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabAlignmentMode="center"
+            app:hideOnScroll="true"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="@drawable/ic_menu_black_24dp"
+            />
+        <!-- TODO den könnte man individuell (Form)im Sinne des Logos designen -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_modul_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_save_black_24dp"
+            app:layout_anchor="@id/bar_modul_edit"/>
+        <!-- TODO Change src on functionality change -->
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>

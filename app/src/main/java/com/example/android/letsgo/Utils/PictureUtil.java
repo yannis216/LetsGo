@@ -50,7 +50,7 @@ public class PictureUtil {
      public void initializePictureWithColours(String pictureUrl){
         int imageHeight = (int) context.getResources().getDimension(R.dimen.element_picture_height);
         int imageWidth = (int) context.getResources().getDimension(R.dimen.element_picture_width);
-        titleColor = context.getResources().getColor(R.color.colorAccent);
+        titleColor = context.getResources().getColor(R.color.colorPrimaryDark);
         titleBackgroundColor= context.getResources().getColor(R.color.colorPrimaryDark);
 
         final Target target = new Target() {

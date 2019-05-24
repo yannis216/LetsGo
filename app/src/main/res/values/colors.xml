@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#bdbdbd</color>
+    <color name="colorPrimaryLight">#efefef</color>
+    <color name="colorPrimaryDark">#8d8d8d</color>
 
-    <color name="backgroundUsedForChips">#EEEEEE</color>
+    <color name="colorSecondary">#81c784</color>
+    <color name="colorSecondaryLight">#b2fab4</color>
+    <color name="colorSecondaryDark">#519657</color>
+    <!--<color name="colorAccent">#99CC00</color>-->
 
-    <color name="backgroundModulTitle">#DDEEEEEE</color>
+    <color name="colorPrimaryHeader">#616161</color>
+    <color name="colorPrimaryText">#616161</color>
+
+    <color name="activityBackground">#FFFFFF</color>
+    <color name="backgroundUsedForChips">@color/colorPrimaryLight</color>
+    <color name="backgroundModulTitle">@color/colorPrimary</color>
 
 
 </resources>

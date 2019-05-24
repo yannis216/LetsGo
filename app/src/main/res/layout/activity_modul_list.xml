@@ -4,14 +4,15 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/col_activity_modul_list_coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/activityBackground">
 
         <androidx.recyclerview.widget.RecyclerView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/rv_modul_list"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:paddingBottom="64dp"
+            android:paddingBottom="96dp"
             android:clipToPadding="false"
             android:divider="@color/colorPrimary"
             android:dividerHeight="1px"/>

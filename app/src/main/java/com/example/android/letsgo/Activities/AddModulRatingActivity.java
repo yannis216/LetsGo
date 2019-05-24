@@ -68,7 +68,7 @@ public class AddModulRatingActivity extends BaseNavDrawActivity {
                         saveDoneActivityToDatabase();
                     }
                 });
-                fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryDark)));
             }
         });
 

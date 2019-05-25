@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.letsgo.Adapter.ModulElementEditListAdapter;
@@ -19,6 +20,7 @@ import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.R;
+import com.example.android.letsgo.Utils.PictureUtil;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
 import com.example.android.letsgo.Utils.TouchHelper.SimpleItemTouchHelperCallback;
 import com.google.android.gms.tasks.Continuation;
@@ -59,6 +61,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     EditText mTitleView;
     FloatingActionButton fab;
     ImageButton mAddImageButton;
+    ImageView mImageView;
 
     RecyclerView mRvModulElements;
     RecyclerView.LayoutManager mLayoutManager;
@@ -104,6 +107,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
         mTitleView = findViewById(R.id.et_modul_edit_title);
         mAddImageButton = findViewById(R.id.bn_modul_edit_picture_picker);
+        mImageView = findViewById(R.id.iv_modul_edit_picture);
 
 
         fab = findViewById(R.id.fab_modul_edit);
@@ -148,6 +152,12 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                 mTitleView.setText(currentModul.getTitle());
                 modulElements = currentModul.getModulElements();
                 mode = "edit";
+            }
+            if(currentModul != null){
+                if(currentModul.getPictureUrl()!=null){
+                    PictureUtil pictureUtil = new PictureUtil(ModulEditActivity.this, mImageView, mTitleView);
+                    pictureUtil.loadTitlePictureIntoImageView(currentModul.getPictureUrl());
+                }
             }
 
             //TODO May have to make this happen only after Database fetch is completed?
@@ -256,6 +266,11 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     inputStream = ModulEditActivity.this.getContentResolver().openInputStream(data.getData()); //TODO delete is safe?
                     Uri inputUri = data.getData();
                     pictureUrl = inputUri.toString();
+                    currentModul.setPictureUrl(pictureUrl);
+                    if (pictureUrl != null) {
+                        PictureUtil pictureUtil = new PictureUtil(ModulEditActivity.this, mImageView, mTitleView);
+                        pictureUtil.loadTitlePictureIntoImageView(pictureUrl);
+                    }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }

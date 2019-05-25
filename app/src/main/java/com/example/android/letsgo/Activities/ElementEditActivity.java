@@ -261,7 +261,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                     pictureUrl = inputUri.toString();
                     if (pictureUrl != null) {
                         PictureUtil pictureUtil = new PictureUtil(ElementEditActivity.this, mPicture, mTitleEdit);
-                        pictureUtil.initializePictureWithColours(pictureUrl);
+                        pictureUtil.loadTitlePictureIntoImageView(pictureUrl);
                     }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

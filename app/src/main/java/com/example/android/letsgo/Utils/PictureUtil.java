@@ -1,8 +1,6 @@
 package com.example.android.letsgo.Utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +14,6 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.File;
 
@@ -47,63 +44,13 @@ public class PictureUtil {
         this.callbackHelper = callbackHelper;
     }
 
-     public void initializePictureWithColours(String pictureUrl){
-        int imageHeight = (int) context.getResources().getDimension(R.dimen.element_picture_height);
-        int imageWidth = (int) context.getResources().getDimension(R.dimen.element_picture_width);
-        titleColor = context.getResources().getColor(R.color.colorPrimaryDark);
-        titleBackgroundColor= context.getResources().getColor(R.color.colorPrimaryDark);
-
-        final Target target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                Log.e("onBitmapLoaded","was called");
-                assert imageView != null;
-                imageView.setImageBitmap(bitmap);
-                Palette.from(bitmap)
-                        .generate(new Palette.PaletteAsyncListener() {
-                            @Override
-                            public void onGenerated(Palette palette) {
-                                swatchMutedDark =palette.getDarkMutedSwatch();
-                                swatchDominant = palette.getDominantSwatch();
-                                swatchVibrant =palette.getVibrantSwatch();
-                                if (swatchDominant == null && swatchVibrant == null) {
-                                    return;
-                                }
-                                if(swatchVibrant!=null){
-                                    titleColor =swatchVibrant.getRgb();
-                                    titleBackgroundColor=swatchVibrant.getBodyTextColor();
-                                }else{
-                                    titleColor = swatchDominant.getTitleTextColor();
-                                    titleBackgroundColor =swatchDominant.getRgb();
-                                    //TODO May choose to do this only when vibrant colour is available
-                                }
-                                titleView.setTextColor(titleColor);
-                                titleView.setBackgroundColor(titleBackgroundColor);
-                                titleView.getBackground().setAlpha(200);
-
-                                //TODO Adapt Default and SetColours in Design phase
-                                //TODO Change Colour of the Play video icon programmatically
-                            }
-                        });
-
-            };
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                Log.e("onBitmapFailed","was called");
-            }
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                Log.e("onPrepareLoad","was called");
-            }
-        };
-        imageView.setTag(target);
-
+     public void loadTitlePictureIntoImageView(String pictureUrl){
 
         Picasso.get()
                 .load(pictureUrl)
-                .resize(imageWidth, imageHeight)
+                .fit()
                 .centerCrop()
-                .into(target);
+                .into(imageView);
     }
 
     //TODO The following picture loading routines do not support update of pictures

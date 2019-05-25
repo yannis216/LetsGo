@@ -4,7 +4,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/col_activity_modul_edit_coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/activityBackground">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -18,8 +19,6 @@
                 tools:context=".Activities.ModulEditActivity"
                 android:id="@+id/cl_modul_edit_layout"
                 >
-
-
 
                 <ImageView
                     android:id="@+id/iv_modul_edit_picture"
@@ -39,18 +38,19 @@
                     android:background="@drawable/add_image_round_button"/>
 
                 <EditText
-                    android:layout_width="wrap_content"
-                    android:minWidth="@dimen/element_picture_width"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_modul_edit_title"
                     android:textSize="32sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="16dp"
                     app:layout_constraintWidth_percent=".5"
+                    android:background="@drawable/modul_title_background"
                     android:textAlignment="center"
-                    android:inputType="textAutoComplete|textCapSentences"/>
+                    android:inputType="textAutoComplete|textCapSentences|textMultiLine"
+                    android:maxLines="2"/>
+
 
                 <!-- Beginn Requirements Bar-->
                 <LinearLayout
@@ -122,13 +122,33 @@
                     </LinearLayout>
                 </LinearLayout>
                 <!-- Ende RequirementsBar -->
+                <View
+                    android:id="@+id/v_modul_edit_divider_1"
+                    app:layout_constraintTop_toBottomOf="@id/ll_modul_edit_requirements"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"/>
 
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_modul_edit_tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintTop_toBottomOf="@id/v_modul_edit_divider_1">
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:text="@string/modul_detail_elements_tab_title"/>
+                </com.google.android.material.tabs.TabLayout>
 
 
                 <androidx.recyclerview.widget.RecyclerView
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/rv_modul_element_edit_list"
-                    app:layout_constraintTop_toBottomOf="@id/ll_modul_edit_requirements"
+                    app:layout_constraintTop_toBottomOf="@id/tl_modul_edit_tabs"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:layout_height="wrap_content"

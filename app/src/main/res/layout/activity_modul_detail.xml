@@ -42,7 +42,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent=".5"
             android:textAlignment="center"
-            android:text="Pushups"/>
+            android:text="Modul Name"/>
 
         <!-- Beginn Social Info Bar-->
         <LinearLayout
@@ -183,17 +183,29 @@
             </LinearLayout>
         </LinearLayout>
         <!-- Ende RequirementsBar -->
+        <View
+            android:id="@+id/v_modul_detail_divider_1"
+            app:layout_constraintTop_toBottomOf="@id/ll_modul_detail_requirements"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimaryLight"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_modul_details_tabs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:backgroundTint="@color/fui_transparent"
-            app:layout_constraintTop_toBottomOf="@id/ll_modul_detail_requirements">
+            app:layout_constraintTop_toBottomOf="@id/v_modul_detail_divider_1">
             <com.google.android.material.tabs.TabItem
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:text="@string/modul_detail_elements_tab_title"/>
         </com.google.android.material.tabs.TabLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             xmlns:android="http://schemas.android.com/apk/res/android"

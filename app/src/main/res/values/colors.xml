@@ -14,7 +14,7 @@
 
     <color name="activityBackground">#FFFFFF</color>
     <color name="backgroundUsedForChips">@color/colorPrimaryLight</color>
-    <color name="backgroundModulTitle">@color/colorPrimary</color>
+    <color name="backgroundModulTitle">#99bdbdbd</color>
 
 
 </resources>

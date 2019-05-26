@@ -36,6 +36,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -79,6 +80,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     NumberPicker mMinHumansPicker;
     TextView mMinHumansTextView;
     ChipGroup mMaterialChipGroup;
+    FloatingActionButton fab;
     ArrayList<Material> materials = new ArrayList<Material>();
 
     ImageButton mPickPictureButton;
@@ -118,13 +120,9 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mUsedForAdder =findViewById(R.id.bn_element_usedFor_add);
         mUsedForChipGroup =findViewById(R.id.cg_element_edit_usedFor_chips);
         mPickPictureButton =findViewById(R.id.bn_element_picture_picker);
-        mSaveButton = findViewById(R.id.bn_element_save);
-        mMaterialEdit=findViewById(R.id.et_element_material);
-        mMaterialGetsConsumed=findViewById(R.id.cb_element_material_gets_consumed);
-        mMaterialCommiter=findViewById(R.id.bn_element_material_commit);
-        mMaterialChipGroup=findViewById(R.id.cg_element_edit_material_chips);
         mMinHumansStarter = findViewById(R.id.ib_element_edit_min_humans_starter);
         mMinHumansTextView = findViewById(R.id.tv_element_edit_num_humans);
+        fab = findViewById(R.id.fab_element_edit);
 
 
         //mMinHumansPicker.setMinValue(1);
@@ -233,7 +231,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
 
 
-        mSaveButton.setOnClickListener(new View.OnClickListener(){
+        fab.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
@@ -251,14 +249,6 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                 intent.putExtra("element", createdElement);
                 startActivity(intent);
 
-            }
-        });
-
-        mMaterialCommiter.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                handleNewMaterialChipAdded();
             }
         });
     }

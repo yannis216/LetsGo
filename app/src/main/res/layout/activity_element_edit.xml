@@ -45,6 +45,16 @@
                 android:inputType="textAutoComplete|textCapSentences|textMultiLine"
                 android:maxLines="2"/>
 
+            <ImageButton
+                android:id="@+id/bn_element_picture_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_add_photo_alternate_black_48dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/iv_element_edit_picture"
+                android:layout_margin="0dp"
+                android:background="@drawable/add_image_round_button"/>
+
             <!-- Beginn Requirements Bar-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,7 +70,8 @@
                     android:gravity="start"
                     android:orientation="horizontal">
 
-                    <ImageButton
+                    <!-- TODO: Make this a button to open an AlertDialog like NumberPicker-->
+                    <ImageView
                         android:layout_marginStart="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -126,6 +137,16 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"/>
 
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_element_edit_usedFor_chips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_element_usedFor"></com.google.android.material.chip.ChipGroup>
+
+
+
             <EditText
                 android:id="@+id/et_element_edit_shortDesc"
                 android:layout_width="0dp"
@@ -157,35 +178,7 @@
                 app:layout_constraintLeft_toRightOf="@id/et_element_usedFor"
                 app:layout_constraintTop_toTopOf="@id/et_element_usedFor" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_element_edit_usedFor_chips"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_element_usedFor"></com.google.android.material.chip.ChipGroup>
-
-
-
-            <ImageButton
-                android:id="@+id/bn_element_picture_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
-                android:src="@drawable/baseline_add_photo_alternate_black_48dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cg_element_edit_usedFor_chips" />
-
-            <ImageView
-                android:id="@+id/iv_element_edit_minHumans_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_people_black_48dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bn_element_picture_picker" />
-
-            <!-- TODO Move the Numberpicker in an alertdialog opened by Button -->
-
-            <EditText
+            <!--<EditText
                 android:id="@+id/et_element_material"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -219,25 +212,34 @@
                 app:layout_constraintTop_toTopOf="@id/et_element_material"
                 app:layout_constraintHorizontal_weight="3"/>
 
+
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/cg_element_edit_material_chips"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_element_material"/>
+                app:layout_constraintTop_toBottomOf="@id/et_element_material"/> -->
 
-
-            <Button
-                android:id="@+id/bn_element_save"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="0dp"
-                android:background="@color/colorPrimaryDark"
-                android:text="@string/element_edit_save"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cg_element_edit_material_chips" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bar_element_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="center"
+        app:hideOnScroll="true"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:navigationIcon="@drawable/ic_menu_black_24dp"
+        />
+    <!-- TODO den könnte man individuell (Form)im Sinne des Logos designen -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_element_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_save_black_24dp"
+        app:layout_anchor="@id/bar_element_edit"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

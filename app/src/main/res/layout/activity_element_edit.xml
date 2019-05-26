@@ -1,163 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/col_activity_element_edit_coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/activityBackground">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".Activities.ElementEditActivity">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_element_edit_picture"
-            android:layout_width="@dimen/element_picture_width"
-            android:layout_height="@dimen/element_picture_height"
-            android:background="@color/design_default_color_primary_dark"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".5" />
-
-        <EditText
-            android:id="@+id/et_element_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:hint="@string/element_edit_title"
-            android:inputType="textCapSentences|textAutoCorrect"
-            android:minWidth="@dimen/element_picture_width"
-            android:textAlignment="center"
-            android:textSize="32sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".5" />
-
-        <EditText
-            android:id="@+id/et_element_edit_shortDesc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/element_edit_shortDesc"
-            android:inputType="textAutoCorrect|textMultiLine"
-            android:lines="4"
-            android:maxLines="4"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_element_edit_picture" />
-        <!--TODO make this an autocompleteTextView that suggests already existing titles with a hint: Already existing: -->
-        <EditText
-            android:id="@+id/et_element_usedFor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/element_edit_usedFor"
-            android:imeOptions="actionDone"
-            android:inputType="textCapSentences|textAutoCorrect"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/bn_element_usedFor_add"
-            app:layout_constraintTop_toBottomOf="@id/et_element_edit_shortDesc" />
-
-        <Button
-            android:id="@+id/bn_element_usedFor_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/element_edit_usedFor_add"
-            app:layout_constraintLeft_toRightOf="@id/et_element_usedFor"
-            app:layout_constraintTop_toTopOf="@id/et_element_usedFor" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_element_edit_usedFor_chips"
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_element_usedFor"></com.google.android.material.chip.ChipGroup>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".Activities.ElementEditActivity">
+
+            <ImageView
+                android:id="@+id/iv_element_edit_picture"
+                android:layout_height="@dimen/element_picture_height"
+                android:layout_width="match_parent"
+                android:background="@color/design_default_color_primary_dark"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".5" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_element_title"
+                android:textSize="32sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".5"
+                android:background="@drawable/modul_title_background"
+                android:textAlignment="center"
+                android:inputType="textAutoComplete|textCapSentences|textMultiLine"
+                android:maxLines="2"/>
+
+            <!-- Beginn Requirements Bar-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:orientation="horizontal"
+                android:id="@+id/ll_element_edit_requirements"
+                app:layout_constraintTop_toBottomOf="@id/iv_element_edit_picture">
+
+                <LinearLayout
+                    android:layout_width="64dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="0"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:layout_marginStart="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/baseline_widgets_black_18dp" />
+
+                    <TextView
+                        android:id="@+id/tv_element_edit_num_materials"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:text="0"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_element_edit_usedFor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="64dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_element_edit_num_humans"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:text="0" />
+
+                    <ImageButton
+                        android:id="@+id/ib_element_edit_min_humans_starter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/baseline_people_black_24dp" />
+                </LinearLayout>
+            </LinearLayout>
+            <!-- Ende RequirementsBar -->
+            <View
+                android:id="@+id/v_element_edit_divider_1"
+                app:layout_constraintTop_toBottomOf="@id/ll_element_edit_requirements"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryLight"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"/>
+
+            <EditText
+                android:id="@+id/et_element_edit_shortDesc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/element_edit_shortDesc"
+                android:inputType="textAutoCorrect|textMultiLine"
+                android:lines="4"
+                android:maxLines="4"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/v_element_edit_divider_1" />
+            <!--TODO make this an autocompleteTextView that suggests already existing titles with a hint: Already existing: -->
+            <EditText
+                android:id="@+id/et_element_usedFor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/element_edit_usedFor"
+                android:imeOptions="actionDone"
+                android:inputType="textCapSentences|textAutoCorrect"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/bn_element_usedFor_add"
+                app:layout_constraintTop_toBottomOf="@id/et_element_edit_shortDesc" />
+
+            <Button
+                android:id="@+id/bn_element_usedFor_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/element_edit_usedFor_add"
+                app:layout_constraintLeft_toRightOf="@id/et_element_usedFor"
+                app:layout_constraintTop_toTopOf="@id/et_element_usedFor" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_element_edit_usedFor_chips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_element_usedFor"></com.google.android.material.chip.ChipGroup>
 
 
 
-        <ImageButton
-            android:id="@+id/bn_element_picture_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:src="@drawable/baseline_add_photo_alternate_black_48dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cg_element_edit_usedFor_chips" />
+            <ImageButton
+                android:id="@+id/bn_element_picture_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:src="@drawable/baseline_add_photo_alternate_black_48dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cg_element_edit_usedFor_chips" />
 
-        <ImageView
-            android:id="@+id/iv_element_edit_minHumans_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_people_black_48dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bn_element_picture_picker" />
+            <ImageView
+                android:id="@+id/iv_element_edit_minHumans_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_people_black_48dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bn_element_picture_picker" />
 
-        <!-- TODO Move the Numberpicker in an alertdialog opened by Button -->
-        <NumberPicker
-            android:id="@+id/np_element_min_humans"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            app:layout_constraintLeft_toRightOf="@id/iv_element_edit_minHumans_icon"
-            app:layout_constraintTop_toTopOf="@id/bn_element_picture_picker" />
+            <!-- TODO Move the Numberpicker in an alertdialog opened by Button -->
 
+            <EditText
+                android:id="@+id/et_element_material"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/element_material_edit_text"
+                android:inputType="textUri"
+                app:layout_constraintEnd_toStartOf="@+id/cb_element_material_gets_consumed"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/np_element_min_humans"
+                app:layout_constraintHorizontal_weight="6"/>
 
-        <EditText
-            android:id="@+id/et_element_material"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="@string/element_material_edit_text"
-            android:inputType="textUri"
-            app:layout_constraintEnd_toStartOf="@+id/cb_element_material_gets_consumed"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/np_element_min_humans"
-            app:layout_constraintHorizontal_weight="6"/>
+            <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/cb_element_material_gets_consumed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/bn_element_material_commit"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toEndOf="@+id/et_element_material"
+                app:layout_constraintTop_toTopOf="@id/et_element_material"
+                app:layout_constraintHorizontal_weight="1"/>
 
-        <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/cb_element_material_gets_consumed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/bn_element_material_commit"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@+id/et_element_material"
-            app:layout_constraintTop_toTopOf="@id/et_element_material"
-            app:layout_constraintHorizontal_weight="1"/>
+            <Button
+                android:id="@+id/bn_element_material_commit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/element_edit_material_add"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toEndOf="@+id/cb_element_material_gets_consumed"
+                app:layout_constraintTop_toTopOf="@id/et_element_material"
+                app:layout_constraintHorizontal_weight="3"/>
 
-        <Button
-            android:id="@+id/bn_element_material_commit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/element_edit_material_add"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@+id/cb_element_material_gets_consumed"
-            app:layout_constraintTop_toTopOf="@id/et_element_material"
-            app:layout_constraintHorizontal_weight="3"/>
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_element_edit_material_chips"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_element_material"/>
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_element_edit_material_chips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_element_material"/>
 
 
-        <Button
-            android:id="@+id/bn_element_save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="0dp"
-            android:background="@color/colorPrimaryDark"
-            android:text="@string/element_edit_save"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cg_element_edit_material_chips" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <Button
+                android:id="@+id/bn_element_save"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="0dp"
+                android:background="@color/colorPrimaryDark"
+                android:text="@string/element_edit_save"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cg_element_edit_material_chips" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

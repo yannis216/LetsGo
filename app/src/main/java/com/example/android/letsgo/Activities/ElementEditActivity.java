@@ -1,12 +1,15 @@
 package com.example.android.letsgo.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -71,8 +74,10 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     //TODO Should handle this in AlertDialog at some point
     CheckBox mMaterialGetsConsumed;
     Button mMaterialCommiter;
-    NumberPicker mMinHumansPicker;
     Button mSaveButton;
+    ImageButton mMinHumansStarter;
+    NumberPicker mMinHumansPicker;
+    TextView mMinHumansTextView;
     ChipGroup mMaterialChipGroup;
     ArrayList<Material> materials = new ArrayList<Material>();
 
@@ -98,6 +103,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_element_edit, (ViewGroup) findViewById(R.id.content_frame));
+        setContentView(R.layout.activity_element_edit);
 
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
@@ -112,17 +118,27 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mUsedForAdder =findViewById(R.id.bn_element_usedFor_add);
         mUsedForChipGroup =findViewById(R.id.cg_element_edit_usedFor_chips);
         mPickPictureButton =findViewById(R.id.bn_element_picture_picker);
-        mMinHumansPicker=findViewById(R.id.np_element_min_humans);
         mSaveButton = findViewById(R.id.bn_element_save);
         mMaterialEdit=findViewById(R.id.et_element_material);
         mMaterialGetsConsumed=findViewById(R.id.cb_element_material_gets_consumed);
         mMaterialCommiter=findViewById(R.id.bn_element_material_commit);
         mMaterialChipGroup=findViewById(R.id.cg_element_edit_material_chips);
+        mMinHumansStarter = findViewById(R.id.ib_element_edit_min_humans_starter);
+        mMinHumansTextView = findViewById(R.id.tv_element_edit_num_humans);
 
 
-        mMinHumansPicker.setMinValue(1);
-        mMinHumansPicker.setMaxValue(32);
+        //mMinHumansPicker.setMinValue(1);
+        //mMinHumansPicker.setMaxValue(32);
         //TODO Could add a 32+ Value -> Maybe use .setDisplayedValues
+
+        mMinHumansStarter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMinHumansDialog();
+            }
+        });
+
+
         mUsedForEdit.setOnEditorActionListener(new DoneOnEditorActionListener());
 
         Intent intent = getIntent();
@@ -320,7 +336,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     private Element getElementFromInputs(List<String> materialIds){
         String createdTitle = mTitleEdit.getText().toString();
         String createdShortDesc =mShortDescEdit.getText().toString();
-        int createdMinHumans = mMinHumansPicker.getValue();
+        int createdMinHumans = Integer.parseInt(mMinHumansTextView.getText().toString());
         List<String> createdUsedFor = generateListFromChipGroup(mUsedForChipGroup);
         String timeOnSavePressed= String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
         Element element = new Element(createdTitle, createdShortDesc, createdUsedFor,createdMinHumans, materialIds, timeOnSavePressed, authUser.getUid());
@@ -505,14 +521,43 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     private void initiateUpdateMode(){
         mTitleEdit.setText(editableElement.getTitle());
         mShortDescEdit.setText(editableElement.getShortDesc());
+        mMinHumansTextView.setText(String.valueOf(editableElement.getMinNumberOfHumans()));
         for(String usedFor:editableElement.getUsedFor()){
             addUsedForChip(usedFor);
         }
         for(Material material : materials){
             addMaterialChip(material.getTitle());
         }
-        mMinHumansPicker.setValue(editableElement.getMinNumberOfHumans());
         mode = "update";
+    }
+
+    public void showMinHumansDialog(){
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this).inflate(
+                R.layout.dialog_element_min_people, viewGroup, false);
+
+        mMinHumansPicker = dialogView.findViewById(R.id.np_element_min_humans);
+        mMinHumansPicker.setMaxValue(32);
+        mMinHumansPicker.setMinValue(0);
+        mMinHumansPicker.setValue(Integer.parseInt(mMinHumansTextView.getText().toString()));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        builder.setPositiveButton(R.string.element_edit_save, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String minHumansString = String.valueOf(mMinHumansPicker.getValue());
+                mMinHumansTextView.setText(minHumansString);
+            }
+        });
+        builder.setNegativeButton(R.string.element_edit_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
     }
 

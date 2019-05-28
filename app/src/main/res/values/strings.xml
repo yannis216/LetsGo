@@ -8,6 +8,7 @@
     <string name="element_material_edit_text">eg. 10kg weights</string>
     <string name="element_detail_material_header">Materials: </string>
     <string name="element_edit_usedFor_more">More</string>
+    <string name="element_edit_usedFor_add">Edit #</string>
     <string name="element_edit_material_add">Add</string>
     <string name="element_edit_save">Save</string>
     <string name="element_edit_shortDesc">Type a short description here...</string>

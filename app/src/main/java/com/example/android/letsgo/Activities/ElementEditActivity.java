@@ -8,16 +8,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.KeyEvent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,12 +62,6 @@ import androidx.annotation.NonNull;
 public class ElementEditActivity extends BaseNavDrawActivity {
     EditText mTitleEdit;
     EditText mShortDescEdit;
-    //TODO Set Maximum number of character for edittexts that result in chips.
-    // Otherwise error on display because long chips dont fit in a row and cant get textwrapped
-    EditText mUsedForEdit;
-    Button mUsedForAdder;
-    ChipGroup mUsedForChipGroup;
-
     EditText mVideoUrlEdit;
     //TODO Set Maximum number of character for edittexts that result in chips.
     // Otherwise error on display because long chips dont fit in a row and cant get textwrapped
@@ -82,6 +76,17 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     ChipGroup mMaterialChipGroup;
     FloatingActionButton fab;
     ArrayList<Material> materials = new ArrayList<Material>();
+
+    Button mUsedForStarter;
+    List<String> newUsedFor = new ArrayList<>();
+    LinearLayout usedForLinearLayout;
+
+    LinearLayout mLlUsedForHash1;
+    EditText mEtUsedForHash1;
+    LinearLayout mLlUsedForHash2;
+    EditText mEtUsedForHash2;
+    LinearLayout mLlUsedForHash3;
+    EditText mEtUsedForHash3;
 
     ImageButton mPickPictureButton;
     String pictureUrl;
@@ -116,12 +121,11 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mPicture =findViewById(R.id.iv_element_edit_picture);
         mTitleEdit = findViewById(R.id.et_element_title);
         mShortDescEdit=findViewById(R.id.et_element_edit_shortDesc);
-        mUsedForEdit = findViewById(R.id.et_element_usedFor);
-        mUsedForAdder =findViewById(R.id.bn_element_usedFor_add);
-        mUsedForChipGroup =findViewById(R.id.cg_element_edit_usedFor_chips);
         mPickPictureButton =findViewById(R.id.bn_element_picture_picker);
+        usedForLinearLayout = findViewById(R.id.ll_element_edit_usedFor);
         mMinHumansStarter = findViewById(R.id.ib_element_edit_min_humans_starter);
         mMinHumansTextView = findViewById(R.id.tv_element_edit_num_humans);
+        mUsedForStarter=findViewById(R.id.bn_element_edit_usedFor_starter);
         fab = findViewById(R.id.fab_element_edit);
 
 
@@ -136,8 +140,12 @@ public class ElementEditActivity extends BaseNavDrawActivity {
             }
         });
 
-
-        mUsedForEdit.setOnEditorActionListener(new DoneOnEditorActionListener());
+        mUsedForStarter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showUsedForDialog();
+            }
+        });
 
         Intent intent = getIntent();
         editableElement = (Element) intent.getSerializableExtra("elementToEdit");
@@ -155,9 +163,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
     private Chip getChip(final ChipGroup entryChipGroup, String text) {
         final Chip chip = new Chip(this);
-        if(entryChipGroup == mUsedForChipGroup) {
-            chip.setChipDrawable(ChipDrawable.createFromResource(this, R.xml.used_for_edit_chip));
-        }else if(entryChipGroup == mMaterialChipGroup){
+        if(entryChipGroup == mMaterialChipGroup){
             chip.setChipDrawable(ChipDrawable.createFromResource(this, R.xml.material_edit_chip));
         }
         int paddingDp = (int) TypedValue.applyDimension(
@@ -188,12 +194,6 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     }
     private List<String> generateListFromChipGroup(ChipGroup chipGroup){
         List<String> strings = new ArrayList<String>();
-
-        //Do this for when the user forgets to press the add button on his last chip entry
-        if(!mUsedForEdit.getText().toString().equals("")){
-            strings.add(mUsedForEdit.getText().toString());
-            //TODO May have to ask user if he wants that
-        }
         for(int i=0; i<chipGroup.getChildCount(); i++){
             Chip chip =(Chip) chipGroup.getChildAt(i);
             strings.add(chip.getText().toString());
@@ -203,14 +203,6 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     }
 
     public void setOnClickListeners(){
-        mUsedForAdder.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                handleNewUsedForChipAdded();
-            }
-        });
-
 
         mPickPictureButton.setOnClickListener(new View.OnClickListener() {
 
@@ -276,17 +268,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         }
     }
 
-    private void handleNewUsedForChipAdded(){
-        String newUsedForChipText = mUsedForEdit.getText().toString();
-        mUsedForEdit.getText().clear();
-        addUsedForChip(newUsedForChipText);
 
-    }
-
-    private void addUsedForChip(String usedForTitle){
-        final Chip entryChip = getChip(mUsedForChipGroup, usedForTitle);
-        mUsedForChipGroup.addView(entryChip);
-    }
 
     private void handleNewMaterialChipAdded(){
         String newMaterialTitle = mMaterialEdit.getText().toString();
@@ -306,30 +288,12 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mMaterialGetsConsumed.setChecked(false);
     }
 
-    // TODO Könnte man glaub auch irgendwie in Utils packen
-    class DoneOnEditorActionListener implements TextView.OnEditorActionListener {
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if(v == mUsedForEdit) {
-                    //InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    //imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    //TODO Add upper lines to close keyboard after click on Done? Test with users whats better
-                    handleNewUsedForChipAdded();
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
     private Element getElementFromInputs(List<String> materialIds){
         String createdTitle = mTitleEdit.getText().toString();
         String createdShortDesc =mShortDescEdit.getText().toString();
         int createdMinHumans = Integer.parseInt(mMinHumansTextView.getText().toString());
-        List<String> createdUsedFor = generateListFromChipGroup(mUsedForChipGroup);
         String timeOnSavePressed= String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
-        Element element = new Element(createdTitle, createdShortDesc, createdUsedFor,createdMinHumans, materialIds, timeOnSavePressed, authUser.getUid());
+        Element element = new Element(createdTitle, createdShortDesc, newUsedFor,createdMinHumans, materialIds, timeOnSavePressed, authUser.getUid());
         if(mode.equals("update")){
             element.setElementId(editableElement.getElementId());
         }
@@ -512,9 +476,8 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mTitleEdit.setText(editableElement.getTitle());
         mShortDescEdit.setText(editableElement.getShortDesc());
         mMinHumansTextView.setText(String.valueOf(editableElement.getMinNumberOfHumans()));
-        for(String usedFor:editableElement.getUsedFor()){
-            addUsedForChip(usedFor);
-        }
+        newUsedFor= editableElement.getUsedFor();
+        buildUsedForHashTexts(newUsedFor);
         for(Material material : materials){
             addMaterialChip(material.getTitle());
         }
@@ -551,4 +514,74 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
     }
 
+    public void showUsedForDialog(){
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this).inflate(
+                R.layout.dialog_element_used_for, viewGroup, false);
+
+        mLlUsedForHash1 = dialogView.findViewById(R.id.ll_dialog_element_used_for_hash1);
+        mEtUsedForHash1 = dialogView.findViewById(R.id.et_dialog_element_used_for_hash1);
+        mLlUsedForHash2 = dialogView.findViewById(R.id.ll_dialog_element_used_for_hash2);
+        mEtUsedForHash2 = dialogView.findViewById(R.id.et_dialog_element_used_for_hash2);
+        mLlUsedForHash3 = dialogView.findViewById(R.id.ll_dialog_element_used_for_hash3);
+        mEtUsedForHash3 = dialogView.findViewById(R.id.et_dialog_element_used_for_hash3);
+        if(mode.equals("update")){
+            mEtUsedForHash1.setText(editableElement.getUsedFor().get(0));
+            mEtUsedForHash2.setText(editableElement.getUsedFor().get(1));
+            mEtUsedForHash3.setText(editableElement.getUsedFor().get(2));
+        }
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        builder.setPositiveButton(R.string.element_edit_save, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                List<String> usedForStrings = new ArrayList<>();
+                newUsedFor.clear();
+                if(!String.valueOf(mEtUsedForHash1).isEmpty()){
+                    String hash1 = mEtUsedForHash1.getText().toString();
+                    newUsedFor.add(hash1);
+                    usedForStrings.add(hash1);
+                }
+                if(!String.valueOf(mEtUsedForHash2).isEmpty()){
+                    String hash2 = mEtUsedForHash2.getText().toString();
+                    newUsedFor.add(hash2);
+                    usedForStrings.add(hash2);
+                }
+                if(!String.valueOf(mEtUsedForHash3).isEmpty()){
+                    String hash3 = mEtUsedForHash3.getText().toString();
+                    newUsedFor.add(hash3);
+                    usedForStrings.add(hash3);
+                }
+                buildUsedForHashTexts(usedForStrings);
+            }
+        });
+        builder.setNegativeButton(R.string.element_edit_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    public void buildUsedForHashTexts(List<String> usedForStrings){
+        usedForLinearLayout.removeAllViews();
+        for(String s : usedForStrings){
+            //Builds the Textview that holds the usedfor Strings
+            TextView textView = new TextView(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0,0,20,0);
+            textView.setLayoutParams(params);
+            textView.setBackgroundColor(this.getResources().getColor(R.color.backgroundUsedForChips));
+            textView.setPadding(5,0,5,0);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            textView.setGravity(Gravity.CENTER);
+            textView.setText("#"+s);
+            usedForLinearLayout.addView(textView);
+        }
+    }
 }

@@ -100,6 +100,11 @@
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:orientation="horizontal"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/element_edit_usedFor_add"
+                        android:id="@+id/bn_element_edit_usedFor_starter"/>
 
                 </LinearLayout>
                 <LinearLayout
@@ -138,14 +143,6 @@
                 android:layout_marginRight="8dp"/>
 
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_element_edit_usedFor_chips"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_element_usedFor"></com.google.android.material.chip.ChipGroup>
-
-
 
             <EditText
                 android:id="@+id/et_element_edit_shortDesc"
@@ -159,24 +156,6 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/v_element_edit_divider_1" />
             <!--TODO make this an autocompleteTextView that suggests already existing titles with a hint: Already existing: -->
-            <EditText
-                android:id="@+id/et_element_usedFor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/element_edit_usedFor"
-                android:imeOptions="actionDone"
-                android:inputType="textCapSentences|textAutoCorrect"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/bn_element_usedFor_add"
-                app:layout_constraintTop_toBottomOf="@id/et_element_edit_shortDesc" />
-
-            <Button
-                android:id="@+id/bn_element_usedFor_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/element_edit_usedFor_add"
-                app:layout_constraintLeft_toRightOf="@id/et_element_usedFor"
-                app:layout_constraintTop_toTopOf="@id/et_element_usedFor" />
 
             <!--<EditText
                 android:id="@+id/et_element_material"

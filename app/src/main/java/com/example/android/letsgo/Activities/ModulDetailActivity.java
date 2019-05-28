@@ -313,7 +313,7 @@ public class ModulDetailActivity extends BaseNavDrawActivity implements ModulDet
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
             textView.setGravity(Gravity.CENTER);
-            textView.setText(s);
+            textView.setText("#"+s);
             usedForLinearLayout.addView(textView);
         }
     }

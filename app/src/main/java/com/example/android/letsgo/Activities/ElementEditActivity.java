@@ -77,7 +77,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     FloatingActionButton fab;
     ArrayList<Material> materials = new ArrayList<Material>();
 
-    Button mUsedForStarter;
+    ImageButton mUsedForStarter;
     List<String> newUsedFor = new ArrayList<>();
     LinearLayout usedForLinearLayout;
 
@@ -123,7 +123,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         usedForLinearLayout = findViewById(R.id.ll_element_edit_usedFor);
         mMinHumansStarter = findViewById(R.id.ib_element_edit_min_humans_starter);
         mMinHumansTextView = findViewById(R.id.tv_element_edit_num_humans);
-        mUsedForStarter=findViewById(R.id.bn_element_edit_usedFor_starter);
+        mUsedForStarter=findViewById(R.id.ib_element_edit_usedFor_starter);
         fab = findViewById(R.id.fab_element_edit);
 
 
@@ -153,6 +153,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         }else{
             mode = "create";
         }
+        buildUsedForHashTexts(newUsedFor);
 
         setOnClickListeners();
 
@@ -471,11 +472,14 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     }
 
     private void initiateUpdateMode(){
+        if(editableElement.getPictureUrl() != null){
+            PictureUtil pictureUtil = new PictureUtil(this, mPicture, mTitleEdit);
+            pictureUtil.loadTitlePictureIntoImageView(editableElement.getPictureUrl());
+        }
         mTitleEdit.setText(editableElement.getTitle());
         mShortDescEdit.setText(editableElement.getShortDesc());
         mMinHumansTextView.setText(String.valueOf(editableElement.getMinNumberOfHumans()));
         newUsedFor= editableElement.getUsedFor();
-        buildUsedForHashTexts(newUsedFor);
         for(Material material : materials){
             addMaterialChip(material.getTitle());
         }
@@ -643,22 +647,37 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
     public void buildUsedForHashTexts(List<String> usedForStrings){
         usedForLinearLayout.removeAllViews();
-        for(String s : usedForStrings){
-            if(!s.isEmpty()){
-                //Builds the Textview that holds the usedfor Strings
-                TextView textView = new TextView(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(0,0,20,0);
-                textView.setLayoutParams(params);
-                textView.setBackgroundColor(this.getResources().getColor(R.color.backgroundUsedForChips));
-                textView.setPadding(5,0,5,0);
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-                textView.setGravity(Gravity.CENTER);
-                textView.setText("#"+s);
-                usedForLinearLayout.addView(textView);
-            }
+        if(usedForStrings.size()<1){
+            TextView textView = new TextView(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0,0,20,0);
+            textView.setLayoutParams(params);
+            textView.setBackgroundColor(this.getResources().getColor(R.color.backgroundUsedForChips));
+            textView.setPadding(5,0,5,0);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            textView.setGravity(Gravity.CENTER);
+            textView.setText("Add your # here");
+            usedForLinearLayout.addView(textView);
+        }else{
+            for(String s : usedForStrings){
+                if(!s.isEmpty()){
+                    //Builds the Textview that holds the usedfor Strings
+                    TextView textView = new TextView(this);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0,0,20,0);
+                    textView.setLayoutParams(params);
+                    textView.setBackgroundColor(this.getResources().getColor(R.color.backgroundUsedForChips));
+                    textView.setPadding(5,0,5,0);
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setText("#"+s);
+                    usedForLinearLayout.addView(textView);
+                }
 
+            }
         }
+
     }
 }

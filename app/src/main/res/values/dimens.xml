@@ -7,4 +7,6 @@
     <dimen name="modul_thumbnail_dimens">50dp</dimen>
 
     <dimen name="modul_title_bottom_radius">20dp</dimen>
+
+    <dimen name="standard_text_size">16sp</dimen>
 </resources>

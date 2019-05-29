@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_delete_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_insert_photo_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,11 +28,12 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="height" value="12" />
-                            <entry key="outputName" value="ic_delete_black_12dp" />
+                            <entry key="color" value="bdbdbd" />
+                            <entry key="height" value="16" />
+                            <entry key="outputName" value="ic_insert_photo_primarydark_16dp" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\Yannis" />
-                            <entry key="width" value="12" />
+                            <entry key="width" value="16" />
                           </map>
                         </option>
                       </PersistentState>

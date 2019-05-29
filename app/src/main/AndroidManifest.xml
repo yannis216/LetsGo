@@ -19,7 +19,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Activities.UserCreationActivity" />
         <activity android:name=".Activities.ModulDetailActivity" />
-        <activity android:name=".Activities.ModulEditActivity" />
+        <activity
+            android:name=".Activities.ModulEditActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".Activities.ModulListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +31,9 @@
         </activity>
         <activity android:name=".Activities.ElementListActivity" />
         <activity android:name=".Activities.ElementDetailActivity" />
-        <activity android:name=".Activities.ElementEditActivity" />
+        <activity
+            android:name=".Activities.ElementEditActivity"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

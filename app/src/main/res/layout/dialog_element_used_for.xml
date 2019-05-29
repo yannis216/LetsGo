@@ -70,5 +70,6 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/element_edit_usedFor_more"/>
+        android:text="@string/element_edit_usedFor_more"
+        android:id="@+id/bn_element_edit_usedFor_adder"/>
 </LinearLayout>

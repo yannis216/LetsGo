@@ -81,12 +81,10 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     List<String> newUsedFor = new ArrayList<>();
     LinearLayout usedForLinearLayout;
 
-    LinearLayout mLlUsedForHash1;
     EditText mEtUsedForHash1;
-    LinearLayout mLlUsedForHash2;
     EditText mEtUsedForHash2;
-    LinearLayout mLlUsedForHash3;
     EditText mEtUsedForHash3;
+    Button mBnElementUsedForAdder;
 
     ImageButton mPickPictureButton;
     String pictureUrl;
@@ -519,42 +517,118 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         View dialogView = LayoutInflater.from(this).inflate(
                 R.layout.dialog_element_used_for, viewGroup, false);
 
-        mLlUsedForHash1 = dialogView.findViewById(R.id.ll_dialog_element_used_for_hash1);
         mEtUsedForHash1 = dialogView.findViewById(R.id.et_dialog_element_used_for_hash1);
-        mLlUsedForHash2 = dialogView.findViewById(R.id.ll_dialog_element_used_for_hash2);
         mEtUsedForHash2 = dialogView.findViewById(R.id.et_dialog_element_used_for_hash2);
-        mLlUsedForHash3 = dialogView.findViewById(R.id.ll_dialog_element_used_for_hash3);
         mEtUsedForHash3 = dialogView.findViewById(R.id.et_dialog_element_used_for_hash3);
+        final LinearLayout mLLHash1=dialogView.findViewById(R.id.ll_dialog_element_used_for_hash1);
+        final LinearLayout mLLHash2=dialogView.findViewById(R.id.ll_dialog_element_used_for_hash2);
+        final LinearLayout mLLHash3=dialogView.findViewById(R.id.ll_dialog_element_used_for_hash3);
         if(mode.equals("update")){
-            mEtUsedForHash1.setText(editableElement.getUsedFor().get(0));
-            mEtUsedForHash2.setText(editableElement.getUsedFor().get(1));
-            mEtUsedForHash3.setText(editableElement.getUsedFor().get(2));
+
+            if(editableElement.getUsedFor().size()>0){
+                newUsedFor.set(0, editableElement.getUsedFor().get(0));
+            }if(editableElement.getUsedFor().size()>1){
+                newUsedFor.set(1, editableElement.getUsedFor().get(1));
+                mLLHash2.setVisibility(View.VISIBLE);
+            }if(editableElement.getUsedFor().size()>2){
+                newUsedFor.set(2, editableElement.getUsedFor().get(2));
+                mLLHash3.setVisibility(View.VISIBLE);
+            }
+        }
+        if(newUsedFor.size()>0){
+            mEtUsedForHash1.setText(newUsedFor.get(0));
+        }
+        if(newUsedFor.size()>1){
+            mEtUsedForHash2.setText(newUsedFor.get(1));
+            mLLHash2.setVisibility(View.VISIBLE);
+        }if(newUsedFor.size()>2){
+            mEtUsedForHash3.setText(newUsedFor.get(2));
+            mLLHash3.setVisibility(View.VISIBLE);
         }
 
+        mBnElementUsedForAdder= dialogView.findViewById(R.id.bn_element_edit_usedFor_adder);
+        mBnElementUsedForAdder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mLLHash2.getVisibility() == View.GONE){
+                    mLLHash2.setVisibility(View.VISIBLE);
+                    mEtUsedForHash2.requestFocus();
+                }else if (mLLHash2.getVisibility() == View.VISIBLE && mLLHash3.getVisibility() == View.GONE){
+                    mLLHash3.setVisibility(View.VISIBLE);
+                    mEtUsedForHash3.requestFocus();
+                    mBnElementUsedForAdder.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+        final ImageButton mBnElementUsedForDeleter1=dialogView.findViewById(R.id.ib_dialog_element_used_for_hash1);
+        final ImageButton mBnElementUsedForDeleter2=dialogView.findViewById(R.id.ib_dialog_element_used_for_hash2);
+        final ImageButton mBnElementUsedForDeleter3=dialogView.findViewById(R.id.ib_dialog_element_used_for_hash3);
+        mBnElementUsedForDeleter1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEtUsedForHash1.getText().clear();
+                if(!mEtUsedForHash2.getText().toString().equals("")){
+                    mEtUsedForHash1.setText(mEtUsedForHash2.getText());
+                    mEtUsedForHash2.getText().clear();
+                    mLLHash2.setVisibility(View.GONE);
+                }else{
+                    mLLHash2.setVisibility(View.GONE);
+                    mBnElementUsedForAdder.setVisibility(View.VISIBLE);
+                }
+                if(!mEtUsedForHash3.getText().toString().equals("")){
+                    mEtUsedForHash2.setText(mEtUsedForHash3.getText());
+                    mLLHash2.setVisibility(View.VISIBLE);
+                    mEtUsedForHash3.getText().clear();
+                    mLLHash3.setVisibility(View.GONE);
+                    mBnElementUsedForAdder.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        mBnElementUsedForDeleter2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEtUsedForHash2.getText().clear();
+                if(!mEtUsedForHash3.getText().toString().equals("")){
+                    mEtUsedForHash2.setText(mEtUsedForHash3.getText());
+                    mEtUsedForHash3.getText().clear();
+                    mLLHash3.setVisibility(View.GONE);
+                    mBnElementUsedForAdder.setVisibility(View.VISIBLE);
+                }else{
+                    mLLHash3.setVisibility(View.GONE);
+                    mLLHash2.setVisibility(View.GONE);
+                }
+            }
+        });
+        mBnElementUsedForDeleter3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEtUsedForHash3.getText().clear();
+                mLLHash3.setVisibility(View.GONE);
+                mBnElementUsedForAdder.setVisibility(View.VISIBLE);
+            }
+        });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
         builder.setPositiveButton(R.string.element_edit_save, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                List<String> usedForStrings = new ArrayList<>();
                 newUsedFor.clear();
                 if(!String.valueOf(mEtUsedForHash1).isEmpty()){
                     String hash1 = mEtUsedForHash1.getText().toString();
                     newUsedFor.add(hash1);
-                    usedForStrings.add(hash1);
                 }
                 if(!String.valueOf(mEtUsedForHash2).isEmpty()){
                     String hash2 = mEtUsedForHash2.getText().toString();
                     newUsedFor.add(hash2);
-                    usedForStrings.add(hash2);
                 }
                 if(!String.valueOf(mEtUsedForHash3).isEmpty()){
                     String hash3 = mEtUsedForHash3.getText().toString();
                     newUsedFor.add(hash3);
-                    usedForStrings.add(hash3);
                 }
-                buildUsedForHashTexts(usedForStrings);
+                buildUsedForHashTexts(newUsedFor);
             }
         });
         builder.setNegativeButton(R.string.element_edit_cancel, new DialogInterface.OnClickListener() {
@@ -570,18 +644,21 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     public void buildUsedForHashTexts(List<String> usedForStrings){
         usedForLinearLayout.removeAllViews();
         for(String s : usedForStrings){
-            //Builds the Textview that holds the usedfor Strings
-            TextView textView = new TextView(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0,0,20,0);
-            textView.setLayoutParams(params);
-            textView.setBackgroundColor(this.getResources().getColor(R.color.backgroundUsedForChips));
-            textView.setPadding(5,0,5,0);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-            textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-            textView.setGravity(Gravity.CENTER);
-            textView.setText("#"+s);
-            usedForLinearLayout.addView(textView);
+            if(!s.isEmpty()){
+                //Builds the Textview that holds the usedfor Strings
+                TextView textView = new TextView(this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(0,0,20,0);
+                textView.setLayoutParams(params);
+                textView.setBackgroundColor(this.getResources().getColor(R.color.backgroundUsedForChips));
+                textView.setPadding(5,0,5,0);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+                textView.setGravity(Gravity.CENTER);
+                textView.setText("#"+s);
+                usedForLinearLayout.addView(textView);
+            }
+
         }
     }
 }

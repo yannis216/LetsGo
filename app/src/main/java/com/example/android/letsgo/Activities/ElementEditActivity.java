@@ -33,6 +33,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
@@ -56,6 +57,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 
 // TODO There is no Input Validation here. Think about security concerns etc
@@ -108,7 +111,6 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_element_edit, (ViewGroup) findViewById(R.id.content_frame));
-        setContentView(R.layout.activity_element_edit);
 
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
@@ -125,6 +127,18 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mMinHumansTextView = findViewById(R.id.tv_element_edit_num_humans);
         mUsedForStarter=findViewById(R.id.ib_element_edit_usedFor_starter);
         fab = findViewById(R.id.fab_element_edit);
+
+        final DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+
+        BottomAppBar bar = findViewById(R.id.bar_element_edit);
+        setSupportActionBar(bar);
+
+        bar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
 
 
         //mMinHumansPicker.setMinValue(1);
@@ -511,8 +525,22 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
             }
         });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        final AlertDialog alertDialog2 = builder.create();
+        alertDialog2.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button negButton = alertDialog2.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0,0,16,0);
+                negButton.setLayoutParams(params);
+
+            }
+        });
+        alertDialog2.show();
 
     }
 
@@ -641,7 +669,22 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
             }
         });
-        AlertDialog alertDialog = builder.create();
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button negButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0,0,16,0);
+                negButton.setLayoutParams(params);
+
+            }
+        });
         alertDialog.show();
     }
 

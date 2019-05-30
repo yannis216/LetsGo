@@ -45,6 +45,7 @@ public class DoActivity extends BaseNavDrawActivity {
     CountDownTimer countDown;
     Modul givenModul;
     LinearLayout mLlUsedFors;
+    ProgressBar mProgressbar;
 
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
@@ -204,6 +205,9 @@ public class DoActivity extends BaseNavDrawActivity {
         if(countDown!= null){
             countDown.cancel();
         }
+        if(mProgressbar!=null){
+            mProgressbar.setProgress(0);
+        }
         currentDoingActivity.setCurrentPosition(currentDoingActivity.getCurrentPosition()+1);
         updateUi();
     }
@@ -212,12 +216,16 @@ public class DoActivity extends BaseNavDrawActivity {
         if(countDown!= null){
             countDown.cancel();
         }
+        if(mProgressbar!=null){
+            mProgressbar.setProgress(0);
+        }
         currentDoingActivity.setCurrentPosition(currentDoingActivity.getCurrentPosition()-1);
         updateUi();
     }
 
     private void startCountdownWithMillis(final ModulElement currentModulElement, final int millis){
-
+        mProgressbar = findViewById(R.id.pb_do_modulelement_progress);
+        mProgressbar.setMax(millis/1000);
 
         //Constructs the countdown with a short delay of 499ms (Feels better for the user)
         countDown = new CountDownTimer(millis+499, 1000) {
@@ -230,6 +238,10 @@ public class DoActivity extends BaseNavDrawActivity {
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % TimeUnit.HOURS.toMinutes(1),
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % TimeUnit.MINUTES.toSeconds(1));
                 mMultiplierView.setText(hms);
+                long progressLong = millis/1000 - millisUntilFinished/1000;
+                int progress = (int) progressLong;
+
+                mProgressbar.setProgress(progress);
 
                 switch(currentSecondLeft){
                     case 5:

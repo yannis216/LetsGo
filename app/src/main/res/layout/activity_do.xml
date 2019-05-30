@@ -129,7 +129,13 @@
         android:textAlignment="center"/>
 
 
-
+    <ProgressBar
+        android:id="@+id/pb_do_modulelement_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/customprogressbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
     <!-- TODO Change bottom Constraint of two bottom thingies -->
     <LinearLayout
         android:layout_width="match_parent"

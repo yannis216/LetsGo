@@ -5,11 +5,14 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -41,6 +44,7 @@ public class DoActivity extends BaseNavDrawActivity {
     Activity currentDoingActivity;
     CountDownTimer countDown;
     Modul givenModul;
+    LinearLayout mLlUsedFors;
 
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
@@ -76,7 +80,7 @@ public class DoActivity extends BaseNavDrawActivity {
         }
 
         mConstraintLayout = findViewById(R.id.cl_do);
-        mImageView = findViewById(R.id.iv_do_modulelement);
+        mImageView = findViewById(R.id.iv_do_modulelement_picture);
         mMultiplierView =  findViewById(R.id.tv_do_modulelement_multiplier);
         mTitleView = findViewById(R.id.tv_do_modulelement_title);
         mMinHumansView = findViewById(R.id.tv_do_modulelement_minHumans);
@@ -84,6 +88,7 @@ public class DoActivity extends BaseNavDrawActivity {
         mNextElementButton = findViewById(R.id.ib_do_next);
         mPreviousElementButton = findViewById(R.id.ib_do_prev);
         mSavingActivityBar = findViewById(R.id.pb_saving_activity);
+        mLlUsedFors = findViewById(R.id.ll_do_modulelement_usedFor);
 
         mPreviousElementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,6 +162,8 @@ public class DoActivity extends BaseNavDrawActivity {
         mTitleView.setText(currentModulElement.getTitle());
 
         mMinHumansView.setText(String.valueOf(currentModulElement.getMinNumberOfHumans()));
+
+        generateUsedForList(currentModulElement);
 
 
         //Set Content regarding the next Element
@@ -272,6 +279,27 @@ public class DoActivity extends BaseNavDrawActivity {
         super.onPostResume();
         if(countDown!=null){
             countDown.start();
+        }
+    }
+
+    private void generateUsedForList(ModulElement currentM){
+        mLlUsedFors.removeAllViews();
+        for(String s : currentM.getUsedFor()){
+            if(!s.isEmpty()){
+                //Builds the Textview that holds the usedfor Strings
+                TextView textView = new TextView(this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(0,0,20,0);
+                textView.setLayoutParams(params);
+                textView.setBackgroundColor(this.getResources().getColor(R.color.backgroundUsedForChips));
+                textView.setPadding(5,0,5,0);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+                textView.setGravity(Gravity.CENTER);
+                textView.setText("#"+s);
+                mLlUsedFors.addView(textView);
+            }
+
         }
     }
 }

@@ -306,7 +306,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         String createdShortDesc =mShortDescEdit.getText().toString();
         int createdMinHumans = Integer.parseInt(mMinHumansTextView.getText().toString());
         String timeOnSavePressed= String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
-        Element element = new Element(createdTitle, createdShortDesc, newUsedFor,createdMinHumans, materialIds, timeOnSavePressed, authUser.getUid());
+        Element element = new Element(createdTitle, createdShortDesc, newUsedFor,createdMinHumans, materialIds, timeOnSavePressed, authUser.getUid(), authUser.getDisplayName());
         if(mode.equals("update")){
             element.setElementId(editableElement.getElementId());
         }

@@ -4,11 +4,50 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/ll_element_list_item">
-    <CheckedTextView
-        android:id="@+id/ctv_element_list_item_title"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:textSize="24sp"
-        />
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/iv_element_list_item_thumb" />
+    <ProgressBar
+        android:id="@+id/pb_element_list_picture_load"
+        android:layout_width="@dimen/element_thumbnail_dimens"
+        android:layout_height="@dimen/element_thumbnail_dimens"
+        android:layout_marginEnd="5dp"
+        android:visibility="gone"/>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <CheckedTextView
+            android:id="@+id/ctv_element_list_item_title"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textAlignment="viewStart"
+            android:gravity="start|bottom"
+            android:textSize="24sp"
+            android:text="TestElement"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimaryHeader"
+            />
+        <LinearLayout
+            android:id="@+id/ll_element_list_usedFor_layout"
+            android:layout_width="match_parent"
+            android:layout_height="16sp"
+            android:orientation="horizontal"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_element_list_item_editor_name"
+            android:textAlignment="viewStart"
+            android:gravity="start"
+            android:textSize="12sp"
+            android:text="Editor Name"
+            android:textColor="@color/colorPrimaryText"/>
+    </LinearLayout>
+
+
 
 </LinearLayout>

@@ -7,6 +7,7 @@ public class Element implements Serializable {
 
     private String elementId;
     private String creatorId;
+    private String creatorName;
     private String title;
     private String shortDesc;
     //What do you achieve with it, what do you use it for? E.G. Lower Back for Deadlift
@@ -34,7 +35,7 @@ public class Element implements Serializable {
     public Element() {
     }
 
-    public Element(String title, String shortDesc, List<String> usedFor, int minNumberOfHumans, List<String> neededMaterialsIds, String timeCreated, String creatorId) {
+    public Element(String title, String shortDesc, List<String> usedFor, int minNumberOfHumans, List<String> neededMaterialsIds, String timeCreated, String creatorId, String creatorName) {
         this.title = title;
         this.shortDesc =shortDesc;
         this.usedFor = usedFor;
@@ -42,6 +43,7 @@ public class Element implements Serializable {
         this.neededMaterialsIds = neededMaterialsIds;
         this.timeCreated = timeCreated;
         this.creatorId = creatorId;
+        this.creatorName = creatorName;
     }
 
     public String getTitle() {
@@ -132,6 +134,14 @@ public class Element implements Serializable {
         this.creatorId = creatorId;
     }
 
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
     //Copy function so that on creation of subclasses its not always necessary to input every single variable
     public void copy(Element element){
         this.title = element.getTitle();
@@ -143,7 +153,9 @@ public class Element implements Serializable {
         this.timeCreated = element.getTimeCreated();
         this.neededMaterialsIds = element.getNeededMaterialsIds();
         this.creatorId = element.getCreatorId();
+        this.creatorName = element.getCreatorName();
         this.elementId = element.getElementId();
+
 
     }
 

@@ -64,9 +64,6 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
         db = FirebaseFirestore.getInstance();
         mFirebaseAuth =FirebaseAuth.getInstance();
 
-
-
-
         mRvModuls = findViewById(R.id.rv_modul_list);
         mLayoutManager = new LinearLayoutManager(this);
         mRvModuls.setLayoutManager(mLayoutManager);
@@ -81,8 +78,6 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-
-
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +115,7 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
                 }else{
                     onSignedOutCleanUp();
                     //user is signed out
+                    Log.e("oStartActivity", "For Result has been called");
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
@@ -134,6 +130,7 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
                 }
             }
         };
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override

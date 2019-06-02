@@ -32,12 +32,14 @@ public class BaseNavDrawActivity extends AppCompatActivity {
 
         mFirebaseAuth =FirebaseAuth.getInstance();
         authUser = mFirebaseAuth.getCurrentUser();
-
         NavigationView navigationView = findViewById(R.id.nav_view);
 
         View headerView = navigationView.getHeaderView(0);
         TextView navUsername = (TextView) headerView.findViewById(R.id.tv_nav_drawer_header_userName);
-        navUsername.setText(authUser.getDisplayName());
+        if(authUser !=null){
+            navUsername.setText(authUser.getDisplayName());
+        }
+
 
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -63,6 +65,8 @@ public class BaseNavDrawActivity extends AppCompatActivity {
                                 Intent startElementEditActivityIntent = new Intent(getApplicationContext(), ElementEditActivity.class);
                                 startActivity(startElementEditActivityIntent);
                                 break;
+                            case R.id.nav_logout:
+                                mFirebaseAuth.signOut();
                         }
 
                         return true;

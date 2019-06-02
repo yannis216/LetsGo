@@ -130,7 +130,6 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
                 }
             }
         };
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -138,6 +137,7 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RC_SIGN_IN){
             if(resultCode == RESULT_OK){
+                authUser = mFirebaseAuth.getCurrentUser();
             }
             else if (resultCode ==RESULT_CANCELED){
                 Toast.makeText(ModulListActivity.this, "Sign in cancelled", Toast.LENGTH_SHORT).show();

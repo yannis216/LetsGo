@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.letsgo.R;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -28,7 +32,6 @@ public class BaseNavDrawActivity extends AppCompatActivity {
 
         //TODO DrawerLayout
         drawerLayout = findViewById(R.id.drawer_layout);
-        TextView userNameView = findViewById(R.id.tv_nav_drawer_header_userName);
 
         mFirebaseAuth =FirebaseAuth.getInstance();
         authUser = mFirebaseAuth.getCurrentUser();
@@ -66,7 +69,16 @@ public class BaseNavDrawActivity extends AppCompatActivity {
                                 startActivity(startElementEditActivityIntent);
                                 break;
                             case R.id.nav_logout:
-                                mFirebaseAuth.signOut();
+                                AuthUI.getInstance()
+                                        .signOut(getApplicationContext())
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Intent startModulListActivityIntent2 = new Intent(getApplicationContext(), ModulListActivity.class);
+                                                startActivity(startModulListActivityIntent2);
+                                            }
+                                        });
+
+                                
                         }
 
                         return true;

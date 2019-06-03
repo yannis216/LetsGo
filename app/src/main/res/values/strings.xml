@@ -39,4 +39,7 @@
 
     <!-- For Modul Detaiol Views -->
     <string name="modul_detail_elements_tab_title">Elements</string>
+
+    <!-- For User Creation -->
+    <string name="user_creation_name_info">Username:</string>
 </resources>

@@ -78,7 +78,7 @@ public class BaseNavDrawActivity extends AppCompatActivity {
                                             }
                                         });
 
-                                
+
                         }
 
                         return true;

@@ -42,4 +42,5 @@
 
     <!-- For User Creation -->
     <string name="user_creation_name_info">Username:</string>
+    <string name="user_creation_saved_successfully">Saved successfully!</string>
 </resources>

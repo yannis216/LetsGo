@@ -116,7 +116,7 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
         mMinHumansView.setText("min. " + String.valueOf(element.getMinNumberOfHumans()));
         buildUsedForHashTexts(displayedElement.getUsedFor());
         if(displayedElement.getPictureUrl() != null){
-            PictureUtil pictureUtil = new PictureUtil(this, mPictureView, mTitleView);
+            PictureUtil pictureUtil = new PictureUtil(this, mPictureView);
             pictureUtil.loadTitlePictureIntoImageView(displayedElement.getPictureUrl());
         }
     }

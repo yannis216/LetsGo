@@ -155,7 +155,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
             }
             if(currentModul != null){
                 if(currentModul.getPictureUrl()!=null){
-                    PictureUtil pictureUtil = new PictureUtil(ModulEditActivity.this, mImageView, mTitleView);
+                    PictureUtil pictureUtil = new PictureUtil(ModulEditActivity.this, mImageView);
                     pictureUtil.loadTitlePictureIntoImageView(currentModul.getPictureUrl());
                 }
             }
@@ -268,7 +268,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     pictureUrl = inputUri.toString();
                     currentModul.setPictureUrl(pictureUrl);
                     if (pictureUrl != null) {
-                        PictureUtil pictureUtil = new PictureUtil(ModulEditActivity.this, mImageView, mTitleView);
+                        PictureUtil pictureUtil = new PictureUtil(ModulEditActivity.this, mImageView);
                         pictureUtil.loadTitlePictureIntoImageView(pictureUrl);
                     }
                 } catch (FileNotFoundException e) {

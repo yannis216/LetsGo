@@ -3,7 +3,6 @@ package com.example.android.letsgo.Utils;
 import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Modul;
@@ -29,13 +28,11 @@ public class PictureUtil {
     int titleColor;
     int titleBackgroundColor;
     ImageView imageView;
-    TextView titleView;
     CallbackHelper callbackHelper;
 
-    public PictureUtil(Context current, ImageView imageView, TextView titleView){
+    public PictureUtil(Context current, ImageView imageView){
         this.context = current;
         this.imageView = imageView;
-        this.titleView = titleView;
     }
 
     public PictureUtil(Context current, ImageView imageView, CallbackHelper callbackHelper){

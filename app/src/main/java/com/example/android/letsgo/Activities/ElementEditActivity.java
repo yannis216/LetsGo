@@ -271,7 +271,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                     Uri inputUri = data.getData();
                     pictureUrl = inputUri.toString();
                     if (pictureUrl != null) {
-                        PictureUtil pictureUtil = new PictureUtil(ElementEditActivity.this, mPicture, mTitleEdit);
+                        PictureUtil pictureUtil = new PictureUtil(ElementEditActivity.this, mPicture);
                         pictureUtil.loadTitlePictureIntoImageView(pictureUrl);
                     }
                 } catch (FileNotFoundException e) {
@@ -487,7 +487,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
     private void initiateUpdateMode(){
         if(editableElement.getPictureUrl() != null){
-            PictureUtil pictureUtil = new PictureUtil(this, mPicture, mTitleEdit);
+            PictureUtil pictureUtil = new PictureUtil(this, mPicture);
             pictureUtil.loadTitlePictureIntoImageView(editableElement.getPictureUrl());
         }
         mTitleEdit.setText(editableElement.getTitle());

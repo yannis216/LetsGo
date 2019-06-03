@@ -3,8 +3,8 @@
     package="com.example.android.letsgo">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.AddModulRatingActivity"></activity>
+        <activity android:name=".Activities.UserListActivity"></activity>
+        <activity android:name=".Activities.AddModulRatingActivity" />
         <activity android:name=".Activities.BaseNavDrawActivity" />
         <activity
             android:name=".Activities.DoActivity"
@@ -22,7 +23,7 @@
         <activity android:name=".Activities.ModulDetailActivity" />
         <activity
             android:name=".Activities.ModulEditActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".Activities.ModulListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +35,7 @@
         <activity android:name=".Activities.ElementDetailActivity" />
         <activity
             android:name=".Activities.ElementEditActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

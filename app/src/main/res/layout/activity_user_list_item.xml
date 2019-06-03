@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.MaterialComponents.CardView"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    app:cardElevation="3dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/ll_user_list_item"
+    android:layout_marginTop="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:id="@+id/iv_user_list_item_thumb"
+            android:src="@mipmap/ic_launcher_round"/>
+        <ProgressBar
+            android:id="@+id/pb_user_list_picture_load"
+            android:layout_width="@dimen/element_thumbnail_dimens"
+            android:layout_height="@dimen/element_thumbnail_dimens"
+            android:layout_marginEnd="5dp"
+            android:visibility="gone"/>
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/tv_user_list_user_name"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textAlignment="viewStart"
+            android:gravity="start"
+            android:textSize="24sp"
+            android:text="Mr. Example"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimaryHeader"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

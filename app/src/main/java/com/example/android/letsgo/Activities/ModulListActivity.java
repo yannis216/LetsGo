@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.letsgo.Adapter.ModulListAdapter;
@@ -49,6 +50,10 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
     List<Modul> moduls;
     List<SocialModulInfo> socialModulInfos;
     int counter;
+    User filterUser;
+    TextView mFilterCreatedBy;
+
+    String filterMode;
 
     //Arbitrary sign in code for google auth sign in flow
     private static final int RC_SIGN_IN = 567;
@@ -63,14 +68,25 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
 
         db = FirebaseFirestore.getInstance();
         mFirebaseAuth =FirebaseAuth.getInstance();
+        authUser = mFirebaseAuth.getCurrentUser();
 
         mRvModuls = findViewById(R.id.rv_modul_list);
         mLayoutManager = new LinearLayoutManager(this);
         mRvModuls.setLayoutManager(mLayoutManager);
+        mFilterCreatedBy = findViewById(R.id.tv_modul_list_filter_created_by);
         BottomAppBar bar= (BottomAppBar) findViewById(R.id.bar_activity_modul_list);
         FloatingActionButton fab =(FloatingActionButton) findViewById(R.id.fab_activity_modul_list);
 
         drawerLayout = findViewById(R.id.drawer_layout);
+
+        Intent intent = getIntent();
+        User filterUserGivenByIntent = (User) intent.getSerializableExtra("filterUser");
+        if(filterUserGivenByIntent != null){
+            filterMode = "selectedCreator";
+            filterUser=filterUserGivenByIntent;
+        }else{
+            filterMode = "byAuthUser";
+        }
 
         bar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +146,11 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
                 }
             }
         };
+        if(authUser != null){
+            populateBasicUi();
+        }
+
+
     }
 
     @Override
@@ -147,8 +168,15 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
     }
 
     private void getModulsFromDatabase(){
+        String filteredById;
+        if(filterUser != null){
+            filteredById = filterUser.getAuthId();
+        }else{
+            filteredById = authUser.getUid();
+        }
+
         moduls = new ArrayList<Modul>();
-        db.collection("moduls").whereEqualTo("editorUid", authUser.getUid())
+        db.collection("moduls").whereEqualTo("editorUid", filteredById)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -235,12 +263,23 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
         // the database and we would get an error if we get them from DB before USer is authenticated
         if(moduls ==null){
             getModulsFromDatabase();
+            populateBasicUi();
         }
 
     }
 
     private void onSignedOutCleanUp(){
 
+    }
+
+    private void populateBasicUi(){
+        String filteredByName;
+        if(filterUser != null){
+            filteredByName = filterUser.getDisplayName();
+        }else{
+            filteredByName = authUser.getDisplayName();
+        }
+        mFilterCreatedBy.setText(getResources().getString(R.string.modul_list_filter_by_creator) + " " +filteredByName);
     }
 
 

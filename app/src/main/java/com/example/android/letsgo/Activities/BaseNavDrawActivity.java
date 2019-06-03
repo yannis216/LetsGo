@@ -61,6 +61,7 @@ public class BaseNavDrawActivity extends AppCompatActivity {
                                 startActivity(startModulEditActivityIntent);
                                 break;
                             case R.id.nav_moduls_created_by_me:
+                                String userId = authUser.getUid();
                                 Intent startModulListActivityIntent = new Intent(getApplicationContext(), ModulListActivity.class);
                                 startActivity(startModulListActivityIntent);
                                 break;

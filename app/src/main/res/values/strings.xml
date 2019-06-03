@@ -25,6 +25,10 @@
         <item>Meters</item>
     </string-array>
 
+    <!-- For Modul List-->
+    <string name="modul_list_header">Modules</string>
+    <string name="modul_list_filter_by_creator">Created by:</string>
+
     <!-- For Modul List Items -->
     <string name="modul_list_item_share">Share</string>
     <string name="modul_list_item_do">Do</string>

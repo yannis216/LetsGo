@@ -108,7 +108,7 @@ public class UserListActivity extends BaseNavDrawActivity implements UserListAda
     @Override
     public void onClick(User clickedUser) {
         Intent startModulListActivityIntent = new Intent(this, ModulListActivity.class);
-        startModulListActivityIntent.putExtra("user", clickedUser);
+        startModulListActivityIntent.putExtra("filterUser", clickedUser);
         startActivity(startModulListActivityIntent);
 
     }

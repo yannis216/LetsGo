@@ -28,11 +28,11 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:navigationIcon="@drawable/ic_menu_black_24dp"
         />
-    <!-- TODO den könnte man individuell (Form)im Sinne des Logos designen -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <!-- TODO Suchfunktion einfügen für Fab -->
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_activity_user_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_add_black_24dp"
-        app:layout_anchor="@id/bar_activity_user_list"/>
+        app:layout_anchor="@id/bar_activity_user_list"/>-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

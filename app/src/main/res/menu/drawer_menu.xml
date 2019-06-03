@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_user_list"
+            android:icon="@drawable/ic_contacts_primarydark_24dp"
+            android:title="All Users"/>
+        <item
             android:id="@+id/nav_moduls_created_by_me"
             android:icon="@drawable/baseline_dehaze_black_24dp"
             android:title="Moduls created by me" />
@@ -17,6 +21,7 @@
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="Logout"/>
+
 
     </group>
 </menu>

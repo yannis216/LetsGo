@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Modul;
+import com.example.android.letsgo.Classes.User;
 import com.example.android.letsgo.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -228,6 +229,60 @@ public class PictureUtil {
                             .into(imageView);
 
                     Log.e("onSuccess", "Modul Thumbnail has been saved to localFile");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    if(callbackHelper != null){
+                        callbackHelper.onFailure();
+                    }
+                }
+            });
+        }
+
+
+
+    }
+
+    public void saveUserThumbnailFromDatabaseToLocalStorage(FirebaseStorage storage, User user){
+        final File localFile;
+        String userId = user.getAuthId();
+        //TODO Change Directory to an external storage (?)
+        String usersPath = context.getFilesDir().getAbsolutePath() + File.separator + "user";
+        File myDir = new File(usersPath);
+        myDir.mkdirs();
+        String fname = userId +"_thumbnail";
+        localFile = new File(myDir, fname);
+        Log.e("LocalFilePath" , localFile.getAbsolutePath());
+
+        final int dimens = (int) context.getResources().getDimension(R.dimen.modul_thumbnail_dimens);
+        if(localFile.exists()){
+            Picasso.get()
+                    .load(localFile)
+                    .resize(dimens, dimens)
+                    .centerCrop()
+                    .into(imageView);
+            if(callbackHelper != null){
+                callbackHelper.onSuccess();
+            }
+            Log.e("LocalFileExists", "Loaded local Thumbnail into View");
+        }else{
+            StorageReference storageRef = storage.getReferenceFromUrl(user.getProfilePictureUrl());
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+                    if(callbackHelper != null){
+                        callbackHelper.onSuccess();
+                    }
+                    Picasso.get()
+                            .load(localFile)
+                            .resize(dimens, dimens)
+                            .centerCrop()
+                            .into(imageView);
+
+                    Log.e("onSuccess", "User Thumbnail has been saved to localFile");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override

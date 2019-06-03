@@ -77,6 +77,9 @@ public class BaseNavDrawActivity extends AppCompatActivity {
                                                 startActivity(startModulListActivityIntent2);
                                             }
                                         });
+                            case R.id.nav_user_list:
+                                Intent startUserListActivityIntent = new Intent(getApplicationContext(), UserListActivity.class);
+                                startActivity(startUserListActivityIntent);
 
 
                         }

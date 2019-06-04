@@ -89,9 +89,6 @@ public class UserCreationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String userName = mUsernameEdit.getText().toString();
-                if(!pictureUrl.isEmpty()){
-
-                }
                 User newUser = new User(userName);
 
                 prepareSaveUserToDatabase(newUser);

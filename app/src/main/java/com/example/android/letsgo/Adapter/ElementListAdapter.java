@@ -98,6 +98,7 @@ public class ElementListAdapter extends RecyclerView.Adapter<ElementListAdapter.
         final ImageView elementThumbView = holder.itemView.findViewById(R.id.iv_element_list_item_thumb);
         final ProgressBar progressBar = holder.itemView.findViewById(R.id.pb_element_list_picture_load);
         if(elementPictureUrl == null){
+            elementThumbView.setImageDrawable(null);
         }else{
             elementThumbView.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);

@@ -130,6 +130,7 @@ public class DoActivity extends BaseNavDrawActivity {
     }
 
     private void updateUi(){
+        mImageView.setImageDrawable(null);
         //Handle Previous Button
         if(currentDoingActivity.getCurrentPosition() == 0){
             mPreviousElementButton.setVisibility(View.INVISIBLE);

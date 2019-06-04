@@ -72,7 +72,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@drawable/element_edit_buttons"
-                    android:src="@drawable/ic_widgets_primarydark_24dp"
+                    android:src="@drawable/ic_widgets_primary_24dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -105,7 +105,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@drawable/element_edit_buttons"
-                    android:src="@drawable/ic_people_primarydark_16dp"
+                    android:src="@drawable/ic_people_primary_16dp"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>

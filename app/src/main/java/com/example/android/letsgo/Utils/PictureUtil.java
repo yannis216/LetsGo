@@ -65,7 +65,11 @@ public class PictureUtil {
         localFile = new File(myDir, fname);
         Log.e("LocalFilePath" , localFile.getAbsolutePath());
         if(localFile.exists()){
-            Picasso.get().load(localFile).into(imageView);
+            Picasso.get()
+                    .load(localFile)
+                    .fit()
+                    .centerCrop()
+                    .into(imageView);
             if(callbackHelper != null){
                 callbackHelper.onSuccess();
             }
@@ -159,7 +163,11 @@ public class PictureUtil {
         localFile = new File(myDir, fname);
         Log.e("LocalFilePath" , localFile.getAbsolutePath());
         if(localFile.exists()){
-            Picasso.get().load(localFile).into(imageView);
+            Picasso.get()
+                    .load(localFile)
+                    .fit()
+                    .centerCrop()
+                    .into(imageView);
             if(callbackHelper != null){
                 callbackHelper.onSuccess();
             }

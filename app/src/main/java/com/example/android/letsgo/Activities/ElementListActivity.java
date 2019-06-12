@@ -112,6 +112,7 @@ public class ElementListActivity extends BaseNavDrawActivity implements ElementL
     private void getElementsFromDatabase(){
         final List<Element> elements = new ArrayList<Element>();
         db.collection("elements")
+                .orderBy("title")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -22,7 +22,7 @@
         <item>Min.</item> <!-- Third must be minutes -->
         <item>Hrs.</item>  <!-- Third must be hours -->
         <item>Days</item>
-        <item>Meters</item>
+        <item>Mtrs.</item>
     </string-array>
 
     <!-- For Modul List-->

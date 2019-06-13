@@ -5,11 +5,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -18,11 +20,13 @@ import com.example.android.letsgo.Classes.ModulElementMultiplier;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.TouchHelper.ItemTouchHelperAdapter;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
+import com.example.android.letsgo.Utils.TouchHelper.Listener.OnStartDragListener;
 
 import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.MotionEventCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulElementEditListAdapter.ModulElementViewHolder> implements ItemTouchHelperAdapter {
@@ -31,13 +35,15 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
     private final ModulElementOnClickHandler mClickHandler;
     private Context context;
     private OnModulElementListChangedListener modulElementListChangedListener;
+    private final OnStartDragListener mDragStartListener;
 
-    public ModulElementEditListAdapter(Context context, List<ModulElement> modulElements, ModulElementOnClickHandler clickHandler, OnModulElementListChangedListener modulElementListChangedListener) {
+    public ModulElementEditListAdapter(Context context, List<ModulElement> modulElements, ModulElementOnClickHandler clickHandler, OnModulElementListChangedListener modulElementListChangedListener, OnStartDragListener dragStartListener) {
         this.modulElements = modulElements;
         this.mInflater = LayoutInflater.from(context);
         this.mClickHandler=clickHandler;
         this.context = context;
         this.modulElementListChangedListener = modulElementListChangedListener;
+        mDragStartListener = dragStartListener;
     }
 
     @Override
@@ -80,6 +86,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         public String givenType;
         public String defaultType;
         public int DEFAULT_SPINNER_POSITION = 0;
+        ImageView handleView;
 
 
 
@@ -93,6 +100,8 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             this.editTextListener = editTextListener;
             this.mMultiplierEdit.addTextChangedListener(editTextListener);
 
+            handleView=(ImageView) view.findViewById(R.id.iv_modul_element_edit_list_handle);
+
             //Spinner Code
             this.spinnerListener =spinnerListener;
             this.spinner = view.findViewById(R.id.s_modul_element_edit_list_item_mutliplier_type);
@@ -100,10 +109,6 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             this.spinner.setAdapter(spinnerAdapter);
             this.spinner.setOnItemSelectedListener(spinnerListener);
-
-
-
-
 
         }
 
@@ -113,10 +118,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             int adapterPosition = getAdapterPosition();
             ModulElement clickedModulElement = modulElements.get(adapterPosition);
             mClickHandler.onClick(clickedModulElement);
-
             //TODO Design: Make an Imageview that has previousply been gone to visible (with a green checkmark) or simply make it a checkbox
-
-
         }
     }
 
@@ -137,7 +139,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ModulElementViewHolder holder, final int position) {
+    public void onBindViewHolder(final @NonNull ModulElementViewHolder holder, final int position) {
         ModulElement currentModulElement = modulElements.get(position);
         String modulElementTitle = currentModulElement.getTitle();
 
@@ -175,6 +177,17 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         }
         TextView titleView = holder.itemView.findViewById(R.id.tv_modul_element_edit_list_item_title);
         titleView.setText(modulElementTitle);
+
+        holder.handleView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (MotionEventCompat.getActionMasked(motionEvent) ==
+                        MotionEvent.ACTION_DOWN) {
+                    mDragStartListener.onStartDrag(holder);
+                }
+                return false;
+            }
+        });
     }
 
     //TODO CHECK IF WORKS

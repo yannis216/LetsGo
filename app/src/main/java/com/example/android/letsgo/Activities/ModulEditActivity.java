@@ -22,6 +22,7 @@ import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.PictureUtil;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
+import com.example.android.letsgo.Utils.TouchHelper.Listener.OnStartDragListener;
 import com.example.android.letsgo.Utils.TouchHelper.SimpleItemTouchHelperCallback;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,7 +54,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ModulEditActivity extends BaseNavDrawActivity implements ModulElementEditListAdapter.ModulElementOnClickHandler, OnModulElementListChangedListener {
+public class ModulEditActivity extends BaseNavDrawActivity implements ModulElementEditListAdapter.ModulElementOnClickHandler, OnModulElementListChangedListener, OnStartDragListener {
 
     Modul currentModul;
     List<ModulElement> modulElements = new ArrayList<ModulElement>();
@@ -66,12 +67,9 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     RecyclerView mRvModulElements;
     RecyclerView.LayoutManager mLayoutManager;
     ModulElementEditListAdapter mAdapter;
-
     DrawerLayout drawerLayout;
 
-
     String mode = "create";
-
 
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
@@ -85,6 +83,8 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     FirebaseStorage storage;
     DocumentReference newModulRef;
     DocumentReference updateModulRef;
+
+    ItemTouchHelper touchHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,11 +180,11 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
     private void updateUiWithModulElements(){
         mRvModulElements.setLayoutManager(mLayoutManager);
-        mAdapter = new ModulElementEditListAdapter(this, modulElements, this, this);
+        mAdapter = new ModulElementEditListAdapter(this, modulElements, this, this, this);
         mRvModulElements.setAdapter(mAdapter);
         ItemTouchHelper.Callback callback =
                 new SimpleItemTouchHelperCallback(mAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRvModulElements);
     }
 
@@ -455,5 +455,8 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         return elementIds;
     }
 
-
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        touchHelper.startDrag(viewHolder);
+    }
 }

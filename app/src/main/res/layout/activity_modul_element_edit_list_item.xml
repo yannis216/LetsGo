@@ -3,7 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFF"
+    android:background="@drawable/background_list_row"
     android:id="@+id/ll_modul_element_edit_list_item">
     <ImageView
         android:id="@+id/iv_modul_element_edit_list_handle"

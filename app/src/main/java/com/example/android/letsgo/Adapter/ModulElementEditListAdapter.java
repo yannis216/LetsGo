@@ -1,9 +1,12 @@
 package com.example.android.letsgo.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,9 +15,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.android.letsgo.Activities.ElementDetailActivity;
 import com.example.android.letsgo.Classes.ModulElement;
 import com.example.android.letsgo.Classes.ModulElementMultiplier;
 import com.example.android.letsgo.R;
@@ -22,6 +27,7 @@ import com.example.android.letsgo.Utils.TouchHelper.ItemTouchHelperAdapter;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnStartDragListener;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,13 +43,24 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
     private OnModulElementListChangedListener modulElementListChangedListener;
     private final OnStartDragListener mDragStartListener;
 
-    public ModulElementEditListAdapter(Context context, List<ModulElement> modulElements, ModulElementOnClickHandler clickHandler, OnModulElementListChangedListener modulElementListChangedListener, OnStartDragListener dragStartListener) {
+    private ClickAdapterListener listener;
+    private SparseBooleanArray selectedItems;
+
+
+    private static int currentSelectedIndex = -1;
+
+    public ModulElementEditListAdapter(Context context, List<ModulElement> modulElements,
+                                       ModulElementOnClickHandler clickHandler,
+                                       OnModulElementListChangedListener modulElementListChangedListener,
+                                       OnStartDragListener dragStartListener, ClickAdapterListener listener){
         this.modulElements = modulElements;
         this.mInflater = LayoutInflater.from(context);
         this.mClickHandler=clickHandler;
         this.context = context;
         this.modulElementListChangedListener = modulElementListChangedListener;
         mDragStartListener = dragStartListener;
+        this.listener = listener;
+        selectedItems = new SparseBooleanArray();
     }
 
     @Override
@@ -78,7 +95,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
     }
 
 
-    public class ModulElementViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ModulElementViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         public EditText mMultiplierEdit;
         public Spinner spinner;
         public ModulElementEditTextListener editTextListener;
@@ -87,18 +104,21 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         public String defaultType;
         public int DEFAULT_SPINNER_POSITION = 0;
         ImageView handleView;
+        LinearLayout mLayout;
 
 
 
         public ModulElementViewHolder(View view, ModulElementEditTextListener editTextListener, ModulElementSpinnerListener spinnerListener){
             super(view);
             view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
 
 
             //Edit Time Multiplied Code
             this.mMultiplierEdit = (EditText) view.findViewById(R.id.et_modul_element_edit_list_item_times_multiplied);
             this.editTextListener = editTextListener;
             this.mMultiplierEdit.addTextChangedListener(editTextListener);
+            this.mLayout = view.findViewById(R.id.ll_modul_element_edit_list_item);
 
             handleView=(ImageView) view.findViewById(R.id.iv_modul_element_edit_list_handle);
 
@@ -110,6 +130,8 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             this.spinner.setAdapter(spinnerAdapter);
             this.spinner.setOnItemSelectedListener(spinnerListener);
 
+
+
         }
 
         @Override
@@ -119,6 +141,13 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             ModulElement clickedModulElement = modulElements.get(adapterPosition);
             mClickHandler.onClick(clickedModulElement);
             //TODO Design: Make an Imageview that has previousply been gone to visible (with a green checkmark) or simply make it a checkbox
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            listener.onRowLongClicked(getAdapterPosition());
+            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            return true;
         }
     }
 
@@ -188,7 +217,41 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
                 return false;
             }
         });
+
+        holder.itemView.setActivated(selectedItems.get(position, false));
+        applyClickEvents(holder, position);
+
+
     }
+
+    private void applyClickEvents(ModulElementViewHolder holder, final int position) {
+        holder.mLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(selectedItems.size()>0) {
+                    listener.onRowClicked(position);
+                    Log.e("OnClickAdapter", "Has Fired");
+                }else{
+                    Intent intent = new Intent(context, ElementDetailActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("element", modulElements.get(position));
+                    context.startActivity(intent);
+                }
+            }
+        });
+
+        holder.mLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                listener.onRowLongClicked(position);
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                Log.e("OnLongClickAdapter", "Has Fired");
+                return true;
+            }
+        });
+    }
+
+
 
     //TODO CHECK IF WORKS
     public List<ModulElement> getModulElements(){
@@ -251,6 +314,53 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         public void onNothingSelected(AdapterView<?> adapterView) {
 
         }
+
+
+    }
+
+    public void toggleSelection(int pos) {
+        currentSelectedIndex = pos;
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+        } else {
+            selectedItems.put(pos, true);
+        }
+        notifyItemChanged(pos);
+    }
+
+    public void clearSelections() {
+        selectedItems.clear();
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+
+    public List getSelectedItems() {
+        List items =
+                new ArrayList(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); i++) {
+            items.add(selectedItems.keyAt(i));
+        }
+        return items;
+    }
+
+    public void removeData(int position) {
+        modulElements.remove(position);
+        resetCurrentIndex();
+    }
+
+    private void resetCurrentIndex() {
+        currentSelectedIndex = -1;
+    }
+
+
+    public interface ClickAdapterListener {
+
+        void onRowClicked(int position);
+
+        void onRowLongClicked(int position);
     }
 
 

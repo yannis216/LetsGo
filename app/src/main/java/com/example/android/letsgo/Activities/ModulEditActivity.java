@@ -48,13 +48,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ActionMode;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ModulEditActivity extends BaseNavDrawActivity implements ModulElementEditListAdapter.ModulElementOnClickHandler, OnModulElementListChangedListener, OnStartDragListener {
+public class ModulEditActivity extends BaseNavDrawActivity implements ModulElementEditListAdapter.ModulElementOnClickHandler, OnModulElementListChangedListener, OnStartDragListener, ModulElementEditListAdapter.ClickAdapterListener {
 
     Modul currentModul;
     List<ModulElement> modulElements = new ArrayList<ModulElement>();
@@ -86,6 +87,9 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
     ItemTouchHelper touchHelper;
 
+    private ActionModeCallback actionModeCallback;
+    private ActionMode actionMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,9 +102,9 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         //TODO Do this in Utils? Is it best Practice to do this in every Activity?
         mFirebaseAuth = FirebaseAuth.getInstance();
         authUser = mFirebaseAuth.getCurrentUser();
-        if(authUser != null){
+        if (authUser != null) {
             uId = authUser.getUid();
-        }else{
+        } else {
             Log.e("ModulEdit Auth", "No User authenticated");
         }
         storage = FirebaseStorage.getInstance();
@@ -126,47 +130,50 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
         mRvModulElements = findViewById(R.id.rv_modul_element_edit_list);
         mLayoutManager = new LinearLayoutManager(this);
+        actionModeCallback = new ActionModeCallback();
+
 
         Intent receivedIntent = getIntent();
-        if(receivedIntent != null){
+        if (receivedIntent != null) {
             Gson gson = new Gson();
-            Type listType = new TypeToken<List<Element>>(){}.getType();
+            Type listType = new TypeToken<List<Element>>() {
+            }.getType();
             addElements = gson.fromJson(receivedIntent.getStringExtra("selectedElements"), listType);
-            if(receivedIntent.getStringExtra("mode")!=null){
+            if (receivedIntent.getStringExtra("mode") != null) {
                 mode = receivedIntent.getStringExtra("mode");
             }
 
             //Adds already existing data to the display when returning from Moudlelement Selection
-            if(receivedIntent.hasExtra("modul")) {
+            if (receivedIntent.hasExtra("modul")) {
                 currentModul = (Modul) receivedIntent.getSerializableExtra("modul");
                 mTitleView.setText(currentModul.getTitle());
             }
-            if(receivedIntent.hasExtra("modulToCopy")) {
+            if (receivedIntent.hasExtra("modulToCopy")) {
                 currentModul = (Modul) receivedIntent.getSerializableExtra("modulToCopy");
                 mTitleView.setText(currentModul.getTitle());
                 modulElements = currentModul.getModulElements();
                 mode = "copy";
             }
-            if(receivedIntent.hasExtra("modulToEdit")) {
+            if (receivedIntent.hasExtra("modulToEdit")) {
                 currentModul = (Modul) receivedIntent.getSerializableExtra("modulToEdit");
                 mTitleView.setText(currentModul.getTitle());
                 modulElements = currentModul.getModulElements();
                 mode = "edit";
             }
-            if(currentModul != null){
-                if(currentModul.getPictureUrl()!=null){
+            if (currentModul != null) {
+                if (currentModul.getPictureUrl() != null) {
                     PictureUtil pictureUtil = new PictureUtil(ModulEditActivity.this, mImageView);
                     pictureUtil.loadTitlePictureIntoImageView(currentModul.getPictureUrl());
                 }
             }
 
             //TODO May have to make this happen only after Database fetch is completed?
-            if(addElements != null){
+            if (addElements != null) {
                 modulElements = generateModulElementsFromElements();
             }
         }
 
-        if(currentModul == null) {
+        if (currentModul == null) {
             currentModul = new Modul("title", "", modulElements);
             modulElements = currentModul.getModulElements();
         }
@@ -177,10 +184,9 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     }
 
 
-
-    private void updateUiWithModulElements(){
+    private void updateUiWithModulElements() {
         mRvModulElements.setLayoutManager(mLayoutManager);
-        mAdapter = new ModulElementEditListAdapter(this, modulElements, this, this, this);
+        mAdapter = new ModulElementEditListAdapter(this, modulElements, this, this, this, this);
         mRvModulElements.setAdapter(mAdapter);
         ItemTouchHelper.Callback callback =
                 new SimpleItemTouchHelperCallback(mAdapter);
@@ -189,9 +195,9 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     }
 
 
-    public List<ModulElement> generateModulElementsFromElements(){
+    public List<ModulElement> generateModulElementsFromElements() {
         modulElements = currentModul.getModulElements();
-        for(Element element: addElements){
+        for (Element element : addElements) {
             // TODO Not sure if I can set other varaible when only using this simple Constructor
             ModulElement newModulElement = new ModulElement(element);
             modulElements.add(newModulElement);
@@ -199,7 +205,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         return modulElements;
     }
 
-    public void addOnClickListeners(){
+    public void addOnClickListeners() {
 
         mAddImageButton.setOnClickListener(new View.OnClickListener() {
 
@@ -212,7 +218,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                 pickIntent.setType("image/*");
 
                 Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
                 startActivityForResult(chooserIntent, PICK_PHOTO_FOR_Modul);
             }
@@ -221,7 +227,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!mTitleView.getText().toString().equals("")&& modulElements.size() > 0) {
+                if (!mTitleView.getText().toString().equals("") && modulElements.size() > 0) {
                     modulElements = mAdapter.getModulElements();
                     String titleText = mTitleView.getText().toString();
                     currentModul.setModulElements(modulElements);
@@ -229,20 +235,19 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     currentModul.setEditorUid(uId);
                     currentModul.setTitle(titleText);
                     currentModul.setEditorName(authUser.getDisplayName());
-                    if(mode.equals("edit")){
+                    if (mode.equals("edit")) {
                         currentModul.setEditTimeStamp(System.currentTimeMillis());
                         prepareUpdateModulInDb(currentModul);
-                    }else if (mode.equals("copy")){
+                    } else if (mode.equals("copy")) {
                         currentModul.setCreationTimestamp(System.currentTimeMillis());
                         prepareSaveModulToDb(currentModul);
-                    }
-                    else{
+                    } else {
                         currentModul.setCreatorUid(uId);
                         currentModul.setCreationTimestamp(System.currentTimeMillis());
                         prepareSaveModulToDb(currentModul);
                     }
 
-                }else{
+                } else {
                     Toast.makeText(ModulEditActivity.this, "Your Modul needs a title and min. 1 ModulElement", Toast.LENGTH_SHORT).show();
                 }
                 //TODO Intent to ModulDetaiLAcitivty
@@ -261,7 +266,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
             if (data == null) {
                 //TODO Display an error
                 return;
-            }else {
+            } else {
                 try {
                     inputStream = ModulEditActivity.this.getContentResolver().openInputStream(data.getData()); //TODO delete is safe?
                     Uri inputUri = data.getData();
@@ -279,40 +284,43 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     }
 
     //public Modul getModulFromDatabase(){
-        //TODO get Modul from Database for update functions
-       //
-       // return modul;
+    //TODO get Modul from Database for update functions
+    //
+    // return modul;
     //}
 
     @Override
     public void onClick(ModulElement clickedModulElement) {
+        if(actionMode == null){
+            Intent startElementDetailActivityIntent = new Intent(this, ElementDetailActivity.class);
+            startElementDetailActivityIntent.putExtra("element", clickedModulElement);
+            startActivity(startElementDetailActivityIntent);
+        }
         //TODO Change this completely
-        Intent startElementDetailActivityIntent = new Intent(this, ElementDetailActivity.class);
-        startElementDetailActivityIntent.putExtra("element", clickedModulElement);
-        startActivity(startElementDetailActivityIntent);
+
 
     }
 
     @Override
     public void onNoteListChanged(List<ModulElement> modulElements) {
-       for(int i = 0; i<modulElements.size(); i++){
-           modulElements.get(i).setOrderInModul(i);
-       }
+        for (int i = 0; i < modulElements.size(); i++) {
+            modulElements.get(i).setOrderInModul(i);
+        }
 
 
     }
 
-    public void prepareSaveModulToDb(Modul modul){
+    public void prepareSaveModulToDb(Modul modul) {
         newModulRef = db.collection("moduls").document();
         modul.setId(newModulRef.getId());
-        if(!(inputStream ==null)){
+        if (!(inputStream == null)) {
             savePictureToStorage(modul);
-        }else{
+        } else {
             continueSaveModulToDatabase(modul);
         }
     }
 
-    private void continueSaveModulToDatabase(Modul modul){
+    private void continueSaveModulToDatabase(Modul modul) {
         newModulRef
                 .set(modul)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -329,16 +337,16 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
     }
 
-    public void prepareUpdateModulInDb(Modul modul){
+    public void prepareUpdateModulInDb(Modul modul) {
         updateModulRef = db.collection("moduls").document(currentModul.getId());
-        if(!(inputStream ==null)){
+        if (!(inputStream == null)) {
             savePictureToStorage(modul);
-        }else{
+        } else {
             continueUpdateModulInDatabase(modul);
         }
     }
 
-    public void continueUpdateModulInDatabase(Modul modul){
+    public void continueUpdateModulInDatabase(Modul modul) {
         updateModulRef
                 .set(modul)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -356,11 +364,11 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                 });
     }
 
-    private void savePictureToStorage(final Modul modul){
+    private void savePictureToStorage(final Modul modul) {
 
         //TODO Handle special case where mode = edit and a picture already exists -> Currently the picture just gets
         // replaced without warning to the user that the user one will be deleted permanently
-        final StorageReference modulImageRef = storage.getReference().child("images/"+authUser.getUid()+"/moduls/"+modul.getId()+"_originalPicture");
+        final StorageReference modulImageRef = storage.getReference().child("images/" + authUser.getUid() + "/moduls/" + modul.getId() + "_originalPicture");
         //TODO Sollten die wirklich in nem nach Nutzer differenzierten Ordner liegen? Selbe bei Elements
 
         UploadTask uploadTask = modulImageRef.putStream(inputStream);
@@ -396,9 +404,9 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     Uri downloadUri = task.getResult();
                     String downloadUrl = downloadUri.toString();
                     modul.setPictureUrl(downloadUrl);
-                    if(mode=="edit"){
+                    if (mode == "edit") {
                         continueUpdateModulInDatabase(modul);
-                    }else{
+                    } else {
                         continueSaveModulToDatabase(modul);
                     }
 
@@ -431,7 +439,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                 Intent addIntent = new Intent(ModulEditActivity.this, ElementListActivity.class);
                 addIntent.putExtra("modulElementsEdit", true);
                 addIntent.putExtra("mode", mode);
-                if(mTitleView.getText() != null){
+                if (mTitleView.getText() != null) {
                     String titleText = mTitleView.getText().toString();
                     currentModul.setTitle(titleText);
                 }
@@ -444,11 +452,11 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         return super.onOptionsItemSelected(item);
     }
 
-    public ArrayList<String> generateElementIds(){
+    public ArrayList<String> generateElementIds() {
         ArrayList<String> elementIds = new ArrayList<>();
-        for(Element element : currentModul.getModulElements()){
+        for (Element element : currentModul.getModulElements()) {
             String currentElementId = element.getElementId();
-            if(!elementIds.contains(currentElementId)){
+            if (!elementIds.contains(currentElementId)) {
                 elementIds.add(currentElementId);
             }
         }
@@ -458,5 +466,105 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         touchHelper.startDrag(viewHolder);
+    }
+
+    @Override
+    public void onRowClicked(int position) {
+        enableActionMode(position);
+    }
+
+    @Override
+    public void onRowLongClicked(int position) {
+        enableActionMode(position);
+    }
+
+    private void enableActionMode(int position) {
+        if (actionMode == null) {
+            actionMode = startSupportActionMode(actionModeCallback);
+        }
+        toggleSelection(position);
+    }
+
+    private void toggleSelection(int position) {
+        mAdapter.toggleSelection(position);
+        int count = mAdapter.getSelectedItemCount();
+
+        if (count == 0) {
+            actionMode.finish();
+            actionMode = null;
+        } else {
+            actionMode.setTitle(String.valueOf(count));
+            actionMode.invalidate();
+        }
+
+
+    }
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.modul_element_edit_action_menu, menu);
+
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            Log.d("API123", "here");
+            switch (item.getItemId()) {
+
+                case R.id.action_delete:
+                    // delete all the selected rows
+                    deleteRows();
+                    mode.finish();
+                    return true;
+
+                /**case R.id.action_duplicate:
+                    // add all the selected rows at the end of the list
+                    duplicateSelected();
+                    mode.finish();
+                    return true;*/
+
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mAdapter.clearSelections();
+            actionMode = null;
+        }
+
+        private void deleteRows() {
+            List selectedItemPositions =
+                    mAdapter.getSelectedItems();
+            for (int i = selectedItemPositions.size() - 1; i >= 0; i--) {
+                int j =(int) selectedItemPositions.get(i);
+                mAdapter.removeData(j);
+            }
+            mAdapter.notifyDataSetChanged();
+            //TODO Add Nice Animation that also illustrates the ability to swipedelete
+
+
+        }
+
+        private void duplicateSelected(){
+            List selectedItemPositions =
+                    mAdapter.getSelectedItems();
+            for (int i = selectedItemPositions.size() - 1; i >= 0; i--) {
+                modulElements.add(modulElements.get(i));
+                mAdapter.notifyItemInserted(modulElements.size()-1);
+            }
+            actionMode = null;
+
+        }
+
     }
 }

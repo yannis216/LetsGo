@@ -232,6 +232,7 @@
         android:id="@+id/fab_element_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorSecondary"
         android:src="@drawable/baseline_save_black_24dp"
         app:layout_anchor="@id/bar_element_edit" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

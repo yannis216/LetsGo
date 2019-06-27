@@ -73,5 +73,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_add_black_24dp"
-        app:layout_anchor="@id/bar_activity_modul_list"/>
+        app:layout_anchor="@id/bar_activity_modul_list"
+        android:backgroundTint="@color/colorSecondary"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

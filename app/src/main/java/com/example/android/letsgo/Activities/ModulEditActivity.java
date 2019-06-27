@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -50,6 +51,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.ActionMode;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -71,6 +73,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     RecyclerView.LayoutManager mLayoutManager;
     ModulElementEditListAdapter mAdapter;
     DrawerLayout drawerLayout;
+    CoordinatorLayout coordinatorLayout;
 
     String mode = "create";
 
@@ -115,6 +118,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         mAddImageButton = findViewById(R.id.bn_modul_edit_picture_picker);
         mImageView = findViewById(R.id.iv_modul_edit_picture);
         mSaveProgressBar = findViewById(R.id.bar_modul_progress);
+        coordinatorLayout = findViewById(R.id.col_activity_modul_edit_coordinatorLayout);
 
 
         fab = findViewById(R.id.fab_modul_edit);
@@ -309,8 +313,6 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         for (int i = 0; i < modulElements.size(); i++) {
             modulElements.get(i).setOrderInModul(i);
         }
-
-
     }
 
     public void prepareSaveModulToDb(Modul modul) {
@@ -338,7 +340,6 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                         Log.w("saveModul", "Error adding document", e);
                     }
                 });
-
     }
 
     public void prepareUpdateModulInDb(Modul modul) {
@@ -370,9 +371,8 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     }
 
     private void savePictureToStorage(final Modul modul) {
-
         //TODO Handle special case where mode = edit and a picture already exists -> Currently the picture just gets
-        // replaced without warning to the user that the user one will be deleted permanently
+        // replaced without warning to the user that the other one will be deleted permanently
         final StorageReference modulImageRef = storage.getReference().child("images/" + authUser.getUid() + "/moduls/" + modul.getId() + "_originalPicture");
         //TODO Sollten die wirklich in nem nach Nutzer differenzierten Ordner liegen? Selbe bei Elements
 
@@ -529,11 +529,11 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     mode.finish();
                     return true;
 
-                /**case R.id.action_duplicate:
+                case R.id.action_duplicate:
                     // add all the selected rows at the end of the list
                     duplicateSelected();
                     mode.finish();
-                    return true;*/
+                    return true;
 
 
                 default:
@@ -563,12 +563,14 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         private void duplicateSelected(){
             List selectedItemPositions =
                     mAdapter.getSelectedItems();
-            for (int i = selectedItemPositions.size() - 1; i >= 0; i--) {
-                modulElements.add(modulElements.get(i));
+            for (int i = 0; i < selectedItemPositions.size(); i++) {
+                int j =(int) selectedItemPositions.get(i);
+                modulElements.add(modulElements.get(j));
                 mAdapter.notifyItemInserted(modulElements.size()-1);
             }
             actionMode = null;
-
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, getResources().getString(R.string.modul_edit_duplicated), Snackbar.LENGTH_SHORT).setAnchorView(fab);
+            snackbar.show();
         }
 
     }

@@ -192,6 +192,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_save_black_24dp"
             app:layout_anchor="@id/bar_modul_edit"
+            android:backgroundTint="@color/colorSecondary"
             />
         <!-- TODO Change src on functionality change -->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

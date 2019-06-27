@@ -230,7 +230,6 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             public void onClick(View view) {
                 if(selectedItems.size()>0) {
                     listener.onRowClicked(position);
-                    Log.e("OnClickAdapter", "Has Fired");
                 }else{
                     Intent intent = new Intent(context, ElementDetailActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

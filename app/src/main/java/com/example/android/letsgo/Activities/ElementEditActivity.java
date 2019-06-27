@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +80,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
     ChipGroup mMaterialChipGroup;
     FloatingActionButton fab;
     ArrayList<Material> materials = new ArrayList<Material>();
+    ProgressBar mSaveProgress;
 
     ImageButton mUsedForStarter;
     List<String> newUsedFor = new ArrayList<>();
@@ -105,6 +107,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
     Element editableElement;
     String mode;
+    Element createdElement;
 
 
     @Override
@@ -127,6 +130,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         mMinHumansTextView = findViewById(R.id.tv_element_edit_num_humans);
         mUsedForStarter=findViewById(R.id.ib_element_edit_usedFor_starter);
         fab = findViewById(R.id.fab_element_edit);
+        mSaveProgress = findViewById(R.id.bar_element_progress);
 
         final DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -240,19 +244,20 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
             @Override
             public void onClick(View view) {
+                //TODO ADD Validators here
+                fab.hide();
+                mSaveProgress.setVisibility(View.VISIBLE);
                 List<String> materialIds = saveMaterialsToDatabase(materials);
-                Element createdElement = getElementFromInputs(materialIds);
+                createdElement = getElementFromInputs(materialIds);
                 if(mode.equals("update")){
-                    prepareUpdateElementInDatabase(createdElement);
+                    prepareUpdateElementInDatabase();
                 }else{
-                    prepareSaveElementToDatabase(createdElement);
+                    prepareSaveElementToDatabase();
                 }
 
 
-                //TODO Hand over List of Materials here via Intent to save time and Databasereads in DetailActivity
-                Intent intent = new Intent(ElementEditActivity.this, ElementDetailActivity.class);
-                intent.putExtra("element", createdElement);
-                startActivity(intent);
+
+
 
             }
         });
@@ -313,23 +318,24 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         return element;
     }
 
-    public void prepareSaveElementToDatabase(Element newElement){
+    public void prepareSaveElementToDatabase(){
         elementReference = db.collection("elements").document();
         String elementId = elementReference.getId();
-        newElement.setElementId(elementId);
+        createdElement.setElementId(elementId);
         if(!(inputStream ==null)){
-            savePictureToStorage(newElement);
+            savePictureToStorage();
         }else{
-            continueSaveElementToDatabase(newElement);
+            continueSaveElementToDatabase();
         }
 
     }
-    private void continueSaveElementToDatabase(Element newElement){
+    private void continueSaveElementToDatabase(){
         elementReference
-                .set(newElement)
+                .set(createdElement)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        goToElementDetailAcitivity();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -341,22 +347,23 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
     }
 
-    public void prepareUpdateElementInDatabase(Element updatedElement){
-        updateElementRef = db.collection("elements").document(updatedElement.getElementId());
+    public void prepareUpdateElementInDatabase(){
+        updateElementRef = db.collection("elements").document(createdElement.getElementId());
         if(!(inputStream ==null)){
-            savePictureToStorage(updatedElement);
+            savePictureToStorage();
         }else{
-            continueUpdateElementInDatabase(updatedElement);
+            continueUpdateElementInDatabase();
         }
     }
 
-    public void continueUpdateElementInDatabase(final Element updatedElement){
+    public void continueUpdateElementInDatabase(){
         updateElementRef
-                .set(updatedElement)
+                .set(createdElement)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.e("editElement", "Document Snap added");
+                        goToElementDetailAcitivity();
 
                     }
                 })
@@ -370,7 +377,7 @@ public class ElementEditActivity extends BaseNavDrawActivity {
 
         CollectionReference modulRef = db.collection("moduls");
         //TODO May limit this to only editing Moduls of this user (And prompt/ask other users if they wanna update their moduls)
-        modulRef.whereArrayContains("elementIds", updatedElement.getElementId())
+        modulRef.whereArrayContains("elementIds", createdElement.getElementId())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
@@ -391,10 +398,10 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                                 for(Modul modul : moduls){
                                     List<ModulElement> modulElements = modul.getModulElements();
                                     for(ModulElement oldModulElement : modulElements){
-                                        if(oldModulElement.getElementId().equals(updatedElement.getElementId())){
-                                            Log.e("Found sameElementId", ""+updatedElement.getElementId());
+                                        if(oldModulElement.getElementId().equals(createdElement.getElementId())){
+                                            Log.e("Found sameElementId", ""+createdElement.getElementId());
                                             ModulElement updatedModulElement = new ModulElement(
-                                                    updatedElement, oldModulElement.getMultiplier(), oldModulElement.getHint(), oldModulElement.getSourceElementId(), oldModulElement.getOrderInModul());
+                                                    createdElement, oldModulElement.getMultiplier(), oldModulElement.getHint(), oldModulElement.getSourceElementId(), oldModulElement.getOrderInModul());
                                             modulElements.set(oldModulElement.getOrderInModul(), updatedModulElement);
                                         }
                                     }
@@ -433,8 +440,8 @@ public class ElementEditActivity extends BaseNavDrawActivity {
         return materialIds;
     }
 
-    private void savePictureToStorage(final Element element){
-        final StorageReference elementImageRef = storage.getReference().child("images/"+authUser.getUid()+"/elements/"+element.getElementId()+"_originalPicture");
+    private void savePictureToStorage(){
+        final StorageReference elementImageRef = storage.getReference().child("images/"+authUser.getUid()+"/elements/"+createdElement.getElementId()+"_originalPicture");
 
         UploadTask uploadTask = elementImageRef.putStream(inputStream);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -468,11 +475,11 @@ public class ElementEditActivity extends BaseNavDrawActivity {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     String downloadUrl = downloadUri.toString();
-                    element.setPictureUrl(downloadUrl);
+                    createdElement.setPictureUrl(downloadUrl);
                     if(mode.equals("update")){
-                        continueUpdateElementInDatabase(element);
+                        continueUpdateElementInDatabase();
                     }else{
-                        continueSaveElementToDatabase(element);
+                        continueSaveElementToDatabase();
                     }
                     Log.e("DownloadUrl", downloadUrl);
                 } else {
@@ -722,5 +729,11 @@ public class ElementEditActivity extends BaseNavDrawActivity {
             }
         }
 
+    }
+
+    private void goToElementDetailAcitivity(){
+        Intent intent = new Intent(ElementEditActivity.this, ElementDetailActivity.class);
+        intent.putExtra("element", createdElement);
+        startActivity(intent);
     }
 }

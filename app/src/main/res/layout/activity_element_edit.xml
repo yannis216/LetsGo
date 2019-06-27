@@ -206,6 +206,16 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bar_element_progress"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:indeterminate="true"
+        app:layout_anchor="@id/bar_element_edit"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bar_element_edit"

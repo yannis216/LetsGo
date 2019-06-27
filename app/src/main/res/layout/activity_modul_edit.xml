@@ -159,8 +159,21 @@
                     android:clipToPadding="false"/>
 
 
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bar_modul_progress"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:indeterminate="true"
+            app:layout_anchor="@id/bar_modul_edit"/>
+
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bar_modul_edit"
             android:layout_width="match_parent"
@@ -178,6 +191,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_save_black_24dp"
-            app:layout_anchor="@id/bar_modul_edit"/>
+            app:layout_anchor="@id/bar_modul_edit"
+            />
         <!-- TODO Change src on functionality change -->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.letsgo.Adapter.ModulElementEditListAdapter;
@@ -64,6 +65,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
     FloatingActionButton fab;
     ImageButton mAddImageButton;
     ImageView mImageView;
+    ProgressBar mSaveProgressBar;
 
     RecyclerView mRvModulElements;
     RecyclerView.LayoutManager mLayoutManager;
@@ -112,6 +114,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         mTitleView = findViewById(R.id.et_modul_edit_title);
         mAddImageButton = findViewById(R.id.bn_modul_edit_picture_picker);
         mImageView = findViewById(R.id.iv_modul_edit_picture);
+        mSaveProgressBar = findViewById(R.id.bar_modul_progress);
 
 
         fab = findViewById(R.id.fab_modul_edit);
@@ -228,6 +231,8 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
             @Override
             public void onClick(View view) {
                 if (!mTitleView.getText().toString().equals("") && modulElements.size() > 0) {
+                    fab.hide();
+                    mSaveProgressBar.setVisibility(View.VISIBLE);
                     modulElements = mAdapter.getModulElements();
                     String titleText = mTitleView.getText().toString();
                     currentModul.setModulElements(modulElements);

@@ -117,7 +117,7 @@ public class ElementDetailActivity extends BaseNavDrawActivity {
         buildUsedForHashTexts(displayedElement.getUsedFor());
         if(displayedElement.getPictureUrl() != null){
             PictureUtil pictureUtil = new PictureUtil(this, mPictureView);
-            pictureUtil.loadTitlePictureIntoImageView(displayedElement.getPictureUrl());
+            pictureUtil.saveElementImageFromDatabaseToLocalStorage(storage, displayedElement);
         }
     }
 

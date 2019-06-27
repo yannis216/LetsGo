@@ -250,10 +250,8 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                 } else {
                     Toast.makeText(ModulEditActivity.this, "Your Modul needs a title and min. 1 ModulElement", Toast.LENGTH_SHORT).show();
                 }
-                //TODO Intent to ModulDetaiLAcitivty
-                Intent startModulDetailActivityIntent = new Intent(ModulEditActivity.this, ModulDetailActivity.class);
-                startModulDetailActivityIntent.putExtra("modul", currentModul);
-                startActivity(startModulDetailActivityIntent);
+
+
 
             }
         });
@@ -326,6 +324,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        goToSavedModulDetail();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -353,6 +352,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.e("editModul", "Document Snap added");
+                        goToSavedModulDetail();
 
                     }
                 })
@@ -566,5 +566,11 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
         }
 
+    }
+
+    private void goToSavedModulDetail(){
+        Intent startModulDetailActivityIntent = new Intent(ModulEditActivity.this, ModulDetailActivity.class);
+        startModulDetailActivityIntent.putExtra("modul", currentModul);
+        startActivity(startModulDetailActivityIntent);
     }
 }

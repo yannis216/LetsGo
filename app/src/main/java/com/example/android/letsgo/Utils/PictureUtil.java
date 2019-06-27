@@ -83,7 +83,7 @@ public class PictureUtil {
                     if(callbackHelper != null){
                         callbackHelper.onSuccess();
                     }
-                    Picasso.get().load(localFile).into(imageView);
+                    Picasso.get().load(localFile).fit().centerCrop().into(imageView);
                     Log.e("onSuccess", "Image has been saved to localFile");
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -173,6 +173,7 @@ public class PictureUtil {
             }
             Log.e("LocalFileExists", "Loaded local Image into View");
         }else{
+            Log.e("StorageUrl", modul.getPictureUrl());
             StorageReference storageRef = storage.getReferenceFromUrl(modul.getPictureUrl());
             storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
@@ -181,7 +182,7 @@ public class PictureUtil {
                     if(callbackHelper != null){
                         callbackHelper.onSuccess();
                     }
-                    Picasso.get().load(localFile).into(imageView);
+                    Picasso.get().load(localFile).fit().centerCrop().into(imageView);
                     Log.e("onSuccess", "Image has been saved to localFile");
                 }
             }).addOnFailureListener(new OnFailureListener() {

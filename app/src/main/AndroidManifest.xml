@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.UserListActivity"></activity>
-        <activity android:name=".Activities.AddModulRatingActivity" />
+        <activity android:name=".Activities.AddModulDoneInfoActivity" />
         <activity android:name=".Activities.BaseNavDrawActivity" />
         <activity
             android:name=".Activities.DoActivity"

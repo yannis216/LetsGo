@@ -51,4 +51,8 @@
 
     <!-- For Modul Edit -->
     <string name="modul_edit_duplicated">The selected elements have been duplicated</string>
+
+    <!-- For Modul Done Info -->
+    <string name="modul_DI_addPicture">Add a picture here</string>
+    <string name="modul_DI_comment">Write something about your experience</string>
 </resources>

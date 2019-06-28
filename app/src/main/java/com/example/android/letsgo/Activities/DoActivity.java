@@ -189,7 +189,7 @@ public class DoActivity extends BaseNavDrawActivity {
                 @Override
                 public void onClick(View view) {
                     currentDoingActivity.setEndTime(System.currentTimeMillis());
-                    Intent startAddModulRatingIntent = new Intent(DoActivity.this, AddModulRatingActivity.class);
+                    Intent startAddModulRatingIntent = new Intent(DoActivity.this, AddModulDoneInfoActivity.class);
                     startAddModulRatingIntent.putExtra("doneActivity", currentDoingActivity);
                     startAddModulRatingIntent.putExtra("modul", givenModul);
                     startActivity(startAddModulRatingIntent);

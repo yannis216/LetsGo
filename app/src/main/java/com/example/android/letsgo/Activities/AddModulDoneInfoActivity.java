@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -26,9 +28,15 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.transition.Slide;
+import androidx.transition.Transition;
+import androidx.transition.TransitionManager;
+import androidx.transition.TransitionSet;
 
-public class AddModulRatingActivity extends BaseNavDrawActivity {
+public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
 
     FirebaseFirestore db;
     private FirebaseAuth mFirebaseAuth;
@@ -40,13 +48,17 @@ public class AddModulRatingActivity extends BaseNavDrawActivity {
     Modul givenModul;
     RatingBar rateBar;
     FloatingActionButton fab;
+    LinearLayout mLlRating;
+    ConstraintLayout mClDoneInfo;
+    CoordinatorLayout mCol;
+    LinearLayout mLlToggleHelper;
 
     DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_modul_rating);
+        setContentView(R.layout.activity_add_modul_done_info);
 
         getLayoutInflater().inflate(R.layout.activity_modul_list, (ViewGroup) findViewById(R.id.content_frame));
 
@@ -59,9 +71,15 @@ public class AddModulRatingActivity extends BaseNavDrawActivity {
         BottomAppBar bar= (BottomAppBar) findViewById(R.id.bar_add_modul_rating);
         fab =(FloatingActionButton) findViewById(R.id.fab_add_modul_rating);
         rateBar = (RatingBar) findViewById(R.id.rb_modul_rating);
+        mLlRating = findViewById(R.id.ll_modul_DI_rating);
+        mClDoneInfo = findViewById(R.id.cl_modul_DI_layout);
+        mCol = findViewById(R.id.col_activity_modul_DI_coordinator);
+        mLlToggleHelper = findViewById(R.id.ll_modul_DI_toggleHelper);
+
         rateBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                slideRatingOut(mLlRating);
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -75,7 +93,7 @@ public class AddModulRatingActivity extends BaseNavDrawActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(AddModulRatingActivity.this , getResources().getText(R.string.add_modul_rating_rateFirst).toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddModulDoneInfoActivity.this , getResources().getText(R.string.add_modul_rating_rateFirst).toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -152,5 +170,20 @@ public class AddModulRatingActivity extends BaseNavDrawActivity {
                         Log.w("Tag", "Transaction failure.", e);
                     }
                 });;
+    }
+
+    private void slideRatingOut(View view){
+        Transition transition = new TransitionSet()
+                .addTransition(new Slide(Gravity.TOP).setDuration(300).addTarget(view))
+                .addTransition(new Slide(Gravity.BOTTOM).setDuration(300).addTarget(mLlToggleHelper));
+
+        TransitionManager.beginDelayedTransition(mCol, transition);
+        if(view.getVisibility() == View.VISIBLE){
+            view.setVisibility(View.INVISIBLE);
+            mLlToggleHelper.setVisibility(View.VISIBLE);
+        }else{
+            view.setVisibility(View.VISIBLE);
+            mLlToggleHelper.setVisibility(View.INVISIBLE);
+        }
     }
 }

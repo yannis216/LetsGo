@@ -25,8 +25,11 @@ import com.example.android.letsgo.Classes.User;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.CallbackHelper;
 import com.example.android.letsgo.Utils.PictureUtil;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +39,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
 import java.io.FileNotFoundException;
@@ -216,7 +221,7 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        saveDoneActivityToDatabase();
+                        initiateSaveDoneActivityToDatabase();
                     }
                 });
                 fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryDark)));
@@ -261,7 +266,6 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
                     inputStream = AddModulDoneInfoActivity.this.getContentResolver().openInputStream(data.getData()); //TODO delete is safe?
                     Uri inputUri = data.getData();
                     String pictureUrl = inputUri.toString();
-                    doneActivity.setPictureUrl(pictureUrl);
                     if (pictureUrl != null) {
                         mIvDIPicture.setVisibility(View.VISIBLE);
                         PictureUtil pictureUtil = new PictureUtil(AddModulDoneInfoActivity.this, mIvDIPicture);
@@ -276,16 +280,78 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
         }
     }
 
-
-    private void saveDoneActivityToDatabase() {
+    private void initiateSaveDoneActivityToDatabase(){
         final DocumentReference newActivityRef = db.collection("activities")
                 .document();
         doneActivity.setId(newActivityRef.getId());
+        if(mEtDiComment.getText() != null){
+            doneActivity.setDiComment(mEtDiComment.getText().toString());
+        }
+        doneActivity.setModulRating(mRbRatedBar.getRating());
+
+        if(inputStream != null){
+            uploadImageToDatabase(newActivityRef);
+        }else{
+            finishSaveDoneActivityToDatabase(newActivityRef);
+        }
+    }
+
+    private void uploadImageToDatabase(final DocumentReference newActivityRef){
+        //TODO Handle special case where mode = edit and a picture already exists -> Currently the picture just gets
+        // replaced without warning to the user that the other one will be deleted permanently
+        final StorageReference activityImageRef = storage.getReference().child("images/" + authUser.getUid() + "/activities/" + newActivityRef.getId() + "_originalPicture");
+        //TODO Sollten die wirklich in nem nach Nutzer differenzierten Ordner liegen? Selbe bei Elements
+
+        UploadTask uploadTask = activityImageRef.putStream(inputStream);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Toast.makeText(context, R.string.picture_upload_failed, Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                //TODO Give some Visual Feedback on Loading Process and so on
+            }
+        });
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return activityImageRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    String downloadUrl = downloadUri.toString();
+                    doneActivity.setPictureUrl(downloadUrl);
+                    finishSaveDoneActivityToDatabase(newActivityRef);
+
+                    Log.e("DownloadUrl", downloadUrl);
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
+    }
+    private void finishSaveDoneActivityToDatabase(final DocumentReference newActivityRef) {
 
         final DocumentReference socialModulInfoAvgRef = db.collection("moduls")
                 .document(givenModul.getId())
                 .collection("socialModulInfo")
                 .document("avg");
+
 
         // In a transaction, add the new rating and update the aggregate totals
         db.runTransaction(new Transaction.Function<Void>() {

@@ -20,6 +20,8 @@ public class Activity implements Serializable {
        //TODO Add ability to track duration of every Element
     private int currentPosition;
     private String pictureUrl;
+    private String diComment;
+    private float modulRating;
 
     public Activity() {
     }
@@ -104,5 +106,21 @@ public class Activity implements Serializable {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public String getDiComment() {
+        return diComment;
+    }
+
+    public void setDiComment(String diComment) {
+        this.diComment = diComment;
+    }
+
+    public float getModulRating() {
+        return modulRating;
+    }
+
+    public void setModulRating(float modulRating) {
+        this.modulRating = modulRating;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,6 +38,8 @@ import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.Gson;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
@@ -84,6 +87,8 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
     SharedPreferences mPrefs;
 
     Context context;
+    private static int PICK_PHOTO_FOR_Activity = 11;
+    InputStream inputStream;
 
 
 
@@ -167,6 +172,9 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
 
     }
 
+
+
+
     private void loadUserPic(){
         CallbackHelper listenIfImageLoadedSuccessfullyHelper = new CallbackHelper() {
             @Override
@@ -221,7 +229,53 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
                 Toast.makeText(AddModulDoneInfoActivity.this , getResources().getText(R.string.add_modul_rating_rateFirst).toString(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        mIbAddPicture.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
+
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("image/*");
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+                startActivityForResult(chooserIntent, PICK_PHOTO_FOR_Activity);
+            }
+        });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_PHOTO_FOR_Activity && resultCode == android.app.Activity.RESULT_OK) {
+            if (data == null) {
+                //TODO Display an error
+                return;
+            } else {
+                try {
+
+                    inputStream = AddModulDoneInfoActivity.this.getContentResolver().openInputStream(data.getData()); //TODO delete is safe?
+                    Uri inputUri = data.getData();
+                    String pictureUrl = inputUri.toString();
+                    doneActivity.setPictureUrl(pictureUrl);
+                    if (pictureUrl != null) {
+                        mIvDIPicture.setVisibility(View.VISIBLE);
+                        PictureUtil pictureUtil = new PictureUtil(AddModulDoneInfoActivity.this, mIvDIPicture);
+                        pictureUtil.loadTitlePictureIntoImageView(pictureUrl);
+                        mIbAddPicture.setVisibility(View.GONE);
+                        mTvAddPictureHelpText.setVisibility(View.GONE);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     private void saveDoneActivityToDatabase() {
         final DocumentReference newActivityRef = db.collection("activities")

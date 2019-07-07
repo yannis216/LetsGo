@@ -19,6 +19,7 @@ public class Activity implements Serializable {
     private long endTime;
        //TODO Add ability to track duration of every Element
     private int currentPosition;
+    private String pictureUrl;
 
     public Activity() {
     }
@@ -97,4 +98,11 @@ public class Activity implements Serializable {
         this.currentPosition = currentPosition;
     }
 
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
 }

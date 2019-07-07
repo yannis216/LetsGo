@@ -153,6 +153,9 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
         if(user.getProfilePictureUrl() != null){
             loadUserPic();
         }
+        if(givenModul.getPictureUrl()!= null){
+            loadModulPic();
+        }
 
         mRbRatedBar.setRating(rateBar.getRating());
         mTvModulTitle.setText(givenModul.getTitle());
@@ -177,6 +180,22 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
         };
         PictureUtil pictureUtil = new PictureUtil(context, mIvUserPic, listenIfImageLoadedSuccessfullyHelper);
         pictureUtil.saveUserThumbnailFromDatabaseToLocalStorage(storage, user);
+    }
+
+    private void loadModulPic(){
+        mIvModulPicture.setVisibility(View.GONE);
+        CallbackHelper listenIfImageLoadedSuccessfullyHelper = new CallbackHelper() {
+            @Override
+            public void onSuccess() {
+                mIvModulPicture.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onFailure() {
+                Log.e("ModulPicture", "Not loaded correctly");
+            }
+        };
+        PictureUtil pictureUtil = new PictureUtil(context, mIvModulPicture, listenIfImageLoadedSuccessfullyHelper);
+        pictureUtil.saveModulThumbnailFromDatabaseToLocalStorage(storage, givenModul);
     }
 
 

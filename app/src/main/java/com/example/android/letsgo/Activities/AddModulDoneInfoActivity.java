@@ -22,6 +22,8 @@ import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.SocialModulInfo;
 import com.example.android.letsgo.Classes.User;
 import com.example.android.letsgo.R;
+import com.example.android.letsgo.Utils.CallbackHelper;
+import com.example.android.letsgo.Utils.PictureUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -32,6 +34,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
@@ -51,6 +54,8 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
     private FirebaseAuth mFirebaseAuth;
     FirebaseUser authUser;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    FirebaseStorage storage;
+
     User user;
     String uId;
     Activity doneActivity;
@@ -78,6 +83,8 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
 
     SharedPreferences mPrefs;
 
+    Context context;
+
 
 
 
@@ -97,6 +104,10 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
         mFirebaseAuth =FirebaseAuth.getInstance();
         authUser = mFirebaseAuth.getCurrentUser();
         uId = authUser.getUid();
+
+        context = getApplicationContext();
+
+        storage = FirebaseStorage.getInstance();
 
         //get current user from sharedprefs
         Gson gson = new Gson();
@@ -136,7 +147,13 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
 
     private void fillUiWithEntries(){
         mTvUsername.setText(user.getDisplayName());
-        //TODO fillIvUserPic
+        mIvUserPic.setVisibility(View.GONE);
+
+        //Get user Picture and load into Thumbview
+        if(user.getProfilePictureUrl() != null){
+            loadUserPic();
+        }
+
         mRbRatedBar.setRating(rateBar.getRating());
         mTvModulTitle.setText(givenModul.getTitle());
         long duration = doneActivity.getEndTime() - doneActivity.getStartTime();
@@ -145,6 +162,21 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
                 TimeUnit.MILLISECONDS.toSeconds(duration) % TimeUnit.MINUTES.toSeconds(1));
         mTvDuration.setText(hms);
 
+    }
+
+    private void loadUserPic(){
+        CallbackHelper listenIfImageLoadedSuccessfullyHelper = new CallbackHelper() {
+            @Override
+            public void onSuccess() {
+                mIvUserPic.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onFailure() {
+                Log.e("UserPicture", "Not loaded correctly");
+            }
+        };
+        PictureUtil pictureUtil = new PictureUtil(context, mIvUserPic, listenIfImageLoadedSuccessfullyHelper);
+        pictureUtil.saveUserThumbnailFromDatabaseToLocalStorage(storage, user);
     }
 
 

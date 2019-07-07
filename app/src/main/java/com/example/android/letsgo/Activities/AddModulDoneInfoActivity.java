@@ -7,8 +7,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.letsgo.Classes.Activity;
@@ -26,6 +30,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
+
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -46,12 +52,30 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
     String uId;
     Activity doneActivity;
     Modul givenModul;
+
     RatingBar rateBar;
     FloatingActionButton fab;
     LinearLayout mLlRating;
     ConstraintLayout mClDoneInfo;
     CoordinatorLayout mCol;
     LinearLayout mLlToggleHelper;
+
+    ImageView mIvUserPic;
+    TextView mTvUsername;
+
+    EditText mEtDiComment;
+    ImageButton mIbAddPicture;
+    ImageView mIvDIPicture;
+    TextView mTvAddPictureHelpText;
+
+    TextView mTvModulTitle;
+    ImageView mIvModulPicture;
+    RatingBar mRbRatedBar;
+    TextView mTvDuration;
+
+
+
+
 
     DrawerLayout drawerLayout;
 
@@ -64,7 +88,8 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
 
         db = FirebaseFirestore.getInstance();
         mFirebaseAuth =FirebaseAuth.getInstance();
-        uId = mFirebaseAuth.getCurrentUser().getUid();
+        authUser = mFirebaseAuth.getCurrentUser();
+        uId = authUser.getUid();
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -76,10 +101,46 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
         mCol = findViewById(R.id.col_activity_modul_DI_coordinator);
         mLlToggleHelper = findViewById(R.id.ll_modul_DI_toggleHelper);
 
+        mIvUserPic = findViewById(R.id.iv_modul_DI_userpic);
+        mTvUsername = findViewById(R.id.tv_modul_DI_username);
+
+        mEtDiComment = findViewById(R.id.et_modul_DI_comment);
+        mIbAddPicture = findViewById(R.id.ib_modul_DI_addpicture);
+        mIvDIPicture = findViewById(R.id.iv_modul_DI_picture);
+        mTvAddPictureHelpText = findViewById(R.id.tv_modul_DI_addpicture);
+
+        mTvModulTitle = findViewById(R.id.tv_modul_DI_modul_title);
+        mIvModulPicture = findViewById(R.id.iv_modul_DI_thumb);
+        mRbRatedBar = findViewById(R.id.rb_modul_DI);
+        mTvDuration = findViewById(R.id.tv_modul_DI_duration);
+
+        setOnClickListeners();
+
+        Intent intent = getIntent();
+        doneActivity = (Activity) intent.getSerializableExtra("doneActivity");
+        givenModul = (Modul) intent.getSerializableExtra("modul");
+    }
+
+    private void fillUiWithEntries(){
+        mTvUsername.setText(authUser.getDisplayName());
+        //TODO fillIvUserPic
+        mRbRatedBar.setRating(rateBar.getRating());
+        mTvModulTitle.setText(givenModul.getTitle());
+        long duration = doneActivity.getEndTime() - doneActivity.getStartTime();
+        String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(duration),
+                TimeUnit.MILLISECONDS.toMinutes(duration) % TimeUnit.HOURS.toMinutes(1),
+                TimeUnit.MILLISECONDS.toSeconds(duration) % TimeUnit.MINUTES.toSeconds(1));
+        mTvDuration.setText(hms);
+
+    }
+
+
+    private void setOnClickListeners(){
         rateBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 slideRatingOut(mLlRating);
+                fillUiWithEntries();
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -96,13 +157,7 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
                 Toast.makeText(AddModulDoneInfoActivity.this , getResources().getText(R.string.add_modul_rating_rateFirst).toString(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        Intent intent = getIntent();
-        doneActivity = (Activity) intent.getSerializableExtra("doneActivity");
-        givenModul = (Modul) intent.getSerializableExtra("modul");
     }
-
-
 
     private void saveDoneActivityToDatabase() {
         final DocumentReference newActivityRef = db.collection("activities")

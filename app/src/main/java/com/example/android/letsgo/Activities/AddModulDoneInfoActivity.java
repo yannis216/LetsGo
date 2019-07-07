@@ -1,6 +1,8 @@
 package com.example.android.letsgo.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
+import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
@@ -73,6 +76,8 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
     RatingBar mRbRatedBar;
     TextView mTvDuration;
 
+    SharedPreferences mPrefs;
+
 
 
 
@@ -86,10 +91,18 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
 
         getLayoutInflater().inflate(R.layout.activity_modul_list, (ViewGroup) findViewById(R.id.content_frame));
 
+        mPrefs = this.getSharedPreferences("com.example.android.letsgo.Activities", Context.MODE_PRIVATE);
+
         db = FirebaseFirestore.getInstance();
         mFirebaseAuth =FirebaseAuth.getInstance();
         authUser = mFirebaseAuth.getCurrentUser();
         uId = authUser.getUid();
+
+        //get current user from sharedprefs
+        Gson gson = new Gson();
+        String json = mPrefs.getString("user", "");
+        Log.e("user", "Read from SharedPrefs:"+json);
+        user = gson.fromJson(json, User.class);
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -122,7 +135,7 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
     }
 
     private void fillUiWithEntries(){
-        mTvUsername.setText(authUser.getDisplayName());
+        mTvUsername.setText(user.getDisplayName());
         //TODO fillIvUserPic
         mRbRatedBar.setRating(rateBar.getRating());
         mTvModulTitle.setText(givenModul.getTitle());

@@ -1,6 +1,8 @@
 package com.example.android.letsgo.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,6 +122,7 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
                                         user = document.toObject(User.class);
+                                        writeAuthUserInfoToLocal();
                                     } else {
                                         Intent startUserCreationActivityIntent = new Intent(ModulListActivity.this, UserCreationActivity.class);
                                         startActivity(startUserCreationActivityIntent);
@@ -151,6 +155,17 @@ public class ModulListActivity extends BaseNavDrawActivity implements ModulListA
         }
 
 
+    }
+
+    public void writeAuthUserInfoToLocal(){
+
+
+        SharedPreferences mPrefs = this.getSharedPreferences("com.example.android.letsgo.Activities", Context.MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        mPrefs.edit().putString("user", json).apply();
+        Log.e("User", "Written to SharedPOrefs:"+json);
     }
 
     @Override

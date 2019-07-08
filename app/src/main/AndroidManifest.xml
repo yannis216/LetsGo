@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.UserListActivity"></activity>
+        <activity android:name=".Activities.ActivityListActivity"></activity>
+        <activity android:name=".Activities.UserListActivity" />
         <activity android:name=".Activities.AddModulDoneInfoActivity" />
         <activity android:name=".Activities.BaseNavDrawActivity" />
         <activity

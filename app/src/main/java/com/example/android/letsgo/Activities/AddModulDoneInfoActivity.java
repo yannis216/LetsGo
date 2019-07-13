@@ -192,7 +192,7 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
             }
         };
         PictureUtil pictureUtil = new PictureUtil(context, mIvUserPic, listenIfImageLoadedSuccessfullyHelper);
-        pictureUtil.saveUserThumbnailFromDatabaseToLocalStorage(storage, user);
+        pictureUtil.saveUserThumbnailFromDatabaseToLocalStorage(storage, user.getAuthId(), user.getProfilePictureUrl());
     }
 
     private void loadModulPic(){
@@ -208,7 +208,7 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
             }
         };
         PictureUtil pictureUtil = new PictureUtil(context, mIvModulPicture, listenIfImageLoadedSuccessfullyHelper);
-        pictureUtil.saveModulThumbnailFromDatabaseToLocalStorage(storage, givenModul);
+        pictureUtil.saveModulThumbnailFromDatabaseToLocalStorage(storage, givenModul.getId(), givenModul.getPictureUrl());
     }
 
 
@@ -288,6 +288,9 @@ public class AddModulDoneInfoActivity extends BaseNavDrawActivity {
             doneActivity.setDiComment(mEtDiComment.getText().toString());
         }
         doneActivity.setModulRating(mRbRatedBar.getRating());
+        doneActivity.setUserName(user.getDisplayName());
+        doneActivity.setUserPicLink(user.getProfilePictureUrl());
+        doneActivity.setModulPicUrl(givenModul.getPictureUrl());
 
         if(inputStream != null){
             uploadImageToDatabase(newActivityRef);

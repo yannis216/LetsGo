@@ -174,7 +174,7 @@ public class ModulListAdapter extends RecyclerView.Adapter<ModulListAdapter.Modu
                 }
             };
             PictureUtil pictureUtil = new PictureUtil(context2, modulThumbView, listenIfImageLoadedSuccessfullyHelper);
-            pictureUtil.saveModulThumbnailFromDatabaseToLocalStorage(storage, currentModul);
+            pictureUtil.saveModulThumbnailFromDatabaseToLocalStorage(storage, currentModul.getId(), currentModul.getPictureUrl());
 
         }
 

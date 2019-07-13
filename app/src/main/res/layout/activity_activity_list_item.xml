@@ -24,19 +24,23 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:id="@+id/iv_activitylistitem_userpic"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:src="@color/colorSecondary"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_activitylistitem_username"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/iv_modul_DI_userpic"
             android:text="username"/>
     </LinearLayout>
-   
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_activitylistitem_text"
+        android:textSize="24sp"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/element_picture_height"
+        android:id="@+id/iv_activitylistitem_pic"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"

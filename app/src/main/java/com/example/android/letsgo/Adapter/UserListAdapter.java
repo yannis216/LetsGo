@@ -100,7 +100,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserVi
                 }
             };
             PictureUtil pictureUtil = new PictureUtil(context2, userThumbView, listenIfImageLoadedSuccessfullyHelper);
-            pictureUtil.saveUserThumbnailFromDatabaseToLocalStorage(storage, currentUser);
+            pictureUtil.saveUserThumbnailFromDatabaseToLocalStorage(storage, currentUser.getAuthId(), currentUser.getProfilePictureUrl());
 
         }
 

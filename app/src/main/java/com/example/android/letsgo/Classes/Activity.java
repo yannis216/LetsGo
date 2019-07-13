@@ -23,6 +23,11 @@ public class Activity implements Serializable {
     private String diComment;
     private float modulRating;
 
+    private String userName;
+    private String userPicLink;
+    private String modulPicUrl;
+
+
     public Activity() {
     }
 
@@ -122,5 +127,29 @@ public class Activity implements Serializable {
 
     public void setModulRating(float modulRating) {
         this.modulRating = modulRating;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserPicLink() {
+        return userPicLink;
+    }
+
+    public void setUserPicLink(String userPicLink) {
+        this.userPicLink = userPicLink;
+    }
+
+    public String getModulPicUrl() {
+        return modulPicUrl;
+    }
+
+    public void setModulPicUrl(String modulPicUrl) {
+        this.modulPicUrl = modulPicUrl;
     }
 }

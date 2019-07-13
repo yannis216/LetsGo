@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.example.android.letsgo.Classes.Activity;
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Modul;
-import com.example.android.letsgo.Classes.User;
 import com.example.android.letsgo.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -200,9 +200,8 @@ public class PictureUtil {
 
     }
 
-    public void saveModulThumbnailFromDatabaseToLocalStorage(FirebaseStorage storage, Modul modul){
+    public void saveModulThumbnailFromDatabaseToLocalStorage(FirebaseStorage storage, String modulId, String modulPictureUrl){
         final File localFile;
-        String modulId = modul.getId();
         //TODO Change Directory to an external storage (?)
         String modulsPath = context.getFilesDir().getAbsolutePath() + File.separator + "moduls";
         File myDir = new File(modulsPath);
@@ -223,7 +222,7 @@ public class PictureUtil {
             }
             Log.e("LocalFileExists", "Loaded local Thumbnail into View");
         }else{
-            StorageReference storageRef = storage.getReferenceFromUrl(modul.getPictureUrl());
+            StorageReference storageRef = storage.getReferenceFromUrl(modulPictureUrl);
             storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -254,9 +253,8 @@ public class PictureUtil {
 
     }
 
-    public void saveUserThumbnailFromDatabaseToLocalStorage(FirebaseStorage storage, User user){
+    public void saveUserThumbnailFromDatabaseToLocalStorage(FirebaseStorage storage, String userId, String profilePictureUrl){
         final File localFile;
-        String userId = user.getAuthId();
         //TODO Change Directory to an external storage (?)
         String usersPath = context.getFilesDir().getAbsolutePath() + File.separator + "user";
         File myDir = new File(usersPath);
@@ -277,7 +275,7 @@ public class PictureUtil {
             }
             Log.e("LocalFileExists", "Loaded local Thumbnail into View");
         }else{
-            StorageReference storageRef = storage.getReferenceFromUrl(user.getProfilePictureUrl());
+            StorageReference storageRef = storage.getReferenceFromUrl(profilePictureUrl);
             storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -292,6 +290,50 @@ public class PictureUtil {
                             .into(imageView);
 
                     Log.e("onSuccess", "User Thumbnail has been saved to localFile");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    if(callbackHelper != null){
+                        callbackHelper.onFailure();
+                    }
+                }
+            });
+        }
+    }
+
+    public void saveActivityImageFromDatabaseToLocalStorage(FirebaseStorage storage, Activity activity){
+        final File localFile;
+        String activityId = activity.getId();
+        //TODO Change Directory to an external storage (?)
+        String elementsPath = context.getFilesDir().getAbsolutePath() + File.separator + "activities";
+        File myDir = new File(elementsPath);
+        myDir.mkdirs();
+        String fname = activityId +"_originalPicture";
+        localFile = new File(myDir, fname);
+        Log.e("LocalFilePath" , localFile.getAbsolutePath());
+        if(localFile.exists()){
+            Picasso.get()
+                    .load(localFile)
+                    .fit()
+                    .centerCrop()
+                    .into(imageView);
+            if(callbackHelper != null){
+                callbackHelper.onSuccess();
+            }
+            Log.e("LocalFileExists", "Loaded local Image into View");
+        }else{
+            StorageReference storageRef = storage.getReferenceFromUrl(activity.getPictureUrl());
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+                    if(callbackHelper != null){
+                        callbackHelper.onSuccess();
+                    }
+                    Picasso.get().load(localFile).fit().centerCrop().into(imageView);
+                    Log.e("onSuccess", "Image has been saved to localFile");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override

@@ -56,6 +56,11 @@ public class BaseNavDrawActivity extends AppCompatActivity {
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
                         switch (menuItem.getItemId()){
+                            case R.id.nav_activity_list:
+                                Intent startActivityListIntent = new Intent(getApplicationContext() , ActivityListActivity.class);
+                                startActivity(startActivityListIntent);
+                                break;
+
                             case R.id.nav_new_modul:
                                 Intent startModulEditActivityIntent = new Intent(getApplicationContext() , ModulEditActivity.class);
                                 startActivity(startModulEditActivityIntent);

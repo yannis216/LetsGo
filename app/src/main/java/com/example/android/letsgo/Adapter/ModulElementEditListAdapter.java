@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -242,6 +243,13 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         holder.mLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                InputMethodManager imm = (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                //TODO Observe if any bugs regarding textview Focus come up.
+                //The Code above may have resolved the issue - if not, the one below will be a (unperfect) solution
+                //ViewParent parent = view.getParent();
+                //parent.clearChildFocus(view);
                 listener.onRowLongClicked(position);
                 view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 Log.e("OnLongClickAdapter", "Has Fired");

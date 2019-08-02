@@ -480,6 +480,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
 
     @Override
     public void onRowLongClicked(int position) {
+
         enableActionMode(position);
     }
 

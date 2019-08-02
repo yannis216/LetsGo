@@ -20,6 +20,7 @@ import com.example.android.letsgo.Adapter.ModulElementEditListAdapter;
 import com.example.android.letsgo.Classes.Element;
 import com.example.android.letsgo.Classes.Modul;
 import com.example.android.letsgo.Classes.ModulElement;
+import com.example.android.letsgo.Classes.ModulElementMultiplier;
 import com.example.android.letsgo.R;
 import com.example.android.letsgo.Utils.PictureUtil;
 import com.example.android.letsgo.Utils.TouchHelper.Listener.OnModulElementListChangedListener;
@@ -207,6 +208,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         for (Element element : addElements) {
             // TODO Not sure if I can set other varaible when only using this simple Constructor
             ModulElement newModulElement = new ModulElement(element);
+            newModulElement.setMultiplier(new ModulElementMultiplier(1, "x"));
             modulElements.add(newModulElement);
         }
         return modulElements;
@@ -555,6 +557,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
                 int j =(int) selectedItemPositions.get(i);
                 mAdapter.removeData(j);
             }
+            onNoteListChanged(modulElements);
             mAdapter.notifyDataSetChanged();
             //TODO Add Nice Animation that also illustrates the ability to swipedelete
 
@@ -562,14 +565,20 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         }
 
         private void duplicateSelected(){
-            List selectedItemPositions =
-                    mAdapter.getSelectedItems();
+            List selectedItemPositions = mAdapter.getSelectedItems();
             for (int i = 0; i < selectedItemPositions.size(); i++) {
                 int j =(int) selectedItemPositions.get(i);
                 modulElements.add(modulElements.get(j));
-                mAdapter.notifyItemInserted(modulElements.size()-1);
             }
             actionMode = null;
+            onNoteListChanged(modulElements);
+            mRvModulElements.getRecycledViewPool().clear();
+            mRvModulElements.setAdapter(null);
+            mRvModulElements.setLayoutManager(null);
+            updateUiWithModulElements();
+
+            //mAdapter.notifyDataSetChanged();
+
             Snackbar snackbar = Snackbar.make(coordinatorLayout, getResources().getString(R.string.modul_edit_duplicated), Snackbar.LENGTH_SHORT).setAnchorView(fab);
             snackbar.show();
         }

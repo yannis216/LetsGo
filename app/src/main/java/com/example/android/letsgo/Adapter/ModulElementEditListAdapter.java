@@ -46,6 +46,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
 
     private ClickAdapterListener listener;
     private SparseBooleanArray selectedItems;
+    ModulElementViewHolder vh;
 
 
     private static int currentSelectedIndex = -1;
@@ -164,7 +165,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean attachImmediately = false;
         View view = inflater.inflate(layoutIdForListItem, viewGroup, attachImmediately);
-        ModulElementViewHolder vh = new ModulElementViewHolder(view, new ModulElementEditTextListener(), new ModulElementSpinnerListener());
+        vh = new ModulElementViewHolder(view, new ModulElementEditTextListener(), new ModulElementSpinnerListener());
         return vh;
     }
 
@@ -173,8 +174,8 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         ModulElement currentModulElement = modulElements.get(position);
         String modulElementTitle = currentModulElement.getTitle();
 
-        holder.editTextListener.updatePosition(position);
-        holder.spinnerListener.updatePosition(position);
+        holder.editTextListener.updatePosition(holder.getAdapterPosition());
+        holder.spinnerListener.updatePosition(holder.getAdapterPosition());
 
         //TODO Think about setting these standards somewhere else
         //This makes the edittext show the given, pre-existing timeMultiplied
@@ -288,32 +289,53 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
 
         @Override
         public void afterTextChanged(Editable editable) {
+            updatePosition(position);
             int timesMultiplied;
             if(editable.toString().equals("")){
                 timesMultiplied=Integer.parseInt("0");
             }else{
                 timesMultiplied = Integer.parseInt(editable.toString());
             }
-
-            if(modulElements.get(position).getMultiplier()==null){
-                modulElements.get(position).setMultiplier(new ModulElementMultiplier());
+            String type ="";
+            if(modulElements.get(position).getMultiplier()!= null){
+                type = modulElements.get(position).getMultiplier().getType();
             }
+            modulElements.get(position).setMultiplier(new ModulElementMultiplier());
             modulElements.get(position).getMultiplier().setTimesMultiplied(timesMultiplied);
+            if(type.equals("")){
+                modulElements.get(position).getMultiplier().setType("x");
+            }else{
+                modulElements.get(position).getMultiplier().setType(type);
+            }
         }
     }
 
-    private class ModulElementSpinnerListener implements AdapterView.OnItemSelectedListener {
+    public class ModulElementSpinnerListener implements AdapterView.OnItemSelectedListener {
         private int position;
+
         public void updatePosition(int position) {
             this.position = position;
+            vh.getAdapterPosition();
         }
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            this.updatePosition(position);
+            updatePosition(position);
+            Log.e("Position", ""+position);
             String spinnerSelection = adapterView.getItemAtPosition(i).toString();
-            if(modulElements.get(position).getMultiplier()==null){
-                modulElements.get(position).setMultiplier(new ModulElementMultiplier());
+
+            int timesMultiplied = 1;
+            if(modulElements.get(position).getMultiplier()!= null){
+                timesMultiplied = modulElements.get(position).getMultiplier().getTimesMultiplied();
             }
+            modulElements.get(position).setMultiplier(new ModulElementMultiplier());
             modulElements.get(position).getMultiplier().setType(spinnerSelection);
+            if(timesMultiplied == 1){
+                modulElements.get(position).getMultiplier().setTimesMultiplied(1);
+            }else{
+                modulElements.get(position).getMultiplier().setTimesMultiplied(timesMultiplied);
+            }
+            notifyDataSetChanged();
 
         }
 

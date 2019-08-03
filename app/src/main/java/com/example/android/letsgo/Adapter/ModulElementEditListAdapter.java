@@ -163,8 +163,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.activity_modul_element_edit_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean attachImmediately = false;
-        View view = inflater.inflate(layoutIdForListItem, viewGroup, attachImmediately);
+        View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
         vh = new ModulElementViewHolder(view, new ModulElementEditTextListener(), new ModulElementSpinnerListener());
         return vh;
     }
@@ -173,6 +172,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
     public void onBindViewHolder(final @NonNull ModulElementViewHolder holder, final int position) {
         ModulElement currentModulElement = modulElements.get(position);
         String modulElementTitle = currentModulElement.getTitle();
+        Log.e("OnBinViewHolder", "Was called");
 
         holder.editTextListener.updatePosition(holder.getAdapterPosition());
         holder.spinnerListener.updatePosition(holder.getAdapterPosition());
@@ -296,17 +296,8 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             }else{
                 timesMultiplied = Integer.parseInt(editable.toString());
             }
-            String type ="";
-            if(modulElements.get(position).getMultiplier()!= null){
-                type = modulElements.get(position).getMultiplier().getType();
-            }
-            modulElements.get(position).setMultiplier(new ModulElementMultiplier());
+
             modulElements.get(position).getMultiplier().setTimesMultiplied(timesMultiplied);
-            if(type.equals("")){
-                modulElements.get(position).getMultiplier().setType("x");
-            }else{
-                modulElements.get(position).getMultiplier().setType(type);
-            }
         }
     }
 
@@ -323,20 +314,7 @@ public class ModulElementEditListAdapter extends RecyclerView.Adapter<ModulEleme
             updatePosition(position);
             Log.e("Position", ""+position);
             String spinnerSelection = adapterView.getItemAtPosition(i).toString();
-
-            int timesMultiplied = 1;
-            if(modulElements.get(position).getMultiplier()!= null){
-                timesMultiplied = modulElements.get(position).getMultiplier().getTimesMultiplied();
-            }
-            modulElements.get(position).setMultiplier(new ModulElementMultiplier());
             modulElements.get(position).getMultiplier().setType(spinnerSelection);
-            if(timesMultiplied == 1){
-                modulElements.get(position).getMultiplier().setTimesMultiplied(1);
-            }else{
-                modulElements.get(position).getMultiplier().setTimesMultiplied(timesMultiplied);
-            }
-            notifyDataSetChanged();
-
         }
 
         @Override

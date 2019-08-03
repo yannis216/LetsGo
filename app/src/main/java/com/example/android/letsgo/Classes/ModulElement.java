@@ -2,7 +2,7 @@ package com.example.android.letsgo.Classes;
 
 import java.io.Serializable;
 
-public class ModulElement extends Element implements Serializable {
+public class ModulElement extends Element implements Serializable, Cloneable {
     //TODO Might have to add "SourceElementId" here
     private ModulElementMultiplier multiplier;
     //Meant to display additional, Modul specific instructions for the element.
@@ -59,5 +59,13 @@ public class ModulElement extends Element implements Serializable {
         this.orderInModul = orderInModul;
     }
 
+    @Override
+    public ModulElement clone() {
+        try{
+            return (ModulElement) super.clone();
+        }catch (CloneNotSupportedException e){
+            throw new AssertionError();
+        }
+    }
 
 }

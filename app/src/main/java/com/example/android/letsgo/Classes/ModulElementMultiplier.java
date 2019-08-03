@@ -2,7 +2,7 @@ package com.example.android.letsgo.Classes;
 
 import java.io.Serializable;
 
-public class ModulElementMultiplier implements Serializable {
+public class ModulElementMultiplier implements Serializable, Cloneable {
 
     private int timesMultiplied;
     private String type;
@@ -29,6 +29,15 @@ public class ModulElementMultiplier implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public ModulElementMultiplier clone() {
+        try{
+            return (ModulElementMultiplier) super.clone();
+        }catch (CloneNotSupportedException e){
+            throw new AssertionError();
+        }
     }
 
 

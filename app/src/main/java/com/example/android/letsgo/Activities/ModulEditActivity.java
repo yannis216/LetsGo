@@ -565,19 +565,23 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
         }
 
         private void duplicateSelected(){
+
             List selectedItemPositions = mAdapter.getSelectedItems();
-            for (int i = 0; i < selectedItemPositions.size(); i++) {
+            int size= selectedItemPositions.size();
+            for (int i = 0; i < size; i++) {
                 int j =(int) selectedItemPositions.get(i);
-                modulElements.add(modulElements.get(j));
+                ModulElement clone = new ModulElement(modulElements.get(j).clone());
+                clone.setMultiplier(modulElements.get(j).getMultiplier().clone());
+                Log.e("CloneMultiplier Type", clone.getMultiplier().getType());
+                modulElements.add(clone);
             }
             actionMode = null;
             onNoteListChanged(modulElements);
-            mRvModulElements.getRecycledViewPool().clear();
-            mRvModulElements.setAdapter(null);
-            mRvModulElements.setLayoutManager(null);
-            updateUiWithModulElements();
+            for(ModulElement x : modulElements){
+                Log.e("Type", x.getTitle());
 
-            //mAdapter.notifyDataSetChanged();
+            }
+            updateUiWithModulElements();
 
             Snackbar snackbar = Snackbar.make(coordinatorLayout, getResources().getString(R.string.modul_edit_duplicated), Snackbar.LENGTH_SHORT).setAnchorView(fab);
             snackbar.show();

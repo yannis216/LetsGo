@@ -1,6 +1,7 @@
 package com.example.android.letsgo.Adapter;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,9 @@ import com.example.android.letsgo.Utils.CallbackHelper;
 import com.example.android.letsgo.Utils.PictureUtil;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
@@ -79,6 +82,17 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
         String userPictureUrl= currentActivity.getUserPicLink();
         TextView userNameView = holder.itemView.findViewById(R.id.tv_activitylistitem_username);
         userNameView.setText(userName);
+
+        //Populate endtime
+        long endTimeStamp = currentActivity.getEndTime();
+        Calendar cal = Calendar.getInstance(Locale.GERMAN);
+        cal.setTimeInMillis(endTimeStamp);
+        String date = DateFormat.format("EEEdd.MM. HH:mm", cal).toString();
+        String endTimeString = date+"h";
+
+        TextView endTimeView = holder.itemView.findViewById(R.id.tv_activitylistitem_endtime);
+        endTimeView.setText(endTimeString);
+
 
         if(userPictureUrl == null){
 

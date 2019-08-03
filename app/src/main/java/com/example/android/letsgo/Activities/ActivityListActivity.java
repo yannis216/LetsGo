@@ -14,6 +14,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -78,6 +79,7 @@ public class ActivityListActivity extends BaseNavDrawActivity implements Activit
     private void getActivityListFromDatabase(){
         activities = new ArrayList<Activity>();
         db.collection("activities")
+                .orderBy("endTime", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

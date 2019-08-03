@@ -577,11 +577,7 @@ public class ModulEditActivity extends BaseNavDrawActivity implements ModulEleme
             }
             actionMode = null;
             onNoteListChanged(modulElements);
-            for(ModulElement x : modulElements){
-                Log.e("Type", x.getTitle());
-
-            }
-            updateUiWithModulElements();
+            mAdapter.notifyDataSetChanged();
 
             Snackbar snackbar = Snackbar.make(coordinatorLayout, getResources().getString(R.string.modul_edit_duplicated), Snackbar.LENGTH_SHORT).setAnchorView(fab);
             snackbar.show();
